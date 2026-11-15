@@ -1,0 +1,151 @@
+@extends('layouts.admin')
+
+@section('title', 'Activity Log')
+@section('page_title', 'Activity Log')
+
+@section('content')
+{{--
+  ==============================================================================
+  ACTIVITY LOG (AUDIT TRAIL SISTEM)
+  ==============================================================================
+  Merekam jejak setiap aksi admin (Tambah, Edit, Hapus Portofolio, Perpanjangan Paket).
+  Dilengkapi filter periode per bulan dan per tahun.
+--}}
+<div class="space-y-6 sm:space-y-8">
+
+    <!-- ================= HEADER SECTION & FILTER PERIODE ================= -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Activity Log</h1>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 font-medium">
+                Riwayat aktivitas admin bulan {{ request('bulan') ? Carbon\Carbon::create(2026, request('bulan'), 1)->translatedFormat('F') : now()->translatedFormat('F') }} {{ request('tahun', now()->year) }}
+            </p>
+        </div>
+
+        {{-- Filter Dropdown Bulan & Tahun --}}
+        <form action="{{ route('admin.logs.index') }}" method="GET" class="flex flex-wrap items-center gap-2.5">
+            <div class="relative">
+                <select name="bulan" class="px-3.5 py-2.5 rounded-xl bg-[#18191f] border border-zinc-800 text-zinc-200 text-xs sm:text-sm font-semibold outline-none cursor-pointer">
+                    <option value="">Semua Bulan</option>
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
+                            {{ Carbon\Carbon::create(2026, $m, 1)->translatedFormat('F') }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
+
+            <div class="relative">
+                <select name="tahun" class="px-3.5 py-2.5 rounded-xl bg-[#18191f] border border-zinc-800 text-zinc-200 text-xs sm:text-sm font-semibold outline-none cursor-pointer">
+                    <option value="">Semua Tahun</option>
+                    @foreach (range(now()->year, now()->year - 2) as $y)
+                        <option value="{{ $y }}" {{ request('tahun') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs sm:text-sm font-bold shadow-xs cursor-pointer">
+                Terapkan
+            </button>
+
+            @if(request('bulan') || request('tahun'))
+                <a href="{{ route('admin.logs.index') }}" class="px-3 py-2.5 rounded-xl bg-zinc-800 text-zinc-300 text-xs font-semibold">
+                    Reset
+                </a>
+            @endif
+        </form>
+    </div>
+
+    <!-- ================= 4 KARTU METRIK AKTIVITAS ================= -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5">
+        <!-- TOTAL -->
+        <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
+            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">TOTAL</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ $summaryBulanIni['total'] ?? $logs->total() }}</p>
+        </div>
+
+        <!-- TAMBAH -->
+        <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
+            <span class="text-xs font-bold text-teal-400 uppercase tracking-wider block mb-1">TAMBAH</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-teal-400">{{ $summaryBulanIni['tambah'] }}</p>
+        </div>
+
+        <!-- EDIT -->
+        <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
+            <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">EDIT</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-cyan-400">{{ $summaryBulanIni['edit'] }}</p>
+        </div>
+
+        <!-- HAPUS -->
+        <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
+            <span class="text-xs font-bold text-rose-400 uppercase tracking-wider block mb-1">HAPUS</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-rose-400">{{ $summaryBulanIni['hapus'] }}</p>
+        </div>
+    </div>
+
+    <!-- ================= TIMELINE LOG AKTIVITAS ================= -->
+    <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 shadow-sm">
+        <div class="relative pl-6 sm:pl-8 border-l-2 border-zinc-800 space-y-6">
+            @forelse ($logs as $log)
+                <div class="relative">
+                    <!-- Dot Indikator di Garis Timeline -->
+                    <span class="absolute -left-[31px] sm:-left-[39px] top-4 w-3.5 h-3.5 rounded-full bg-teal-500 border-2 border-[#18191f]"></span>
+
+                    <!-- Card Log Item -->
+                    <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-2">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <!-- Action Badge -->
+                            @php
+                                $badgeColor = match(true) {
+                                    str_contains($log->action, 'TAMBAH') => 'bg-teal-500/20 text-teal-300 border-teal-500/40',
+                                    str_contains($log->action, 'EDIT') => 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+                                    str_contains($log->action, 'HAPUS') => 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+                                    default => 'bg-zinc-800 text-zinc-300 border-zinc-700',
+                                };
+                            @endphp
+                            <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border uppercase tracking-wider {{ $badgeColor }}">
+                                {{ $log->action }}
+                            </span>
+
+                            <span class="text-xs text-zinc-400">
+                                oleh <strong class="text-zinc-200">{{ $log->admin->name ?? 'Admin' }}</strong>
+                            </span>
+
+                            {{-- Relasi Eloquent ke Portfolio (jika log terkait dengan portofolio tertentu) --}}
+                            @if ($log->portfolio)
+                                <span class="text-zinc-600">&bull;</span>
+                                <span class="text-xs text-zinc-400">
+                                    web <a href="{{ route('admin.portfolios.edit', $log->portfolio->id) }}" class="text-teal-400 underline font-medium">{{ $log->portfolio->business_name }}</a>
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Deskripsi Aktivitas -->
+                        <p class="text-sm font-semibold text-white leading-relaxed">
+                            {{ $log->description }}
+                        </p>
+
+                        <!-- Waktu Pencatatan: Menggunakan translatedFormat & diffForHumans Carbon -->
+                        <div class="flex items-center gap-2 text-xs text-zinc-500 pt-1">
+                            <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>{{ $log->created_at->translatedFormat('l, d F Y &bull; H:i') }} WIB</span>
+                            <span>({{ $log->created_at->diffForHumans() }})</span>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="py-8 text-center text-zinc-500 text-sm">
+                    Tidak ada aktivitas admin yang tercatat pada periode ini.
+                </div>
+            @endforelse
+        </div>
+
+        @if ($logs->hasPages())
+            <div class="pt-6 mt-6 border-t border-zinc-800">
+                {{ $logs->links() }}
+            </div>
+        @endif
+    </div>
+
+</div>
+@endsection

@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+}
+
+/*
+ * Mobile rendering fixes
+ * ─────────────────────────────────────────────────────────────────────────────
+ * html/body TIDAK boleh overflow: hidden — itu yang menyebabkan scroll
+ * terjadi di child element bukan di window, membuat scroll lambat & lag di HP.
+ *
+ * overflow-x: hidden di body mencegah horizontal overflow tanpa memblokir
+ * scroll vertikal alami.
+ *
+ * -webkit-overflow-scrolling: touch sudah deprecated tapi masih membantu
+ * di iOS lama. Untuk iOS modern, pastikan TIDAK ada overflow: auto/scroll
+ * di wrapper yang membungkus seluruh halaman.
+ */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    min-height: 100dvh; /* dynamic viewport — tidak terpengaruh address bar mobile */
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%; /* mencegah iOS membesarkan font saat landscape */
+}
+
+/* Mencegah tap highlight biru di iOS saat klik elemen interaktif */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * Menonaktifkan Seluruh Animasi & Transisi
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Menjamin UI tampil statis, cepat, konsisten di semua perangkat,
+ * serta memudahkan pembacaan kode tanpa efek gerak atau transformasi.
+ */
+*, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+}
