@@ -30,7 +30,7 @@
     </div>
 
     <!-- ================= 4 KARTU METRIK STATISTIK ================= -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <!-- 1. Total Web -->
         <div class="p-5 sm:p-6 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm flex flex-col justify-between space-y-4">
             <div class="flex items-center justify-between">
@@ -101,10 +101,10 @@
     </div>
 
     <!-- ================= 2 KOLOM: AKTIVITAS TERBARU & AKSI CEPAT ================= -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
 
         <!-- Kolom Kiri: Aktivitas Terbaru (2 Kolom di Desktop) -->
-        <div class="xl:col-span-2 rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-7 space-y-5">
+        <div class="lg:col-span-2 rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-7 space-y-5">
             <div class="flex items-center justify-between pb-4 border-b border-zinc-800">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center">

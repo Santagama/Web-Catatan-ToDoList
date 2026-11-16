@@ -15,7 +15,7 @@
 
     <!-- ================= HEADER SECTION ================= -->
     <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Pengaturan</h1>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Pengaturan Sistem</h1>
     </div>
 
     <!-- ================= SECTION 1: RINGKASAN AKUN ================= -->

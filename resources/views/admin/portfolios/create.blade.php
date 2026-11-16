@@ -12,7 +12,31 @@
     gambar (logo, banner, foto produk) dalam format multipart binary ke server.
   - @csrf: Token pengaman transaksi form bawaan Laravel.
 --}}
-<form action="{{ route('admin.portfolios.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8 max-w-5xl">
+<div class="space-y-6 sm:space-y-8 max-w-5xl">
+
+    <!-- ================= HEADER SECTION & TAB SWITCHER ================= -->
+    <div class="space-y-5">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Buat Web Baru</h1>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 font-medium">Buat website portofolio klien UMKM baru dalam hitungan detik.</p>
+        </div>
+
+        <!-- Tab Switcher (Daftar Website / Buat Web Baru) -->
+        <div class="grid grid-cols-2 p-1.5 rounded-2xl bg-[#101116] border border-zinc-800 gap-1.5">
+            <a href="{{ route('admin.portfolios.index') }}"
+               class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-zinc-400 text-xs sm:text-sm font-bold">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                <span>Daftar Website</span>
+            </a>
+            <a href="{{ route('admin.portfolios.create') }}"
+               class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-teal-500/15 text-teal-300 border border-teal-500/30 text-xs sm:text-sm font-bold shadow-xs">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                <span>Buat Web Baru</span>
+            </a>
+        </div>
+    </div>
+
+    <form action="{{ route('admin.portfolios.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
     @csrf
 
     <!-- ================= SECTION 1: PILIHAN TEMPLATE ================= -->
@@ -243,6 +267,7 @@
         </a>
     </div>
 </form>
+</div>
 
 {{--
   ==============================================================================

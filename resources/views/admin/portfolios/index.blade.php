@@ -14,9 +14,9 @@
 <div class="space-y-6 sm:space-y-8">
 
     <!-- ================= HEADER SECTION & TAB SWITCHER ================= -->
-    <div class="space-y-4">
+    <div class="space-y-5">
         <div>
-            <span class="text-xs font-bold text-teal-400 uppercase tracking-widest block mb-1">Data Portofolio</span>
+            <span class="sr-only">Data Portofolio</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Direktori Web Klien</h1>
             <p class="text-xs sm:text-sm text-zinc-400 mt-1 font-medium">
                 {{ $totalCount ?? $portfolios->total() }} website terdaftar &bull; {{ $publishCount ?? 0 }} publish &bull; {{ $draftCount ?? 0 }} draft
@@ -24,15 +24,16 @@
         </div>
 
         <!-- Tab Switcher (Daftar Website / Buat Web Baru) -->
-        <div class="flex flex-wrap items-center gap-2 pt-2">
+        <div class="grid grid-cols-2 p-1.5 rounded-2xl bg-[#101116] border border-zinc-800 gap-1.5">
             <a href="{{ route('admin.portfolios.index') }}"
-               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-500/15 text-teal-300 border border-teal-500/30 text-xs sm:text-sm font-bold shadow-xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
-                <span>Daftar Website ({{ $totalCount ?? $portfolios->total() }})</span>
+               class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-teal-500/15 text-teal-300 border border-teal-500/30 text-xs sm:text-sm font-bold shadow-xs">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                <span>Daftar Website</span>
+                <span class="px-2 py-0.5 rounded-full bg-teal-400/20 text-teal-300 text-xs font-extrabold">{{ $totalCount ?? $portfolios->total() }}</span>
             </a>
             <a href="{{ route('admin.portfolios.create') }}"
-               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#18191f] text-zinc-300 border border-zinc-800 text-xs sm:text-sm font-bold">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+               class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-zinc-400 text-xs sm:text-sm font-bold">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 <span>Buat Web Baru</span>
             </a>
         </div>

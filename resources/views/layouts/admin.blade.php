@@ -128,30 +128,33 @@
       AREA KONTEN UTAMA
       ==========================================================================
       Di desktop, padding-left (lg:pl-72) menyesuaikan lebar sidebar kiri (w-72).
+      Topbar atas hanya tampil di layar HP/tablet (lg:hidden) untuk tombol menu.
+      Di desktop langsung menampilkan konten halaman tanpa header ganda.
     --}}
     <div class="pl-0 lg:pl-72 flex-1 flex flex-col min-h-screen">
-        <!-- Topbar Header Bersih -->
-        <header class="h-20 border-b border-zinc-800/80 bg-[#14151a] px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30">
-            <div class="flex items-center gap-3.5">
+        <!-- Topbar Mobile Khusus Layar Kecil (lg:hidden) -->
+        <header class="lg:hidden h-16 border-b border-zinc-800/80 bg-[#14151a] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-3">
                 <!-- Tombol Hamburger Mobile -->
-                <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 cursor-pointer" aria-label="Buka Menu Sidebar">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                <button type="button" onclick="toggleAdminSidebar()" class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 cursor-pointer" aria-label="Buka Menu Sidebar">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
 
-                <div>
-                    <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">@yield('page_title', 'Dashboard')</h2>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-white p-0.5 flex items-center justify-center shrink-0">
+                        <img src="/assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'" />
+                    </div>
+                    <span class="text-sm font-extrabold text-white">Web Builder</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1.5 sm:px-3.5">
-                    <span class="h-2 w-2 rounded-full bg-teal-400"></span>
-                    <span class="text-xs font-bold text-teal-300">Panel Admin</span>
-                </div>
+            <div class="flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1">
+                <span class="h-2 w-2 rounded-full bg-teal-400"></span>
+                <span class="text-xs font-bold text-teal-300">Admin</span>
             </div>
         </header>
 
-        <!-- Wadah Konten Halaman (@yield('content')) -->
+        {{-- Wadah Konten Halaman Utama --}}
         <main class="p-4 sm:p-6 lg:p-8 flex-1 max-w-7xl w-full mx-auto">
             @include('components.alert')
 

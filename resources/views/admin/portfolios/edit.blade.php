@@ -12,7 +12,20 @@
   - enctype="multipart/form-data": Wajib untuk upload berkas baru jika user ingin mengganti logo/banner/foto.
   - old('field', $portfolio->field): Mengambil input sebelumnya jika validasi gagal, atau nilai database saat ini.
 --}}
-<form action="{{ route('admin.portfolios.update', $portfolio->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8 max-w-5xl">
+<div class="space-y-6 sm:space-y-8 max-w-5xl">
+
+    <!-- ================= HEADER SECTION ================= -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Edit Portofolio</h1>
+            <p class="text-xs sm:text-sm text-zinc-400 mt-1 font-medium">Perbarui profil, produk, template, atau pengaturan status publikasi.</p>
+        </div>
+        <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#18191f] border border-zinc-800 text-zinc-300 text-xs sm:text-sm font-bold self-start sm:self-center">
+            &larr; Kembali ke Direktori
+        </a>
+    </div>
+
+    <form action="{{ route('admin.portfolios.update', $portfolio->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
     @csrf
     @method('PUT')
 
@@ -266,6 +279,7 @@
         </a>
     </div>
 </form>
+</div>
 
 {{--
   ==============================================================================

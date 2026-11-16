@@ -39,7 +39,6 @@
                 <a href="#fitur" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Fitur Unggulan</a>
                 <a href="#cara-kerja" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Cara Kerja</a>
                 <a href="#paket" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Paket Layanan</a>
-                <a href="#keunggulan" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Keunggulan</a>
                 <a href="#faq" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">FAQ</a>
                 <a href="#pengembang" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Developer</a>
                 <a href="#lokasi" class="px-3 py-2 rounded-xl text-slate-600 whitespace-nowrap">Lokasi</a>
@@ -73,7 +72,6 @@
                 <a href="#fitur" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Fitur Unggulan</a>
                 <a href="#cara-kerja" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Cara Kerja</a>
                 <a href="#paket" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Paket Layanan</a>
-                <a href="#keunggulan" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Keunggulan</a>
                 <a href="#faq" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">FAQ</a>
                 <a href="#pengembang" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Developer</a>
                 <a href="#lokasi" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="px-3.5 py-2.5 rounded-xl">Lokasi Kantor</a>
@@ -88,48 +86,89 @@
 
     <main class="space-y-24 sm:space-y-36 py-12 sm:py-20">
 
-        <!-- ================= HERO SECTION (CLEAN & PERSUASIF) ================= -->
-        <section class="max-w-5xl mx-auto px-5 sm:px-8 text-center space-y-8">
+        <!-- ================= HERO SECTION (CLEAN, MODERN & ELEGAN) ================= -->
+        <section class="max-w-5xl mx-auto px-5 sm:px-8 text-center space-y-6 sm:space-y-8">
+
+            <!-- Pill Tag Atas -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200/90 text-teal-800 text-xs font-bold shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span>Layanan Pembuatan Website UMKM Terima Beres</span>
+            </div>
 
             <!-- Judul Utama Proporsional -->
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-                Tingkatkan Kredibilitas Bisnis Anda dengan
-                <span class="text-teal-600">Website Portofolio Profesional</span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.12] max-w-4xl mx-auto">
+                Tingkatkan Kredibilitas Usaha dengan
+                <span class="text-teal-600">Website Portofolio Resmi</span>
             </h1>
 
-            <!-- Subtitle Proporsional & Jelas -->
-            <p class="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
-                Layanan terima beres tanpa perlu repot urusan teknis. Kirim materi produk lewat WhatsApp, kami buatkan website resmi yang cepat, estetik, dan siap digunakan untuk memperluas jangkauan bisnis Anda.
+            <!-- Subtitle Ringkas & Padat -->
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
+                Cukup kirim foto dan info produk lewat WhatsApp. Kami buatkan website instan yang estetik, cepat, dan siap dipakai untuk memperluas jangkauan bisnis Anda.
             </p>
 
-            <!-- Dual CTA Buttons Bersih Tanpa Neon Shadow -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <!-- Dual CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-1">
                 <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer"
-                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-teal-600 text-white text-base font-bold shadow-xs">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-teal-600 text-white text-sm sm:text-base font-extrabold shadow-sm">
+                    <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
                     <span>Pesan Website via WhatsApp</span>
                 </a>
                 <a href="#kategori"
-                   class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-slate-800 text-base font-bold border border-slate-300 shadow-xs">
-                    Lihat Pilihan Desain &darr;
+                   class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white text-slate-800 text-sm sm:text-base font-bold border border-slate-300 shadow-xs flex items-center justify-center gap-2">
+                    <span>Lihat 5 Pilihan Desain</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7"/></svg>
                 </a>
             </div>
 
-            <!-- ================= RUNNING HIGHLIGHT BAR (INSPIRASI AGANSI RESMI EDA) ================= -->
-            <div class="pt-6">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50/75 py-3.5 px-4 overflow-hidden">
-                    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-600">
-                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Siap Pakai Dalam 24 Jam</span>
-                        <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Direct WhatsApp Order</span>
-                        <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Mobile-First Responsive</span>
-                        <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Akses Panel Admin Mandiri</span>
-                        <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                        <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-teal-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Integrasi Google Maps</span>
+            <!-- Preview Frame Showcase (Mockup Browser Elegan) -->
+            <div class="pt-6 sm:pt-8 max-w-4xl mx-auto">
+                <div class="rounded-3xl border border-slate-200/90 bg-slate-900 text-white shadow-xl overflow-hidden text-left">
+                    <!-- Header Mockup Window -->
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-950/80">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300 font-mono">
+                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span>webbuilder.id/kopi-kenangan</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-teal-400 hidden sm:block">
+                            Live Preview
+                        </div>
+                    </div>
+
+                    <!-- 3 Kartu Keunggulan Cepat di Dalam Mockup -->
+                    <div class="p-5 sm:p-7 bg-[#14151a]">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                            <!-- Fitur 1 -->
+                            <div class="p-4 rounded-2xl bg-[#1a1b22] border border-zinc-800 space-y-2">
+                                <div class="w-8 h-8 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                </div>
+                                <p class="text-xs font-bold text-white">Online Dalam 24 Jam</p>
+                                <p class="text-[11px] text-zinc-400 leading-relaxed">Website langsung tayang dan siap disebar ke medsos.</p>
+                            </div>
+
+                            <!-- Fitur 2 -->
+                            <div class="p-4 rounded-2xl bg-[#1a1b22] border border-zinc-800 space-y-2">
+                                <div class="w-8 h-8 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                </div>
+                                <p class="text-xs font-bold text-white">Order WhatsApp Otomatis</p>
+                                <p class="text-[11px] text-zinc-400 leading-relaxed">Pemesanan produk langsung masuk ke WhatsApp Anda.</p>
+                            </div>
+
+                            <!-- Fitur 3 -->
+                            <div class="p-4 rounded-2xl bg-[#1a1b22] border border-zinc-800 space-y-2">
+                                <div class="w-8 h-8 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                </div>
+                                <p class="text-xs font-bold text-white">Panel Admin Mandiri</p>
+                                <p class="text-[11px] text-zinc-400 leading-relaxed">Ubah harga produk dan info toko kapan saja secara mandiri.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -592,53 +631,6 @@
                        class="w-full py-3.5 rounded-xl bg-teal-600 text-white text-sm font-bold text-center shadow-xs block">
                         Pesan Paket 1 Tahun
                     </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= SECTION: KEUNGGULAN & STANDAR LAYANAN (REFERENSI RESMI EDA) ================= -->
-        <section id="keunggulan" class="max-w-6xl mx-auto px-5 sm:px-8">
-            <div class="text-center space-y-3 mb-12 sm:mb-16">
-                <span class="text-xs font-extrabold uppercase tracking-widest text-teal-600">STANDAR KUALITAS KAMI</span>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">Mengapa Memilih CMS Web Builder?</h2>
-                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-medium">Kami menggabungkan kemudahan layanan terima beres dengan arsitektur sistem modern yang tangguh untuk bisnis Anda.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Pilar 1 -->
-                <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg">01</div>
-                    <h3 class="text-base font-extrabold text-slate-900">Cepat &amp; Praktis</h3>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                        Tidak perlu pusing setup server atau domain rumit. Cukup kirim konten via WA, website Anda online dalam hitungan hari.
-                    </p>
-                </div>
-
-                <!-- Pilar 2 -->
-                <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg">02</div>
-                    <h3 class="text-base font-extrabold text-slate-900">Biaya Transparan</h3>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                        Harga paket jelas tanpa biaya tersembunyi. Sudah mencakup hosting, sistem pemesanan WhatsApp, dan pemeliharaan dasar.
-                    </p>
-                </div>
-
-                <!-- Pilar 3 -->
-                <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg">03</div>
-                    <h3 class="text-base font-extrabold text-slate-900">All-in-One Terintegrasi</h3>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                        Katalog foto, deskripsi, harga, nomor WhatsApp, hingga rute peta Google Maps sudah tersambung langsung dalam satu link.
-                    </p>
-                </div>
-
-                <!-- Pilar 4 -->
-                <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg">04</div>
-                    <h3 class="text-base font-extrabold text-slate-900">Panel Admin Mandiri</h3>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                        Disediakan akses panel admin jika Anda sewaktu-waktu ingin mengedit harga menu atau menambah produk baru secara mandiri.
-                    </p>
                 </div>
             </div>
         </section>
