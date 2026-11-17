@@ -45,6 +45,10 @@
             </nav>
 
             <!-- Aksi Tombol Desktop -->
+            {{--
+              // UBAH WARNA TOMBOL NAVBAR 'LOGIN ADMIN':
+              // Ganti 'bg-teal-600' jadi 'bg-blue-600' (biru) atau 'bg-rose-600' (merah)
+            --}}
             <div class="hidden sm:flex items-center shrink-0">
                 <a href="{{ route('admin.login') }}"
                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-teal-600 shadow-xs">
@@ -101,6 +105,10 @@
             </p>
 
             <!-- Dual CTA Buttons -->
+            {{--
+              // UBAH WARNA TOMBOL HERO CTA 'KONSULTASI WHATSAPP':
+              // Ganti 'bg-teal-600' jadi 'bg-blue-600' (biru) atau 'bg-emerald-600' (hijau)
+            --}}
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-1">
                 <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer"
                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-teal-600 text-white text-sm sm:text-base font-extrabold shadow-sm">

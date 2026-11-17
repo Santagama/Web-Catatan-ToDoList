@@ -11,14 +11,12 @@
             "id": "b697c5583df3340e",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "FLOWCHART.md",
-                "mode": "source",
-                "source": false
+                "file": "Flowchart_3a_Login_Admin.svg"
               },
-              "icon": "lucide-file",
-              "title": "FLOWCHART"
+              "icon": "lucide-image",
+              "title": "Flowchart_3a_Login_Admin"
             }
           }
         ]
@@ -190,22 +188,24 @@
   },
   "active": "b697c5583df3340e",
   "lastOpenFiles": [
-    "FLOWCHART_RESMI.md",
-    "Flowchart_3c_Akses_Publik_404.png",
-    "Flowchart_3c_Akses_Publik_404.svg",
-    "Flowchart_3b_Input_Validasi_Publish.png",
-    "Flowchart_3b_Input_Validasi_Publish.svg",
+    "PANDUAN_BEDAH_KODINGAN_DAN_LIVE_CODING.md",
+    "ALUR_CERITA_SISTEM.md",
     "Flowchart_3a_Login_Admin.png",
+    "Flowchart_3b_Input_Validasi_Publish.svg",
+    "Flowchart_3b_Input_Validasi_Publish.png",
+    "Flowchart_3c_Akses_Publik_404.svg",
+    "Flowchart_3c_Akses_Publik_404.png",
+    "Flowchart_Login_Admin.png",
     "Flowchart_3a_Login_Admin.svg",
+    "FLOWCHART.md",
+    "FLOWCHART_RESMI.md",
     "SOAL_PRAKTIK_KEJURUAN_PLATFORM_WEB_PORTOFOLIO_UMKM.pdf",
     "SAWALA - Platform Web Portofolio UMKM.pdf",
     "Query SQL.md",
     "PERTANYAAN_DOKUMEN_KELENGKAPAN.md",
     "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
     "PANDUAN_DAN_CONTEKAN_POPUP_UJIKOM.md",
-    "Flowchart_Login_Admin.png",
     "Flowchart_Login_Admin.svg",
-    "FLOWCHART.md",
     "ERD_DAN_MAPPING_TABEL_DATABASE.md",
     "ERD_CMS_Web_Builder.svg",
     "DOKUMENTASI_LENGKAP_UJIKOM.md",

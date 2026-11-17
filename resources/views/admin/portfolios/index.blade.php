@@ -24,6 +24,10 @@
         </div>
 
         <!-- Tab Switcher (Daftar Website / Buat Web Baru) -->
+        {{--
+          // UBAH WARNA TAB AKTIF:
+          // Ganti 'bg-teal-500/15 text-teal-300 border-teal-500/30' jadi 'bg-blue-500/15 text-blue-300 border-blue-500/30' (biru)
+        --}}
         <div class="grid grid-cols-2 p-1.5 rounded-2xl bg-[#101116] border border-zinc-800 gap-1.5">
             <a href="{{ route('admin.portfolios.index') }}"
                class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-teal-500/15 text-teal-300 border border-teal-500/30 text-xs sm:text-sm font-bold shadow-xs">
@@ -62,6 +66,10 @@
         @php
             $currentStatus = request('status', '');
         @endphp
+        {{--
+          // UBAH WARNA TOMBOL FILTER AKTIF:
+          // Ganti 'bg-teal-600 text-white' jadi 'bg-blue-600 text-white' (biru) atau 'bg-rose-600 text-white' (merah)
+        --}}
         <div class="flex flex-wrap items-center gap-1.5 self-start md:self-center">
             <a href="{{ route('admin.portfolios.index', request()->only('search')) }}"
                class="px-3.5 py-1.5 rounded-lg text-xs font-bold {{ $currentStatus === '' ? 'bg-teal-600 text-white' : 'bg-zinc-900 text-zinc-400 border border-zinc-800' }}">

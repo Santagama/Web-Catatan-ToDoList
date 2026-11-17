@@ -52,6 +52,10 @@
                     <input type="radio" name="template_id" value="{{ $key }}"
                         {{ old('template_id') === $key ? 'checked' : '' }}
                         class="hidden peer" />
+                    {{--
+                      // UBAH WARNA SELEKSI TEMPLATE:
+                      // Ganti 'peer-checked:border-teal-500 peer-checked:bg-teal-500/15' jadi 'peer-checked:border-blue-500 peer-checked:bg-blue-500/15' (biru)
+                    --}}
                     <div class="p-4 sm:p-5 rounded-2xl border-2 text-center
                         peer-checked:border-teal-500 peer-checked:bg-teal-500/15
                         border-zinc-800 bg-[#101116]">
@@ -179,6 +183,10 @@
                 <h3 class="text-base font-bold text-white mb-1">Produk / Layanan Unggulan</h3>
                 <p class="text-xs sm:text-sm text-zinc-400">Tambahkan katalog produk, harga, foto, dan deskripsi yang langsung terhubung ke WhatsApp.</p>
             </div>
+            {{--
+              // UBAH WARNA TOMBOL '+ TAMBAH PRODUK':
+              // Ganti 'bg-teal-600 shadow-teal-950/40' jadi 'bg-blue-600 shadow-blue-950/40' (biru)
+            --}}
             <button type="button" onclick="addProductRow()"
                 class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-bold shadow-md shadow-teal-950/40 cursor-pointer self-start sm:self-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,6 +270,12 @@
     </div>
 
     <!-- ================= TOMBOL SIMPAN / BATAL ================= -->
+    {{--
+      // UBAH WARNA TOMBOL 'SIMPAN PORTOFOLIO' DI SINI:
+      // Jika penguji minta warna BIRU : ganti 'bg-teal-600 shadow-teal-950/50' jadi 'bg-blue-600 shadow-blue-950/50'
+      // Jika penguji minta warna MERAH: ganti jadi 'bg-rose-600 shadow-rose-950/50'
+      // Jika penguji minta warna HIJAU: ganti jadi 'bg-emerald-600 shadow-emerald-950/50'
+    --}}
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
         <button type="submit" class="px-8 py-3.5 rounded-xl bg-teal-600 text-white text-sm font-bold shadow-lg shadow-teal-950/50 cursor-pointer flex items-center justify-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -44,6 +44,10 @@
                 </select>
             </div>
 
+            {{--
+              // UBAH WARNA TOMBOL 'TERAPKAN FILTER':
+              // Ganti 'bg-teal-600' jadi 'bg-blue-600' (biru)
+            --}}
             <button type="submit" class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs sm:text-sm font-bold shadow-xs cursor-pointer">
                 Terapkan
             </button>

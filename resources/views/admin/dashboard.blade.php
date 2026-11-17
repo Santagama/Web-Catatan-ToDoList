@@ -16,6 +16,10 @@
     <!-- ================= WELCOME BANNER ================= -->
     <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 relative overflow-hidden shadow-sm">
         <div class="relative z-10 space-y-3">
+            {{--
+              // UBAH WARNA BADGE BANNER:
+              // Ganti 'bg-teal-500/10 border-teal-500/30 text-teal-400' dengan 'bg-blue-500/10 border-blue-500/30 text-blue-400' (biru)
+            --}}
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-xs font-bold text-teal-400">
                 <span class="w-2 h-2 rounded-full bg-teal-400"></span>
                 <span>Panel Admin</span>
@@ -164,6 +168,12 @@
             </div>
 
             <div class="space-y-3">
+                {{--
+                  // UBAH WARNA TOMBOL 'BUAT WEB BARU' DI SINI:
+                  // Jika penguji minta warna BIRU : ganti 'bg-teal-600' jadi 'bg-blue-600 shadow-blue-950/40'
+                  // Jika penguji minta warna MERAH: ganti 'bg-teal-600' jadi 'bg-rose-600 shadow-rose-950/40'
+                  // Jika penguji minta warna HIJAU: ganti 'bg-teal-600' jadi 'bg-emerald-600 shadow-emerald-950/40'
+                --}}
                 <!-- Tombol Buat Web Baru Utama -->
                 <a href="{{ route('admin.portfolios.create') }}"
                    class="w-full py-4 px-5 rounded-2xl bg-teal-600 text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-950/40 cursor-pointer">

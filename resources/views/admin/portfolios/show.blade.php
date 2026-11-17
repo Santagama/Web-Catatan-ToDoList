@@ -56,6 +56,10 @@
                 Salin URL
             </button>
 
+            {{--
+              // UBAH WARNA TOMBOL 'PERPANJANG PAKET':
+              // Ganti 'bg-teal-600 shadow-teal-950/40' jadi 'bg-blue-600 shadow-blue-950/40' (biru)
+            --}}
             <!-- Tombol Perpanjang Paket (Buka Modal) -->
             <button type="button" onclick="document.getElementById('modal-extend').classList.remove('hidden')"
                     class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-bold shadow-md shadow-teal-950/40 cursor-pointer">

@@ -28,6 +28,10 @@
         </p>
 
         {{-- Tombol Aksi Sederhana --}}
+        {{--
+          // UBAH WARNA TOMBOL 404 KEMBALI KE BERANDA:
+          // Ganti 'bg-white text-zinc-950' jadi 'bg-red-600 text-white' atau 'bg-teal-600 text-white'
+        --}}
         <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a href="{{ route('home') }}"
                class="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-5 py-2.5 text-xs sm:text-sm font-bold text-zinc-950 transition-colors">

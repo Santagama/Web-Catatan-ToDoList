@@ -145,6 +145,10 @@
             </div>
 
             <!-- Tombol Simpan -->
+            {{--
+              // UBAH WARNA TOMBOL 'SIMPAN PROFIL':
+              // Ganti 'bg-teal-600' jadi 'bg-blue-600' (biru) atau 'bg-rose-600' (merah)
+            --}}
             <div class="flex items-center gap-3 pt-2">
                 <button type="submit"
                         class="px-6 py-3 rounded-xl bg-teal-600 text-white text-sm font-bold shadow-sm cursor-pointer">
@@ -233,6 +237,10 @@
                     </div>
                 </div>
 
+                {{--
+                  // UBAH WARNA TOMBOL 'DAFTARKAN ADMIN BARU':
+                  // Ganti 'bg-teal-600' jadi 'bg-blue-600' (biru) atau 'bg-indigo-600' (ungu)
+                --}}
                 <div class="flex justify-end pt-1">
                     <button type="submit"
                             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 text-white text-xs sm:text-sm font-bold shadow-sm cursor-pointer">

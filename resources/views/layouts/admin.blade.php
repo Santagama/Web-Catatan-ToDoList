@@ -53,6 +53,11 @@
               Navigasi Menu Sidebar
               request()->routeIs('nama.route'): Helper Laravel untuk mengecek rute aktif saat ini
               sehingga menu yang sedang dibuka otomatis mendapatkan styling aktif (highlight teal).
+
+              // UBAH WARNA MENU AKTIF SIDEBAR DI SINI:
+              // Jika penguji minta warna BIRU: ganti 'bg-teal-500/15 text-teal-400 border-teal-500/30' jadi 'bg-blue-500/15 text-blue-400 border-blue-500/30'
+              // Jika penguji minta warna MERAH: ganti jadi 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+              // Jika penguji minta warna UNGU : ganti jadi 'bg-purple-500/15 text-purple-400 border-purple-500/30'
             --}}
             <nav class="p-4 sm:p-5 space-y-2 flex-1">
                 <!-- 1. Dashboard -->
@@ -111,6 +116,7 @@
 
                 >
                     @csrf
+                    {{-- // UBAH WARNA TOMBOL LOGOUT: Ganti 'bg-rose-950/40 text-rose-300 border-rose-900/60' (contoh: jadi 'bg-red-600 text-white') // --}}
                     <button type="submit"
                             class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-rose-300 bg-rose-950/40 border border-rose-900/60 cursor-pointer">
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

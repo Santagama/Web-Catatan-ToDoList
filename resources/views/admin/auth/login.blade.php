@@ -161,6 +161,12 @@
                     </div>
 
                     {{-- Tombol Submit Form (Putih Bersih Flat, Tanpa Shadow) --}}
+                    {{--
+                      // UBAH WARNA TOMBOL LOGIN:
+                      // Jika penguji minta warna TEAL : ganti 'bg-white text-gray-950' jadi 'bg-teal-600 text-white'
+                      // Jika penguji minta warna BIRU : ganti jadi 'bg-blue-600 text-white'
+                      // Jika penguji minta warna HITAM: ganti jadi 'bg-zinc-900 text-white border border-zinc-700'
+                    --}}
                     <button
                         type="submit"
                         id="submitBtn"

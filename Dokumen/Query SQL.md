@@ -102,13 +102,13 @@ DELIMITER ;
 DELIMITER $$
 
 DROP FUNCTION IF EXISTS CekKetersediaanSlug$$
-CREATE FUNCTION CekKetersediaanSlug(p_slug VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci)
+CREATE FUNCTION CekKetersediaanSlug(p_slug VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci)
 RETURNS INT
 DETERMINISTIC
 READS SQL DATA
 BEGIN
     DECLARE total INT;
-    SELECT COUNT(*) INTO total FROM portfolios WHERE slug = p_slug COLLATE utf8mb4_0900_ai_ci;
+    SELECT COUNT(*) INTO total FROM portfolios WHERE slug = p_slug COLLATE utf8mb4_unicode_ci;
     RETURN total;
 END$$
 
@@ -128,7 +128,7 @@ DROP PROCEDURE IF EXISTS TambahPortfolio$$
 CREATE PROCEDURE TambahPortfolio(
     IN p_admin_id      BIGINT UNSIGNED,
     IN p_nama_umkm     VARCHAR(150),
-    IN p_slug          VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+    IN p_slug          VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     IN p_bio           TEXT,
     IN p_whatsapp      VARCHAR(20),
     IN p_template_id   VARCHAR(50),
