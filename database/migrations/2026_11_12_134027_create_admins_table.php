@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name', 100); // Nama lengkap admin pengelola
             $table->string('username', 50)->unique(); // Username unik untuk login, tidak boleh ada yang kembar
             $table->string('password', 255); // Password terenkripsi (Bcrypt hash)
-            $table->rememberToken(); // Token untuk fitur "Ingat Saya" (Remember Me)
             $table->timestamps(); // Mencatat created_at (kapan dibuat) dan updated_at (kapan diubah)
         });
     }

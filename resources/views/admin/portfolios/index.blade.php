@@ -89,6 +89,7 @@
                         <th class="px-5 py-4 font-bold">Slug</th>
                         <th class="px-5 py-4 font-bold">Template</th>
                         <th class="px-5 py-4 font-bold">Status</th>
+                        <th class="px-5 py-4 font-bold">Expired</th>
                         <th class="px-5 py-4 font-bold text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -99,16 +100,16 @@
                             <td class="px-5 py-4">
                                 <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 p-1 flex items-center justify-center overflow-hidden shrink-0">
                                     @if ($porto->logo_path)
-                                        <img src="{{ Storage::url($porto->logo_path) }}" alt="{{ $porto->business_name }}" class="w-full h-full object-contain rounded-lg" />
+                                        <img src="{{ Storage::url($porto->logo_path) }}" alt="{{ $porto->nama_umkm }}" class="w-full h-full object-contain rounded-lg" />
                                     @else
-                                        <span class="text-teal-400 font-bold text-xs uppercase">{{ substr($porto->business_name, 0, 2) }}</span>
+                                        <span class="text-teal-400 font-bold text-xs uppercase">{{ substr($porto->nama_umkm, 0, 2) }}</span>
                                     @endif
                                 </div>
                             </td>
 
                             <!-- Kolom: Nama Web & Bio -->
                             <td class="px-5 py-4">
-                                <p class="font-bold text-white text-sm sm:text-base">{{ $porto->business_name }}</p>
+                                <p class="font-bold text-white text-sm sm:text-base">{{ $porto->nama_umkm }}</p>
                                 <p class="text-xs text-zinc-400 mt-0.5 line-clamp-1">{{ $porto->bio ?? 'Tidak ada deskripsi' }}</p>
                             </td>
 
@@ -124,8 +125,8 @@
                                 </span>
                             </td>
 
-                            <!-- Kolom: Status Publikasi & Masa Aktif -->
-                            <td class="px-5 py-4">
+                            <!-- Kolom: Status Publikasi -->
+                            <td class="px-5 py-4 whitespace-nowrap">
                                 @if ($porto->status === 'publish' && !$porto->isExpired())
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 text-xs font-bold border border-teal-500/30">
                                         <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
@@ -139,6 +140,19 @@
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 text-xs font-bold border border-amber-500/30">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
                                         Draft
+                                    </span>
+                                @endif
+                            </td>
+
+                            <!-- Kolom: Tanggal Expired -->
+                            <td class="px-5 py-4 whitespace-nowrap font-mono text-xs">
+                                @if ($porto->expired_at)
+                                    <span class="{{ $porto->isExpired() ? 'text-rose-400 font-bold' : 'text-zinc-300' }}">
+                                        {{ $porto->expired_at->format('d-m-Y') }}
+                                    </span>
+                                @else
+                                    <span class="text-zinc-500">
+                                        Tanpa Batas
                                     </span>
                                 @endif
                             </td>
@@ -163,7 +177,7 @@
                                       Form DELETE dengan konfirmasi javascript dan token CSRF (@csrf + @method('DELETE')).
                                     --}}
                                     <form action="{{ route('admin.portfolios.destroy', $porto->id) }}" method="POST"
-                                          onsubmit="return confirm('Yakin ingin menghapus portofolio {{ $porto->business_name }}?')">
+                                          onsubmit="return confirm('Yakin ingin menghapus portofolio {{ $porto->nama_umkm }}?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 rounded-xl bg-[#101116] border border-zinc-800 text-zinc-300 cursor-pointer" title="Hapus Portofolio">
@@ -175,7 +189,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-14 text-center text-zinc-500 text-sm">
+                            <td colspan="7" class="px-5 py-14 text-center text-zinc-500 text-sm">
                                 Belum ada website portofolio klien. Klik tombol "Buat Web Baru" untuk memulai.
                             </td>
                         </tr>

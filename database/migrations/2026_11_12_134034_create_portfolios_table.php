@@ -15,12 +15,13 @@ return new class extends Migration
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id(); // Primary Key
             $table->foreignId('admin_id')->constrained('admins')->cascadeOnDelete(); // Relasi ke tabel admins (siapa admin pembuatnya)
-            $table->string('template_id', 50)->default('minuman'); // Pilihan template (minuman, makanan, organisasi, tokoh, jasa)
-            $table->string('business_name', 150); // Nama usaha / brand UMKM
+            $table->string('template_id', 50)->default('minuman'); // Pilihan template (minuman, makanan, barang, tokoh, jasa)
+            $table->string('nama_umkm', 150); // Nama usaha / brand UMKM
             $table->string('slug', 150)->unique(); // Alamat URL unik publik (contoh: /kopi-kita), tidak boleh duplikat
             $table->text('bio')->nullable(); // Deskripsi profil atau cerita singkat usaha
             $table->text('alamat')->nullable(); // Alamat fisik usaha
             $table->string('whatsapp', 20)->nullable(); // Nomor WhatsApp untuk tombol pesan langsung
+            $table->string('instagram', 100)->nullable(); // Akun Instagram resmi UMKM (@username atau URL)
             $table->text('maps_embed_url')->nullable(); // URL sematan peta Google Maps (tipe TEXT agar muat menampung URL maupun iframe)
             $table->string('logo_path', 255)->nullable(); // Lokasi penyimpanan file logo di storage
             $table->string('banner_path', 255)->nullable(); // Lokasi penyimpanan file foto banner di storage

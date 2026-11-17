@@ -15,7 +15,7 @@ Folder ini berisi seluruh antarmuka publik yang dapat diakses oleh **pengunjung 
        - Header & Brand 'CMS Web Builder'
        - Hero section ajakan konversi & value proposition
        - 6 Fitur unggulan website untuk calon klien
-       - 5 Pilihan kategori desain industri (Kuliner, Resto, Jasa, Tokoh, Organisasi)
+       - 5 Pilihan kategori desain industri (Kuliner Minuman, Resto Makanan, Toko Barang, Tokoh, Jasa)
        - 3 Langkah alur pemesanan terima beres (Done-For-You)
        - 2 Pilihan paket investasi (Starter 3 Bulan vs Pro Bisnis 1 Tahun)
        - Interactive CV Card profil developer (Hanan Aria Santagama)
@@ -48,7 +48,7 @@ Folder ini berisi seluruh antarmuka publik yang dapat diakses oleh **pengunjung 
     *   *Navbar*: Logo CMS Web Builder (fallback cerdas ke file `.png` / `.svg`), link navigasi halus, tombol Konsultasi WA, dan Login Admin.
     *   *Hero Section*: Headline fokus solusi bisnis, trust metrics (selesai 24 jam, mobile responsive, WA order, Google Maps).
     *   *Fitur Unggulan*: 6 kartu fitur (slug kustom, katalog produk, chat WA, peta lokasi, mobile friendly, bebas maintenance).
-    *   *Etalase Kategori Desain*: Menampilkan 5 varian industri (Minuman, Makanan, Jasa, Tokoh, Organisasi).
+    *   *Etalase Kategori Desain*: Menampilkan 5 varian industri (Minuman, Makanan, Jasa, Tokoh, Barang).
     *   *Paket Layanan*: Perbedaan paket murni di benefit layanan di luar web (masa aktif 90 hari vs 365 hari, kuota update menu, dukungan SEO redirect).
     *   *Interactive CV Card Developer*: Profil Hanan Aria Santagama (foto profil, role founder, SMKN 1 Majalengka XII RPL 1, tech stack badges, tanda tangan digital, tautan kontak).
     *   *Footer*: Minimalis dan rapi, copyright tunggal `© 2026 Hanan Aria Santagama | XII RPL 1`.
@@ -56,6 +56,6 @@ Folder ini berisi seluruh antarmuka publik yang dapat diakses oleh **pengunjung 
 ### 2. Subfolder `templates/` (5 Variasi Layout Portofolio)
 *   `minuman.blade.php`: Mengadopsi aksen warna kopi/amber, menonjolkan menu minuman segar, harga, dan tombol pesan menu ke WhatsApp.
 *   `makanan.blade.php`: Mengadopsi aksen warna oranye hangat kuliner, menonjolkan foto hidangan lezat dan tombol pesan antar (*delivery*).
-*   `organisasi.blade.php`: Mengadopsi aksen warna biru/indigo formal, menonjolkan Visi-Misi, struktur kepengurusan, dan program kerja unggulan.
+*   `barang.blade.php`: Mengadopsi aksen warna biru retail modern, menonjolkan etalase katalog produk fisik, spesifikasi, dan tombol order WhatsApp.
 *   `tokoh.blade.php`: Mengadopsi aksen warna cyan berwibawa, menonjolkan foto profil besar, rekam jejak, program janji aksi, dan tombol WA.
 *   `jasa.blade.php`: Mengadopsi aksen warna hijau emerald terpercaya, menonjolkan daftar layanan, pricelist transparan, dan sematan peta Google Maps.

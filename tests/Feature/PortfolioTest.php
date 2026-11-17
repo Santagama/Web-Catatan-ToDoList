@@ -8,9 +8,9 @@ beforeEach(function () {
 });
 
 afterEach(function () {
-    Portfolio::where('business_name', 'like', '%Test%')
-        ->orWhere('business_name', 'like', '%Kopi Lama%')
-        ->orWhere('business_name', 'like', '%Usaha Rahasia%')
+    Portfolio::where('nama_umkm', 'like', '%Test%')
+        ->orWhere('nama_umkm', 'like', '%Kopi Lama%')
+        ->orWhere('nama_umkm', 'like', '%Usaha Rahasia%')
         ->delete();
 });
 
@@ -25,7 +25,7 @@ test('admin dapat membuat portofolio baru dengan format valid', function () {
     $uniqueSlug = 'warung-kopi-test-'.time();
 
     $response = $this->actingAs($this->admin)->post(route('admin.portfolios.store'), [
-        'business_name' => 'Warung Kopi Test',
+        'nama_umkm' => 'Warung Kopi Test',
         'slug' => $uniqueSlug,
         'template_id' => 'minuman',
         'bio' => 'Kedai kopi uji coba otomatis',
@@ -48,7 +48,7 @@ test('perubahan slug mencatat riwayat dan menghasilkan redirect 301 untuk SEO', 
     $portfolio = Portfolio::create([
         'admin_id' => $this->admin->id,
         'template_id' => 'minuman',
-        'business_name' => 'Kopi Lama',
+        'nama_umkm' => 'Kopi Lama',
         'slug' => $slugAwal,
         'status' => 'publish',
         'paket' => 'tanpa_batas',
@@ -56,7 +56,7 @@ test('perubahan slug mencatat riwayat dan menghasilkan redirect 301 untuk SEO', 
 
     // Update slug
     $response = $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolio), [
-        'business_name' => 'Kopi Lama',
+        'nama_umkm' => 'Kopi Lama',
         'slug' => $slugBaru,
         'template_id' => 'minuman',
         'status' => 'publish',
@@ -83,7 +83,7 @@ test('portofolio berstatus draft tidak dapat diakses oleh publik (404)', functio
     Portfolio::create([
         'admin_id' => $this->admin->id,
         'template_id' => 'jasa',
-        'business_name' => 'Usaha Rahasia',
+        'nama_umkm' => 'Usaha Rahasia',
         'slug' => $slugDraft,
         'status' => 'draft',
     ]);
@@ -99,7 +99,7 @@ test('input google maps berupa tag iframe otomatis diekstrak menjadi url bersih'
     $uniqueSlug = 'warung-kopi-maps-'.time();
 
     $this->actingAs($this->admin)->post(route('admin.portfolios.store'), [
-        'business_name' => 'Warung Kopi Test Maps',
+        'nama_umkm' => 'Warung Kopi Test Maps',
         'slug' => $uniqueSlug,
         'template_id' => 'minuman',
         'maps_embed_url' => $iframeTag,
@@ -109,4 +109,29 @@ test('input google maps berupa tag iframe otomatis diekstrak menjadi url bersih'
     $created = Portfolio::where('slug', $uniqueSlug)->first();
     expect($created)->not->toBeNull();
     expect($created->maps_embed_url)->toBe($cleanExpected);
+});
+
+test('admin dapat membuat portofolio dengan template barang dan publik dapat melihat katalog barang', function () {
+    $uniqueSlug = 'toko-distro-test-'.time();
+
+    $response = $this->actingAs($this->admin)->post(route('admin.portfolios.store'), [
+        'nama_umkm' => 'Toko Distro Test',
+        'slug' => $uniqueSlug,
+        'template_id' => 'barang',
+        'bio' => 'Toko busana dan pakaian retail terbaik',
+        'whatsapp' => '081299998888',
+        'status' => 'publish',
+        'paket' => 'tanpa_batas',
+    ]);
+
+    $response->assertRedirect(route('admin.portfolios.index'));
+    $this->assertDatabaseHas('portfolios', [
+        'slug' => $uniqueSlug,
+        'template_id' => 'barang',
+    ]);
+
+    $publicResponse = $this->get('/'.$uniqueSlug);
+    $publicResponse->assertStatus(200);
+    $publicResponse->assertSee('Toko Distro Test');
+    $publicResponse->assertSee('Katalog Produk &amp; Barang Pilihan', false);
 });

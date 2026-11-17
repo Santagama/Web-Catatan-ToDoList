@@ -18,7 +18,7 @@
         <div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Activity Log</h1>
             <p class="text-xs sm:text-sm text-zinc-400 mt-1 font-medium">
-                Riwayat aktivitas admin bulan {{ request('bulan') ? Carbon\Carbon::create(2026, request('bulan'), 1)->translatedFormat('F') : now()->translatedFormat('F') }} {{ request('tahun', now()->year) }}
+                Riwayat aktivitas admin bulan {{ request('bulan') ? Carbon\Carbon::create(2026, request('bulan'), 1)->locale('id')->translatedFormat('F') : now()->locale('id')->translatedFormat('F') }} {{ request('tahun', now()->year) }}
             </p>
         </div>
 
@@ -29,7 +29,7 @@
                     <option value="">Semua Bulan</option>
                     @for ($m = 1; $m <= 12; $m++)
                         <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
-                            {{ Carbon\Carbon::create(2026, $m, 1)->translatedFormat('F') }}
+                            {{ Carbon\Carbon::create(2026, $m, 1)->locale('id')->translatedFormat('F') }}
                         </option>
                     @endfor
                 </select>
@@ -66,20 +66,20 @@
 
         <!-- TAMBAH -->
         <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
-            <span class="text-xs font-bold text-teal-400 uppercase tracking-wider block mb-1">TAMBAH</span>
-            <p class="text-2xl sm:text-3xl font-extrabold text-teal-400">{{ $summaryBulanIni['tambah'] }}</p>
+            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">TAMBAH</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ $summaryBulanIni['tambah'] }}</p>
         </div>
 
         <!-- EDIT -->
         <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
-            <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">EDIT</span>
-            <p class="text-2xl sm:text-3xl font-extrabold text-cyan-400">{{ $summaryBulanIni['edit'] }}</p>
+            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">EDIT</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ $summaryBulanIni['edit'] }}</p>
         </div>
 
         <!-- HAPUS -->
         <div class="p-5 rounded-3xl bg-[#18191f] border border-zinc-800 shadow-sm">
-            <span class="text-xs font-bold text-rose-400 uppercase tracking-wider block mb-1">HAPUS</span>
-            <p class="text-2xl sm:text-3xl font-extrabold text-rose-400">{{ $summaryBulanIni['hapus'] }}</p>
+            <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">HAPUS</span>
+            <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ $summaryBulanIni['hapus'] }}</p>
         </div>
     </div>
 
@@ -114,8 +114,8 @@
                             {{-- Relasi Eloquent ke Portfolio (jika log terkait dengan portofolio tertentu) --}}
                             @if ($log->portfolio)
                                 <span class="text-zinc-600">&bull;</span>
-                                <span class="text-xs text-zinc-400">
-                                    web <a href="{{ route('admin.portfolios.edit', $log->portfolio->id) }}" class="text-teal-400 underline font-medium">{{ $log->portfolio->business_name }}</a>
+                                <span class="text-xs text-zinc-400 font-medium">
+                                    web {{ $log->portfolio->nama_umkm }}
                                 </span>
                             @endif
                         </div>
@@ -125,11 +125,10 @@
                             {{ $log->description }}
                         </p>
 
-                        <!-- Waktu Pencatatan: Menggunakan translatedFormat & diffForHumans Carbon -->
-                        <div class="flex items-center gap-2 text-xs text-zinc-500 pt-1">
+                        <!-- Waktu Pencatatan: Bahasa Indonesia Bersih -->
+                        <div class="flex items-center gap-2 text-xs text-zinc-400 pt-1">
                             <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <span>{{ $log->created_at->translatedFormat('l, d F Y &bull; H:i') }} WIB</span>
-                            <span>({{ $log->created_at->diffForHumans() }})</span>
+                            <span>{{ $log->created_at->locale('id')->translatedFormat('l, d F Y, H:i') }} WIB</span>
                         </div>
                     </div>
                 </div>

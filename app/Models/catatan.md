@@ -37,7 +37,7 @@ Data berhasil disimpan, Model mengembalikan objek data ke Controller.
 *   **Keistimewaan**: Meng-extend class `Illuminate\Foundation\Auth\User as Authenticatable`. Hal ini wajib agar model ini dapat dikenali oleh sistem autentikasi dan session Laravel (`Auth::attempt()`, `auth()->user()`).
 *   **Atribut Kunci**:
     *   `$fillable`: `['name', 'username', 'password']`.
-    *   `$hidden`: Menyembunyikan hash password dan remember token agar tidak bocor saat data di-serialize.
+    *   `$hidden`: Menyembunyikan hash password agar tidak bocor saat data di-serialize.
     *   `$casts`: `'password' => 'hashed'` memastikan password terenkripsi otomatis dengan Bcrypt.
 *   **Relasi**:
     *   `portfolios()`: Relasi `hasMany` (satu admin dapat mengelola banyak portofolio).

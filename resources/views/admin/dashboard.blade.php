@@ -21,11 +21,8 @@
                 <span>Panel Admin</span>
             </div>
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
-                Selamat Datang, {{ auth()->user()->name ?? 'Hanan Aria Santagama' }}
+                Welcome, {{ auth()->user()->name ?? 'Hanan Aria Santagama' }}
             </h1>
-            <p class="text-sm sm:text-base text-zinc-300 max-w-2xl font-normal leading-relaxed">
-                Kelola landing page klien UMKM dengan praktis, pantau status publikasi, dan audit perubahan sistem secara real-time.
-            </p>
         </div>
     </div>
 
@@ -57,7 +54,7 @@
                 </div>
             </div>
             <div>
-                <p class="text-3xl sm:text-4xl font-extrabold text-teal-400 tracking-tight">{{ $publishedPortfolios }}</p>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">{{ $publishedPortfolios }}</p>
                 <p class="text-xs text-zinc-400 mt-1 flex items-center gap-1 font-medium">
                     <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                     <span>Siap diakses publik</span>
@@ -74,7 +71,7 @@
                 </div>
             </div>
             <div>
-                <p class="text-3xl sm:text-4xl font-extrabold text-amber-400 tracking-tight">{{ $draftPortfolios }}</p>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">{{ $draftPortfolios }}</p>
                 <p class="text-xs text-zinc-400 mt-1 flex items-center gap-1 font-medium">
                     <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                     <span>Menunggu publikasi</span>
@@ -132,7 +129,7 @@
                             <div class="space-y-0.5">
                                 <p class="text-sm font-semibold text-white leading-snug">{{ $log->description }}</p>
                                 {{-- translatedFormat: Format tanggal lokal Indonesia memanfaatkan Carbon Laravel --}}
-                                <p class="text-xs text-zinc-400">{{ $log->created_at->translatedFormat('d M Y, H:i') }}</p>
+                                <p class="text-xs text-zinc-400">{{ $log->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</p>
                             </div>
                         </div>
 

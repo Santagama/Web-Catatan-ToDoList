@@ -38,7 +38,7 @@ Schedule::call(function () {
             'admin_id' => $portfolio->admin_id,
             'portfolio_id' => $portfolio->id,
             'action' => 'AUTO_DRAFT',
-            'description' => 'Paket portofolio "'.$portfolio->business_name
+            'description' => 'Paket portofolio "'.$portfolio->nama_umkm
                 .'" telah melewati masa aktif dan otomatis dialihkan ke status draft oleh sistem scheduler.',
             'created_at' => now(),
         ]);

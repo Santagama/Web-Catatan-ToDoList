@@ -3,7 +3,7 @@
 Folder ini berisi 5 varian template spesifik industri untuk etalase portofolio UMKM:
 1. `minuman.blade.php` (Aksen Amber - Kedai Kopi, Boba, Minuman Segar)
 2. `makanan.blade.php` (Aksen Oranye - Restoran, Rumah Makan, Kuliner Bakso)
-3. `organisasi.blade.php` (Aksen Indigo - OSIS, Komunitas Pemuda, Lembaga Swadaya)
+3. `barang.blade.php` (Aksen Biru/Indigo - Toko Retail, Fashion, Elektronik, Produk Fisik UMKM)
 4. `tokoh.blade.php` (Aksen Sian - Profil Calon Legislatif, Figur Publik, Tokoh Masyarakat)
 5. `jasa.blade.php` (Aksen Zamrud/Emerald - Studio Foto, Bengkel Servis, Barbershop/Salon)
 

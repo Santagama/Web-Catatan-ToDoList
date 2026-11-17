@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Portofolio: ' . $portfolio->business_name)
+@section('title', 'Detail Portofolio: ' . $portfolio->nama_umkm)
 @section('page_title', 'Detail Portofolio')
 
 @section('content')
@@ -17,7 +17,7 @@
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 p-6 sm:p-8 rounded-3xl bg-[#18191f] border border-zinc-800">
         <div class="space-y-2">
             <div class="flex flex-wrap items-center gap-3">
-                <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">{{ $portfolio->business_name }}</h2>
+                <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">{{ $portfolio->nama_umkm }}</h2>
                 @if ($portfolio->status === 'publish' && !$portfolio->isExpired())
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 text-teal-400 text-xs font-bold border border-teal-500/30">
                         <span class="w-2 h-2 rounded-full bg-teal-400"></span>
@@ -76,7 +76,7 @@
 
             <!-- Tombol Hapus -->
             <form action="{{ route('admin.portfolios.destroy', $portfolio->id) }}" method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus portofolio {{ $portfolio->business_name }} secara permanen?');">
+                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus portofolio {{ $portfolio->nama_umkm }} secara permanen?');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-rose-950/80 text-rose-400 border border-rose-800/60 text-xs font-bold cursor-pointer">
@@ -118,6 +118,20 @@
                             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $portfolio->whatsapp) }}" target="_blank"
                                class="text-sm text-teal-400 font-mono font-bold flex items-center gap-1.5">
                                 {{ $portfolio->whatsapp }}
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        @else
+                            <p class="text-sm text-zinc-500">Belum diisi</p>
+                        @endif
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">Akun Instagram</span>
+                        @if ($portfolio->instagram)
+                            <a href="{{ $portfolio->instagram_url }}" target="_blank"
+                               class="text-sm text-pink-400 font-mono font-bold flex items-center gap-1.5">
+                                {{ $portfolio->instagram }}
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
@@ -312,7 +326,7 @@
             @method('PUT')
 
             <p class="text-xs text-zinc-300 leading-relaxed">
-                Pilih durasi paket baru untuk memperpanjang masa aktif portofolio <strong class="text-white">{{ $portfolio->business_name }}</strong>. Status otomatis diperbarui menjadi <em class="text-teal-400 font-semibold not-italic">Publish</em>.
+                Pilih durasi paket baru untuk memperpanjang masa aktif portofolio <strong class="text-white">{{ $portfolio->nama_umkm }}</strong>. Status otomatis diperbarui menjadi <em class="text-teal-400 font-semibold not-italic">Publish</em>.
             </p>
 
             <div>

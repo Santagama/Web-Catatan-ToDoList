@@ -37,7 +37,6 @@ dan mencatat daftar batch di tabel internal 'migrations'.
     *   `name` (varchar 100): Nama lengkap admin ("Hanan Aria Santagama").
     *   `username` (varchar 50): Username unik (`unique()`), mencegah adanya username ganda.
     *   `password` (varchar 255): Password yang sudah terenkripsi Bcrypt hash.
-    *   `rememberToken()`: Menyimpan token sesi "Ingat Saya".
     *   `timestamps()`: Mencatat tanggal `created_at` dan `updated_at`.
 
 ### 2. `..._create_portfolios_table.php`
@@ -45,8 +44,8 @@ dan mencatat daftar batch di tabel internal 'migrations'.
 *   **Struktur Kolom**:
     *   `id`: Primary key auto-increment.
     *   `admin_id`: Foreign key ke `admins.id` dengan relasi `cascadeOnDelete()`.
-    *   `template_id` (varchar 50): Menyimpan kode template visual (`minuman`, `makanan`, `organisasi`, `tokoh`, `jasa`).
-    *   `business_name` (varchar 150): Nama usaha atau entitas UMKM.
+    *   `template_id` (varchar 50): Menyimpan kode template visual (`minuman`, `makanan`, `barang`, `tokoh`, `jasa`).
+    *   `nama_umkm` (varchar 150): Nama usaha atau entitas UMKM.
     *   `slug` (varchar 150): URL unik publik (`unique()`), menjadi alamat web UMKM (contoh: `/kopi-kita`).
     *   `bio` (text, nullable): Cerita singkat atau profil usaha.
     *   `alamat` (text, nullable): Alamat fisik UMKM.

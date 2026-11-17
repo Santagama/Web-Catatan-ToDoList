@@ -31,11 +31,12 @@ class Portfolio extends Model
     protected $fillable = [
         'admin_id',
         'template_id',
-        'business_name',
+        'nama_umkm',
         'slug',
         'bio',
         'alamat',
         'whatsapp',
+        'instagram',
         'maps_embed_url',
         'logo_path',
         'banner_path',
@@ -156,5 +157,24 @@ class Portfolio extends Model
         }
 
         return (int) Carbon::now()->diffInDays($this->expired_at, false);
+    }
+
+    /**
+     * Helper Accessor: Menghasilkan link URL lengkap ke akun Instagram resmi UMKM.
+     * Menerima input '@nama_toko' maupun 'nama_toko' dan mengonversinya menjadi URL aktif.
+     */
+    public function getInstagramUrlAttribute(): ?string
+    {
+        if (blank($this->instagram)) {
+            return null;
+        }
+
+        $ig = trim($this->instagram);
+
+        if (str_starts_with($ig, 'http://') || str_starts_with($ig, 'https://')) {
+            return $ig;
+        }
+
+        return 'https://instagram.com/'.ltrim($ig, '@');
     }
 }

@@ -3,7 +3,7 @@
 ## 1. login.blade.php
 
 ### [FUNGSI]
-Menyediakan antarmuka (UI) formulir login pengelola platform SentraUMKM. Dilengkapi masukan kredensial (username dan kata sandi), opsi *remember me*, visual peringatan error validasi, serta kartu bantuan kredensial default untuk mempermudah penilaian oleh dewan penguji UKK.
+Menyediakan antarmuka (UI) formulir login pengelola platform CMS Web Builder. Dilengkapi masukan kredensial (username dan kata sandi), visual peringatan error validasi, serta kartu bantuan kredensial default untuk mempermudah penilaian oleh dewan penguji UKK.
 
 ### [ALUR SISTEM/USER FLOW]
 1. Pengunjung/penguji mengakses alamat `/admin/login` atau otomatis diarahkan ke sini saat mencoba membuka rute terproteksi tanpa login session.

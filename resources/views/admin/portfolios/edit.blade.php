@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Portofolio: ' . $portfolio->business_name)
+@section('title', 'Edit Portofolio: ' . $portfolio->nama_umkm)
 @section('page_title', 'Edit Portofolio')
 
 @section('content')
@@ -63,12 +63,12 @@
             <p class="text-xs sm:text-sm text-zinc-400">Informasi identitas brand dan kontak yang akan dipajang di web publik.</p>
         </div>
 
-        <!-- Nama Usaha -->
+        <!-- Nama UMKM -->
         <div>
-            <label for="business_name" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Nama Usaha <span class="text-rose-400">*</span></label>
-            <input type="text" name="business_name" id="business_name" value="{{ old('business_name', $portfolio->business_name) }}" required
-                class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('business_name') border-rose-500 @else border-zinc-800 @enderror text-white placeholder-zinc-500 text-sm outline-none font-medium" />
-            @error('business_name')
+            <label for="nama_umkm" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Nama UMKM <span class="text-rose-400">*</span></label>
+            <input type="text" name="nama_umkm" id="nama_umkm" value="{{ old('nama_umkm', $portfolio->nama_umkm) }}" required
+                class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('nama_umkm') border-rose-500 @else border-zinc-800 @enderror text-white placeholder-zinc-500 text-sm outline-none font-medium" />
+            @error('nama_umkm')
                 <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
             @enderror
         </div>
@@ -104,16 +104,23 @@
             <!-- WhatsApp -->
             <div>
                 <label for="whatsapp" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Nomor WhatsApp Usaha</label>
-                <input type="text" name="whatsapp" id="whatsapp" value="{{ old('whatsapp', $portfolio->whatsapp) }}"
+                <input type="text" name="whatsapp" id="whatsapp" value="{{ old('whatsapp', $portfolio->whatsapp) }}" placeholder="081234567890"
                     class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
             </div>
 
-            <!-- Alamat Fisik -->
+            <!-- Instagram -->
             <div>
-                <label for="alamat" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Alamat Fisik Usaha</label>
-                <input type="text" name="alamat" id="alamat" value="{{ old('alamat', $portfolio->alamat) }}"
+                <label for="instagram" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Akun Instagram Usaha</label>
+                <input type="text" name="instagram" id="instagram" value="{{ old('instagram', $portfolio->instagram) }}" placeholder="@namatoko atau namatoko"
                     class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
             </div>
+        </div>
+
+        <!-- Alamat Fisik -->
+        <div>
+            <label for="alamat" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Alamat Fisik Usaha</label>
+            <input type="text" name="alamat" id="alamat" value="{{ old('alamat', $portfolio->alamat) }}" placeholder="Jl. Raya No. 123, Majalengka"
+                class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
         </div>
 
         <!-- Google Maps Embed -->

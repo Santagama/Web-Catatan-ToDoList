@@ -34,7 +34,7 @@ class PortfolioController extends Controller
     private const TEMPLATE_OPTIONS = [
         'minuman' => 'Minuman (Kopi, Boba, Kedai)',
         'makanan' => 'Makanan (Kuliner, Resto, Bakso)',
-        'organisasi' => 'Organisasi (OSIS, Komunitas)',
+        'barang' => 'Barang (Elektronik, Fashion, Retail)',
         'tokoh' => 'Tokoh (Caleg, Profil Publik)',
         'jasa' => 'Jasa (Salon, Servis, Studio)',
     ];
@@ -51,7 +51,7 @@ class PortfolioController extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('business_name', 'like', '%'.$search.'%')
+                $q->where('nama_umkm', 'like', '%'.$search.'%')
                     ->orWhere('slug', 'like', '%'.$search.'%');
             });
         }
@@ -97,12 +97,13 @@ class PortfolioController extends Controller
     {
         // 1. Validasi seluruh input dari form
         $validated = $request->validate([
-            'business_name' => ['required', 'string', 'max:150'],
+            'nama_umkm' => ['required', 'string', 'max:150'],
             'slug' => ['required', 'string', 'max:150', 'unique:portfolios,slug', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up'],
             'template_id' => ['required', 'string', 'in:'.implode(',', array_keys(self::TEMPLATE_OPTIONS))],
             'bio' => ['nullable', 'string'],
             'alamat' => ['nullable', 'string'],
             'whatsapp' => ['nullable', 'string', 'max:20'],
+            'instagram' => ['nullable', 'string', 'max:100'],
             'maps_embed_url' => ['nullable', 'string', 'max:2000'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'banner' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
@@ -114,7 +115,7 @@ class PortfolioController extends Controller
             'products.*.price' => ['nullable', 'numeric', 'min:0'],
             'products.*.description' => ['nullable', 'string'],
         ], [
-            'business_name.required' => 'Nama usaha wajib diisi.',
+            'nama_umkm.required' => 'Nama UMKM wajib diisi.',
             'slug.required' => 'Slug URL wajib diisi.',
             'slug.unique' => 'Slug URL ini sudah digunakan UMKM lain, silakan pilih yang berbeda.',
             'slug.regex' => 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.',
@@ -146,11 +147,12 @@ class PortfolioController extends Controller
         $portfolio = Portfolio::create([
             'admin_id' => auth()->id(),
             'template_id' => $validated['template_id'],
-            'business_name' => $validated['business_name'],
+            'nama_umkm' => $validated['nama_umkm'],
             'slug' => $validated['slug'],
             'bio' => $validated['bio'] ?? null,
             'alamat' => $validated['alamat'] ?? null,
             'whatsapp' => $validated['whatsapp'] ?? null,
+            'instagram' => $validated['instagram'] ?? null,
             'maps_embed_url' => $validated['maps_embed_url'] ?? null,
             'logo_path' => $logoPath,
             'banner_path' => $bannerPath,
@@ -163,12 +165,12 @@ class PortfolioController extends Controller
         // 7. Catat jejak audit ke activity_logs
         ActivityLog::record(
             'TAMBAH_PORTFOLIO',
-            'Admin '.auth()->user()->name.' menambahkan portofolio baru: '.$portfolio->business_name,
+            'Admin '.auth()->user()->name.' menambahkan portofolio baru: '.$portfolio->nama_umkm,
             $portfolio->id
         );
 
         return redirect()->route('admin.portfolios.index')
-            ->with('success', 'Portofolio "'.$portfolio->business_name.'" berhasil ditambahkan!');
+            ->with('success', 'Portofolio "'.$portfolio->nama_umkm.'" berhasil ditambahkan!');
     }
 
     /**
@@ -196,12 +198,13 @@ class PortfolioController extends Controller
     {
         // 1. Validasi input (slug unik tapi abaikan slug milik portofolio ini sendiri)
         $validated = $request->validate([
-            'business_name' => ['required', 'string', 'max:150'],
+            'nama_umkm' => ['required', 'string', 'max:150'],
             'slug' => ['required', 'string', 'max:150', 'unique:portfolios,slug,'.$portfolio->id, 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up'],
             'template_id' => ['required', 'string', 'in:'.implode(',', array_keys(self::TEMPLATE_OPTIONS))],
             'bio' => ['nullable', 'string'],
             'alamat' => ['nullable', 'string'],
             'whatsapp' => ['nullable', 'string', 'max:20'],
+            'instagram' => ['nullable', 'string', 'max:100'],
             'maps_embed_url' => ['nullable', 'string', 'max:2000'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'banner' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
@@ -212,6 +215,7 @@ class PortfolioController extends Controller
             'products.*.price' => ['nullable', 'numeric', 'min:0'],
             'products.*.description' => ['nullable', 'string'],
         ], [
+            'nama_umkm.required' => 'Nama UMKM wajib diisi.',
             'slug.unique' => 'Slug URL ini sudah digunakan UMKM lain.',
             'slug.regex' => 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.',
         ]);
@@ -252,11 +256,12 @@ class PortfolioController extends Controller
         // 6. Update data di database
         $portfolio->update([
             'template_id' => $validated['template_id'],
-            'business_name' => $validated['business_name'],
+            'nama_umkm' => $validated['nama_umkm'],
             'slug' => $validated['slug'],
             'bio' => $validated['bio'] ?? null,
             'alamat' => $validated['alamat'] ?? null,
             'whatsapp' => $validated['whatsapp'] ?? null,
+            'instagram' => $validated['instagram'] ?? null,
             'maps_embed_url' => $validated['maps_embed_url'] ?? null,
             'logo_path' => $validated['logo_path'] ?? $portfolio->logo_path,
             'banner_path' => $validated['banner_path'] ?? $portfolio->banner_path,
@@ -266,14 +271,14 @@ class PortfolioController extends Controller
         ]);
 
         // 7. Catat jejak audit
-        $desc = 'Admin '.auth()->user()->name.' memperbarui portofolio: '.$portfolio->business_name;
+        $desc = 'Admin '.auth()->user()->name.' memperbarui portofolio: '.$portfolio->nama_umkm;
         if ($slugLama !== $slugBaru) {
             $desc .= ' (Slug diubah dari "'.$slugLama.'" menjadi "'.$slugBaru.'")';
         }
         ActivityLog::record('EDIT_PORTFOLIO', $desc, $portfolio->id);
 
         return redirect()->route('admin.portfolios.index')
-            ->with('success', 'Portofolio "'.$portfolio->business_name.'" berhasil diperbarui!');
+            ->with('success', 'Portofolio "'.$portfolio->nama_umkm.'" berhasil diperbarui!');
     }
 
     /**
@@ -281,7 +286,7 @@ class PortfolioController extends Controller
      */
     public function destroy(Portfolio $portfolio): RedirectResponse
     {
-        $namaUsaha = $portfolio->business_name;
+        $namaUsaha = $portfolio->nama_umkm;
 
         // 1. Hapus file gambar logo dan banner dari disk storage
         if ($portfolio->logo_path) {
@@ -343,13 +348,13 @@ class PortfolioController extends Controller
         // Catat jejak audit
         ActivityLog::record(
             'PERPANJANG_PAKET',
-            'Admin '.auth()->user()->name.' memperpanjang paket portofolio "'.$portfolio->business_name
+            'Admin '.auth()->user()->name.' memperpanjang paket portofolio "'.$portfolio->nama_umkm
                 .'" hingga '.$newExpiredAt->format('d M Y'),
             $portfolio->id
         );
 
         return redirect()->route('admin.portfolios.show', $portfolio->id)
-            ->with('success', 'Paket "'.$portfolio->business_name.'" berhasil diperpanjang hingga '.$newExpiredAt->format('d M Y').'!');
+            ->with('success', 'Paket "'.$portfolio->nama_umkm.'" berhasil diperpanjang hingga '.$newExpiredAt->format('d M Y').'!');
     }
 
     /**

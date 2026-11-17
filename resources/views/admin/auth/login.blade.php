@@ -164,25 +164,6 @@
                         </div>
                     </div>
 
-                    {{-- Checkbox Ingat Saya (Remember Token) --}}
-                    <div>
-                        <label class="flex cursor-pointer items-center gap-3">
-                            <div class="relative">
-                                <input
-                                    type="checkbox"
-                                    name="remember"
-                                    id="remember"
-                                    value="1"
-                                    {{ old('remember') ? 'checked' : '' }}
-                                    class="peer sr-only"
-                                />
-                                <div class="h-6 w-11 rounded-full bg-white/10 ring-2 ring-white/20 peer-checked:bg-teal-500 lg:h-7 lg:w-12"></div>
-                                <div class="absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-md peer-checked:translate-x-5 lg:h-5 lg:w-5 lg:peer-checked:translate-x-5"></div>
-                            </div>
-                            <span class="text-xs font-semibold text-white/80 lg:text-sm">Ingat saya</span>
-                        </label>
-                    </div>
-
                     {{-- Tombol Submit Form --}}
                     <button
                         type="submit"

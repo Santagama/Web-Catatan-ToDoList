@@ -61,9 +61,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Log Aktivitas Audit
     Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
 
-    // Pengaturan Akun Admin
+    // Pengaturan Akun Admin & Manajemen Admin Multi-User
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::post('/settings/admins', [SettingsController::class, 'storeAdmin'])->name('settings.admins.store');
+    Route::delete('/settings/admins/{admin}', [SettingsController::class, 'destroyAdmin'])->name('settings.admins.destroy');
 });
 
 /*

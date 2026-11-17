@@ -55,7 +55,7 @@ Folder ini berisi seluruh antarmuka pengguna (View Blade) untuk **Manajemen Port
 ### 2. `create.blade.php`
 *   **Fungsi**: Halaman formulir pendaftaran portofolio UMKM baru.
 *   **Fitur Cerdas (Nilai Plus Penguji)**:
-    *   *Pemilihan Template*: Radio button bergaya kartu interaktif untuk 5 template (`minuman`, `makanan`, `organisasi`, `tokoh`, `jasa`).
+    *   *Pemilihan Template*: Radio button bergaya kartu interaktif untuk 5 template (`minuman`, `makanan`, `barang`, `tokoh`, `jasa`).
     *   *Auto-Slug Generator (Vanilla JS)*: Saat admin mengetik *"Kopi Senja Nusantara"*, input slug otomatis terisi *"kopi-senja-nusantara"*.
     *   *Live Image Preview (Vanilla JS)*: Saat admin memilih file logo atau banner, gambar langsung tampil di layar sebelum klik Simpan.
     *   *Dynamic Product Row*: Admin bisa klik `+ Tambah Produk` untuk menambah baris produk (nama, harga, deskripsi, foto) tanpa batas secara dinamis di browser.

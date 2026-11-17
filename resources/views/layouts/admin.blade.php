@@ -36,15 +36,12 @@
         <div class="flex flex-col h-full overflow-y-auto">
             <!-- Header Brand & Logo -->
             <div class="h-20 px-6 border-b border-zinc-800/80 flex items-center justify-between shrink-0">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-2xl bg-white p-1 border border-white/20 flex items-center justify-center shrink-0 shadow-md">
+                <div class="flex items-center gap-3.5 select-none">
+                    <div class="w-10 h-10 rounded-xl bg-white p-1 border border-white/20 flex items-center justify-center shrink-0 shadow-md overflow-hidden">
                         <img src="/assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'" />
                     </div>
-                    <div>
-                        <h1 class="text-base font-extrabold tracking-tight text-white">Web Builder</h1>
-                        <span class="block text-[10px] tracking-widest text-teal-400 font-bold uppercase -mt-0.5">Management System</span>
-                    </div>
-                </a>
+                    <span class="text-base font-extrabold tracking-tight text-white">CMS Web Builder</span>
+                </div>
 
                 <!-- Tombol Close Sidebar Khusus HP -->
                 <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 rounded-xl text-zinc-400 bg-zinc-800/60 cursor-pointer" aria-label="Tutup Menu">
@@ -140,11 +137,11 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
 
-                <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-white p-0.5 flex items-center justify-center shrink-0">
+                <div class="flex items-center gap-2.5 select-none">
+                    <div class="w-8 h-8 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                         <img src="/assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'" />
                     </div>
-                    <span class="text-sm font-extrabold text-white">Web Builder</span>
+                    <span class="text-sm font-extrabold text-white">CMS Web Builder</span>
                 </div>
             </div>
 

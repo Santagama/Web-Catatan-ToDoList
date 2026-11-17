@@ -47,8 +47,6 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        $remember = $request->boolean('remember');
-
         // 2. Proteksi Brute-Force: Batasi maksimal 5 percobaan login gagal per menit
         $throttleKey = Str::transliterate(Str::lower($request->input('username')).'|'.$request->ip());
 
@@ -56,14 +54,14 @@ class AuthController extends Controller
             $seconds = RateLimiter::availableIn($throttleKey);
 
             return back()
-                ->withInput($request->only('username', 'remember'))
+                ->withInput($request->only('username'))
                 ->withErrors([
                     'username' => 'Terlalu banyak percobaan login gagal. Silakan coba lagi dalam '.$seconds.' detik.',
                 ]);
         }
 
         // 3. Verifikasi kecocokan username dan enkripsi hash password
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials)) {
             // Bersihkan pencatat kegagalan rate limiter saat sukses login
             RateLimiter::clear($throttleKey);
 
@@ -86,7 +84,7 @@ class AuthController extends Controller
 
         // 4. Jika gagal, kembalikan ke form login dengan pesan error
         return back()
-            ->withInput($request->only('username', 'remember'))
+            ->withInput($request->only('username'))
             ->withErrors([
                 'username' => 'Username atau password salah.',
             ]);

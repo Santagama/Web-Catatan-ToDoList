@@ -73,13 +73,13 @@
             <p class="text-xs sm:text-sm text-zinc-400">Informasi identitas brand dan kontak yang akan dipajang di web publik.</p>
         </div>
 
-        <!-- Nama Usaha -->
+        <!-- Nama UMKM -->
         <div>
-            <label for="business_name" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Nama Usaha <span class="text-rose-400">*</span></label>
-            <input type="text" name="business_name" id="business_name" value="{{ old('business_name') }}" required
+            <label for="nama_umkm" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Nama UMKM <span class="text-rose-400">*</span></label>
+            <input type="text" name="nama_umkm" id="nama_umkm" value="{{ old('nama_umkm') }}" required
                 placeholder="Contoh: Kedai Kopi Senja Nusantara"
-                class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('business_name') border-rose-500 @else border-zinc-800 @enderror text-white placeholder-zinc-500 text-sm outline-none font-medium" />
-            @error('business_name')
+                class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('nama_umkm') border-rose-500 @else border-zinc-800 @enderror text-white placeholder-zinc-500 text-sm outline-none font-medium" />
+            @error('nama_umkm')
                 <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
             @enderror
         </div>
@@ -114,12 +114,19 @@
                     class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
             </div>
 
-            <!-- Alamat Fisik -->
+            <!-- Instagram -->
             <div>
-                <label for="alamat" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Alamat Fisik Toko</label>
-                <input type="text" name="alamat" id="alamat" value="{{ old('alamat') }}" placeholder="Jl. Raya No. 123, Majalengka"
+                <label for="instagram" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Akun Instagram Usaha</label>
+                <input type="text" name="instagram" id="instagram" value="{{ old('instagram') }}" placeholder="@namatoko atau namatoko"
                     class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
             </div>
+        </div>
+
+        <!-- Alamat Fisik -->
+        <div>
+            <label for="alamat" class="block text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Alamat Fisik Toko</label>
+            <input type="text" name="alamat" id="alamat" value="{{ old('alamat') }}" placeholder="Jl. Raya No. 123, Majalengka"
+                class="w-full px-4 py-3 rounded-xl bg-[#101116] border border-zinc-800 text-white placeholder-zinc-500 text-sm outline-none font-medium" />
         </div>
 
         <!-- Google Maps Embed -->
@@ -276,7 +283,7 @@
 --}}
 <script>
     // 1. Auto-generate slug dari nama usaha secara real-time
-    const nameInput = document.getElementById('business_name');
+    const nameInput = document.getElementById('nama_umkm');
     const slugInput = document.getElementById('slug');
 
     if (nameInput && slugInput) {
