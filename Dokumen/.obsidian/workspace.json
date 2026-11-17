@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ERD_DAN_MAPPING_TABEL_DATABASE.md",
+                "file": "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ERD_DAN_MAPPING_TABEL_DATABASE"
+              "title": "PANDUAN_UJIKOM_HARI_1_DAN_2"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "ERD_DAN_MAPPING_TABEL_DATABASE.md",
+                "file": "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "ERD_DAN_MAPPING_TABEL_DATABASE.md",
+                "file": "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ERD_DAN_MAPPING_TABEL_DATABASE.md",
+                "file": "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,9 +190,24 @@
   },
   "active": "b697c5583df3340e",
   "lastOpenFiles": [
+    "PANDUAN_DAN_CONTEKAN_POPUP_UJIKOM.md",
+    "Query SQL.md",
+    "PANDUAN_SOAL_6_DATABASE_UJIKOM.md",
+    "QUERY_UJIKOM_DATABASE_LENGKAP.sql",
     "FLOWCHART.md",
-    "SOAL PRAKTIK KEJURUAN - PENGEMBANGAN PLATFORM WEB PORTOFOLIO UMKM.md",
+    "ERD_DAN_MAPPING_TABEL_DATABASE.md",
+    "ERD_CMS_Web_Builder.svg",
+    "PERTANYAAN_DOKUMEN_KELENGKAPAN.md",
+    "PANDUAN_UJIKOM_HARI_1_DAN_2.md",
     "SAWALA - Platform Web Portofolio UMKM.pdf",
+    "SOAL PRAKTIK KEJURUAN - PENGEMBANGAN PLATFORM WEB PORTOFOLIO UMKM.md",
+    "SOAL_PRAKTIK_KEJURUAN_PLATFORM_WEB_PORTOFOLIO_UMKM.pdf",
+    "ERD_CMS_Web_Builder.jpg",
+    "ERD_CMS_Web_Builder.png",
+    "generate_erd_image.py",
+    "test_svg.png",
+    "test_render.py",
+    "test.png",
     "flow_p6_Image10.jpg",
     "flow_p9_Image10.jpg",
     "flow_p8_Image10.jpg",
@@ -200,7 +215,6 @@
     "flow_p6_Image13.jpg",
     "DOKUMENTASI_LENGKAP_UJIKOM.md",
     "DOKUMEN KELENGKAPAN APLIKASI.md",
-    "ERD_DAN_MAPPING_TABEL_DATABASE.md",
     "FLOWCHART_DAN_PSEUDOCODE.md",
     "database.sql",
     "ERD_DIAGRAM.md",

@@ -1,71 +1,67 @@
 {{--
   ==============================================================================
-  TEMPLATE PUBLIK: JASA & STUDIO PROFESIONAL
+  TEMPLATE PUBLIK: JASA, STUDIO FOTO, BENGKEL & SERVIS PROFESIONAL
   ==============================================================================
-  - preg_replace('/[^0-9]/', '', ...): Membersihkan karakter simbol (+, -, spasi)
-    dari nomor WhatsApp agar valid dengan format internasional API wa.me.
-  - urlencode(): Mengubah teks pesan pembuka otomatis ke format URL encoding (%20, dsb.)
-  - $portfolio->products: Disimpan sebagai JSON di database, di-cast sebagai array di model,
-    sehingga langsung bisa di-loop (@foreach / @forelse) tanpa decode manual.
-  - Storage::url(): Memanggil tautan publik dari symbolic link public/storage.
+  - Desain modern, bersih, dan berwibawa khas studio kreatif & penyedia jasa profesional.
+  - Banner full-width membentang penuh di bagian paling atas website.
+  - Profil studio & logo elegan bertumpuk rapi di bawah banner.
+  - Etalase paket layanan & jasa dengan foto, rincian biaya, dan tombol booking WhatsApp.
+  - Informasi jam operasional & peta lokasi studio terhubung Google Maps.
+  - Bebas efek AI-slop: tanpa gradien norak, tanpa frame tebal bertumpuk, seleksi teks default.
 --}}
 @extends('layouts.app')
 
-@section('title', ($portfolio->nama_umkm ?? 'Layanan Profesional') . ' — ' . ($portfolio->bio ?? 'Landing Page'))
-@section('body_class', 'bg-gray-950 text-gray-100 min-h-screen antialiased flex flex-col justify-between selection:bg-purple-600 selection:text-white')
+@section('title', ($portfolio->nama_umkm ?? 'Studio Jasa Profesional') . ' — ' . ($portfolio->bio ?? 'Layanan & Portofolio Karya'))
+@section('body_class', 'bg-zinc-50 text-zinc-900 min-h-screen antialiased flex flex-col justify-between')
 
 @section('content')
 @php
     $waNumber = preg_replace('/[^0-9]/', '', $portfolio->whatsapp ?? '');
-    $waLink = $waNumber ? 'https://wa.me/' . $waNumber . '?text=' . urlencode('Halo ' . $portfolio->nama_umkm . ', saya tertarik dengan layanan Anda.') : null;
-    $nama = $portfolio->nama_umkm ?? 'Brand Kami';
+    $waLink = $waNumber ? 'https://wa.me/' . $waNumber . '?text=' . urlencode('Halo ' . $portfolio->nama_umkm . ', saya tertarik dengan layanan jasa Anda dan ingin konsultasi / booking jadwal.') : null;
+    $nama = $portfolio->nama_umkm ?? 'Layanan Jasa & Studio Profesional';
     $products = $portfolio->products ?? [];
 @endphp
 
-<div class="min-h-screen bg-gray-950 font-sans" style="color: #f1f1f5;">
+<div class="min-h-screen bg-zinc-50 font-sans text-zinc-900">
 
-    <!-- ── HEADER STICKY ──────────────────────────────────────── -->
-    <header class="sticky top-0 z-50 border-b border-white/10 bg-gray-950/90 backdrop-blur-md">
-        <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3">
+    <!-- ── 1. HEADER NAVIGASI STICKY ──────────────────────────── -->
+    <header class="sticky top-0 z-40 border-b border-zinc-200 bg-white/95 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <div class="flex min-w-0 items-center gap-3">
                 @if ($portfolio->logo_path)
-                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-10 w-10 shrink-0 rounded-xl object-cover ring-1 ring-purple-500/40" />
+                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-9 w-9 shrink-0 rounded-lg object-cover border border-zinc-200" />
                 @else
-                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 text-sm font-black text-white shadow-md shadow-purple-900/40">
-                        {{ substr($nama, 0, 1) }}
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-700 text-sm font-bold text-white">
+                        🛠️
                     </div>
                 @endif
                 <div class="min-w-0">
-                    <p class="truncate text-sm font-bold text-white">{{ $nama }}</p>
-                    <p class="text-[10px] text-purple-400 font-semibold tracking-wide">Professional Service</p>
+                    <p class="truncate text-sm font-bold text-zinc-900">{{ $nama }}</p>
+                    <p class="text-[11px] font-medium text-zinc-500">Layanan Jasa &amp; Studio Resmi</p>
                 </div>
             </div>
 
-            <nav class="hidden items-center gap-6 text-sm font-medium text-gray-400 md:flex">
-                <a href="#layanan" class="">Layanan</a>
-                <a href="#keunggulan" class="">Keunggulan</a>
-                @if ($portfolio->bio)
-                    <a href="#tentang" class="">Tentang</a>
-                @endif
+            <nav class="hidden items-center gap-6 text-sm font-medium text-zinc-600 md:flex">
+                <a href="#layanan" class="hover:text-emerald-700 transition-colors">Paket Layanan</a>
+                <a href="#keunggulan" class="hover:text-emerald-700 transition-colors">Keunggulan</a>
                 @if ($portfolio->maps_embed_url || $portfolio->alamat)
-                    <a href="#lokasi" class="">Lokasi</a>
+                    <a href="#lokasi" class="hover:text-emerald-700 transition-colors">Lokasi &amp; Jadwal</a>
                 @endif
             </nav>
 
             <div class="flex items-center gap-2">
                 @if ($portfolio->instagram_url)
                     <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-pink-400" title="Instagram Resmi {{ $nama }}">
-                        <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                       class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors">
+                        <svg class="h-3.5 w-3.5 fill-current text-pink-600" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         <span class="hidden sm:inline">Instagram</span>
                     </a>
                 @endif
                 @if ($waLink)
                     <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-purple-900/40">
+                       class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-emerald-700 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800 transition-colors shadow-xs">
                         <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                        <span class="hidden sm:inline">Hubungi Kami</span>
-                        <span class="sm:hidden">Chat</span>
+                        <span>Konsultasi (WA)</span>
                     </a>
                 @endif
             </div>
@@ -73,301 +69,272 @@
     </header>
 
     <main>
-        <!-- ── HERO SECTION ──────────────────────────────────────── -->
-        <section class="relative overflow-hidden">
-            <!-- Background Glows -->
-            <div class="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full bg-purple-700/20 blur-[100px]"></div>
-            <div class="pointer-events-none absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-pink-700/15 blur-[100px]"></div>
-
-            <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:py-20 lg:grid-cols-2">
-                <!-- Sisi Kiri: Headline & CTA -->
-                <div class="space-y-6">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-xs font-semibold text-purple-300">
-                        <span class="h-1.5 w-1.5 rounded-full bg-purple-400"></span>
-                        <span>{{ $nama }}</span>
-                    </div>
-
-                    <h1 class="text-[2rem] font-extrabold leading-[1.15] text-white sm:text-4xl md:text-5xl">
-                        {{ $portfolio->bio ? Str::limit($portfolio->bio, 80) : 'Layanan Profesional & Studio Kreatif ' . $nama }}
-                    </h1>
-
-                    <p class="max-w-md text-base leading-relaxed text-gray-400">
-                        Kami menghadirkan layanan premium dengan standar kualitas tinggi untuk memenuhi setiap kebutuhan Anda secara elegan, solutif, dan profesional.
-                    </p>
-
-                    <div class="flex flex-wrap gap-3 pt-1">
-                        @if ($waLink)
-                            <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-900/40">
-                                <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                                <span>Mulai Sekarang</span>
-                            </a>
-                        @endif
-                        <a href="#layanan"
-                           class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white">
-                            <span>Lihat Layanan</span>
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                        @if ($portfolio->instagram_url)
-                            <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
-                               class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-pink-400">
-                                <svg class="h-4 w-4 fill-pink-400" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                <span>Instagram</span>
-                            </a>
-                        @endif
-                    </div>
-
-                    <!-- Micro Stats -->
-                    <div class="grid grid-cols-3 gap-3 border-t border-white/10 pt-6">
-                        <div class="text-center">
-                            <p class="text-2xl font-extrabold text-white">{{ count($products) ? count($products) . '+' : '10+' }}</p>
-                            <p class="mt-1 text-[10px] text-gray-500 uppercase tracking-widest font-bold">Layanan</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-extrabold text-white">100%</p>
-                            <p class="mt-1 text-[10px] text-gray-500 uppercase tracking-widest font-bold">Kualitas</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-extrabold text-white">24/7</p>
-                            <p class="mt-1 text-[10px] text-gray-500 uppercase tracking-widest font-bold">Support</p>
-                        </div>
-                    </div>
+        <!-- ── 2. FULL-WIDTH BANNER WEBSITE DI ATAS ──────────────── -->
+        <section class="relative w-full h-56 sm:h-72 md:h-84 lg:h-96 overflow-hidden bg-zinc-900">
+            @if ($portfolio->banner_path)
+                <img src="{{ Storage::url($portfolio->banner_path) }}" alt="{{ $nama }}" class="h-full w-full object-cover" />
+            @else
+                <div class="h-full w-full bg-zinc-900 flex flex-col items-center justify-center text-center p-6 text-zinc-400">
+                    <span class="text-4xl sm:text-5xl mb-2">🛠️</span>
+                    <p class="text-lg sm:text-xl font-bold text-white tracking-wide">{{ $nama }}</p>
+                    <p class="text-xs sm:text-sm text-zinc-400 mt-1">Layanan Profesional, Tepat Waktu &amp; Bergaransi</p>
                 </div>
-
-                <!-- Sisi Kanan: Banner Frame Visual -->
-                <div class="relative">
-                    <div class="absolute -inset-4 rounded-3xl bg-gradient-to-br from-purple-600/20 to-pink-600/10 blur-2xl"></div>
-                    <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gray-900">
-                        @if ($portfolio->banner_path)
-                            <img src="{{ Storage::url($portfolio->banner_path) }}" alt="{{ $nama }}" class="h-[300px] w-full object-cover sm:h-[360px] md:h-[420px]" />
-                        @elseif ($portfolio->logo_path)
-                            <div class="flex h-[300px] w-full flex-col items-center justify-center bg-gradient-to-br from-purple-900/60 via-gray-900 to-pink-900/60 sm:h-[360px] md:h-[420px] p-8 text-center space-y-4">
-                                <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-28 w-28 rounded-2xl object-cover ring-2 ring-purple-500/40 shadow-2xl" />
-                                <p class="text-2xl font-bold text-white">{{ $nama }}</p>
-                                <p class="text-xs text-purple-300">Premium Professional Service</p>
-                            </div>
-                        @else
-                            <div class="flex h-[300px] w-full flex-col items-center justify-center bg-gradient-to-br from-purple-900 via-gray-900 to-pink-900 sm:h-[360px] md:h-[420px]">
-                                <div class="space-y-3 text-center px-8">
-                                    <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-2xl shadow-purple-900/50">
-                                        <svg class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
-                                    </div>
-                                    <p class="text-2xl font-bold text-white">{{ $nama }}</p>
-                                    <p class="text-sm text-gray-400">Premium Service</p>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="absolute bottom-3 left-3 right-3 flex gap-2">
-                            <div class="flex-1 rounded-xl bg-gray-950/80 px-3 py-2 backdrop-blur-sm border border-white/5">
-                                <p class="text-[9px] font-semibold uppercase tracking-wider text-purple-400">Kelas</p>
-                                <p class="text-sm font-bold text-white">Premium</p>
-                            </div>
-                            <div class="flex-1 rounded-xl bg-gray-950/80 px-3 py-2 backdrop-blur-sm border border-white/5">
-                                <p class="text-[9px] font-semibold uppercase tracking-wider text-pink-400">Kualitas</p>
-                                <p class="text-sm font-bold text-white">Terjamin</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </section>
 
-        <!-- ── KEUNGGULAN SECTION ──────────────────────────── -->
-        <section id="keunggulan" class="border-y border-white/10 bg-gray-900/50 py-14">
-            <div class="mx-auto max-w-6xl px-5">
-                <div class="mb-10 text-center">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-purple-400">Keunggulan</p>
-                    <h2 class="mt-2 text-2xl font-extrabold text-white sm:text-3xl">Mengapa Memilih Kami</h2>
-                </div>
-                <div class="grid gap-4 sm:grid-cols-3">
-                    <div class="rounded-2xl border border-white/10 bg-gray-900 p-6">
-                        <div class="mb-4 text-2xl text-purple-400">✦</div>
-                        <h3 class="text-base font-bold text-white">Kelas Premium</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-gray-400">Layanan dengan standar mutu premium yang dirancang untuk pengalaman terbaik Anda.</p>
-                    </div>
-                    <div class="rounded-2xl border border-white/10 bg-gray-900 p-6">
-                        <div class="mb-4 text-2xl text-purple-400">◈</div>
-                        <h3 class="text-base font-bold text-white">Tim Berpengalaman</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-gray-400">Didukung profesional berpengalaman yang siap memberikan solusi terbaik dan tepat waktu.</p>
-                    </div>
-                    <div class="rounded-2xl border border-white/10 bg-gray-900 p-6">
-                        <div class="mb-4 text-2xl text-purple-400">◉</div>
-                        <h3 class="text-base font-bold text-white">Hasil Terukur</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-gray-400">Setiap proses dan hasil kerja dirancang transparan, terukur, dan berdampak nyata.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ── TENTANG SECTION ─────────────────────────────── -->
-        @if ($portfolio->bio)
-            <section id="tentang" class="py-16">
-                <div class="mx-auto max-w-6xl px-5">
-                    <div class="overflow-hidden rounded-3xl border border-white/10 bg-gray-900">
-                        <div class="grid lg:grid-cols-[1fr_360px]">
-                            <div class="p-8 md:p-12 space-y-4">
-                                <p class="text-xs font-semibold uppercase tracking-widest text-purple-400">Tentang Kami</p>
-                                <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Profil &amp; Dedikasi</h2>
-                                <p class="whitespace-pre-line text-sm leading-relaxed text-gray-300">
-                                    {{ $portfolio->bio }}
-                                </p>
-                                @if ($portfolio->alamat)
-                                    <p class="text-xs text-gray-400 pt-2 flex items-center gap-2">
-                                        <svg class="h-4 w-4 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                        <span>{{ $portfolio->alamat }}</span>
-                                    </p>
-                                @endif
-                                @if ($waLink)
-                                    <div class="pt-2">
-                                        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                                           class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-purple-900/30">
-                                            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                                            <span>Konsultasi Langsung</span>
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="hidden lg:flex flex-col items-center justify-center gap-4 bg-gradient-to-b from-purple-900/60 to-pink-900/40 p-10">
+        <!-- ── 3. PROFIL STUDIO (OVERLAPPING BANNER) ─────────────── -->
+        <section class="relative bg-white border-b border-zinc-200">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="relative -mt-14 sm:-mt-16 pb-8">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+                        <div class="flex flex-col sm:flex-row sm:items-end gap-4">
+                            <!-- Logo Studio -->
+                            <div class="h-24 w-24 sm:h-28 sm:w-28 shrink-0 rounded-2xl border-4 border-white bg-white shadow-md overflow-hidden">
                                 @if ($portfolio->logo_path)
-                                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-24 w-24 rounded-2xl object-cover shadow-xl ring-2 ring-purple-500/40" />
+                                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-full w-full object-cover" />
                                 @else
-                                    <div class="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 text-3xl font-black text-white shadow-xl">
-                                        {{ substr($nama, 0, 1) }}
-                                    </div>
-                                @endif
-                                <p class="text-center text-sm font-bold text-white">{{ $nama }}</p>
-                                <div class="flex gap-1 text-amber-400">
-                                    ★ ★ ★ ★ ★
-                                </div>
-                                <p class="text-xs text-purple-300 font-semibold uppercase tracking-wider">Premium Quality</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        @endif
-
-        <!-- ── KATALOG PRODUK & LAYANAN ─────────────────────── -->
-        @if (count($products) > 0)
-            <section id="layanan" class="bg-gray-900/40 py-16">
-                <div class="mx-auto max-w-6xl px-5">
-                    <div class="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-widest text-purple-400">Portofolio Layanan</p>
-                            <h2 class="mt-2 text-2xl font-extrabold text-white sm:text-3xl">Pilihan Layanan &amp; Paket</h2>
-                        </div>
-                        <span class="text-xs px-3 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 font-bold self-start sm:self-auto">
-                            {{ count($products) }} Layanan Tersedia
-                        </span>
-                    </div>
-
-                    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        @foreach ($products as $item)
-                            <div class="group overflow-hidden rounded-2xl border border-white/10 bg-gray-900 flex flex-col justify-between">
-                                <div>
-                                    <div class="relative aspect-[4/3] overflow-hidden bg-gray-800">
-                                        @if (!empty($item['image']))
-                                            <img src="{{ Storage::url($item['image']) }}" alt="{{ $item['name'] }}" class="h-full w-full object-cover" />
-                                        @else
-                                            <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-950 via-gray-900 to-pink-950">
-                                                <svg class="h-12 w-12 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                                            </div>
-                                        @endif
-                                        <span class="absolute left-3 top-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow-sm">Premium</span>
-                                    </div>
-                                    <div class="p-4 space-y-2">
-                                        <h3 class="text-sm font-bold text-white">{{ $item['name'] }}</h3>
-                                        <p class="text-sm font-extrabold text-pink-400">
-                                            {{ !empty($item['price']) && $item['price'] > 0 ? 'Rp ' . number_format($item['price'], 0, ',', '.') : 'Konsultasi Harga' }}
-                                        </p>
-                                        @if (!empty($item['description']))
-                                            <p class="text-xs leading-relaxed text-gray-400 line-clamp-2">{{ $item['description'] }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                @if ($waNumber)
-                                    <div class="p-4 pt-0">
-                                        <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Halo ' . $nama . ', saya tertarik memesan layanan: ' . $item['name']) }}"
-                                           target="_blank" rel="noopener noreferrer"
-                                           class="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-500/10 py-2 text-xs font-bold text-purple-300">
-                                            <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                                            <span>Tanya Sekarang</span>
-                                        </a>
+                                    <div class="h-full w-full bg-emerald-700 flex items-center justify-center text-3xl text-white font-black">
+                                        🛠️
                                     </div>
                                 @endif
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-            </section>
-        @endif
 
-        <!-- ── LOKASI PETA GOOGLE MAPS ──────────────────────── -->
-        @if ($portfolio->maps_embed_url || $portfolio->alamat)
-            <section id="lokasi" class="py-16">
-                <div class="mx-auto max-w-6xl px-5 space-y-6">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-widest text-purple-400">Lokasi &amp; Studio</p>
-                        <h2 class="mt-2 text-2xl font-extrabold text-white sm:text-3xl">Kunjungi Tempat Kami</h2>
-                        @if ($portfolio->alamat)
-                            <p class="mt-1 text-sm text-gray-400">{{ $portfolio->alamat }}</p>
-                        @endif
+                            <!-- Judul & Kategori -->
+                            <div class="space-y-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+                                        {{ $nama }}
+                                    </h1>
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
+                                        Studio Resmi
+                                    </span>
+                                </div>
+                                <p class="text-xs sm:text-sm font-medium text-zinc-500">
+                                    Layanan Jasa &bull; Berpengalaman &bull; Pengerjaan Rapi
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Kontak Cepat -->
+                        <div class="flex flex-wrap items-center gap-2.5 pt-2 sm:pt-0">
+                            @if ($waLink)
+                                <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 px-5 py-2.5 text-xs font-bold text-white transition-colors shadow-xs">
+                                    <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
+                                    <span>Konsultasi via WhatsApp</span>
+                                </a>
+                            @endif
+
+                            @if ($portfolio->instagram_url)
+                                <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-2 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 px-4 py-2.5 text-xs font-bold text-zinc-700 transition-colors shadow-2xs">
+                                    <svg class="h-4 w-4 fill-current text-pink-600" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                    <span>Instagram</span>
+                                </a>
+                            @endif
+
+                            <a href="#layanan"
+                               class="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 px-4 py-2.5 text-xs font-bold text-zinc-700 transition-colors shadow-2xs">
+                                <span>Lihat Paket Jasa</span>
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </a>
+                        </div>
                     </div>
-                    @if ($portfolio->maps_embed_url)
-                        <div class="overflow-hidden rounded-3xl border border-white/10 aspect-video max-h-96 bg-gray-900">
-                            <iframe src="{{ $portfolio->maps_embed_url }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+                    <!-- Bio Deskripsi -->
+                    @if ($portfolio->bio)
+                        <div class="mt-4 pt-4 border-t border-zinc-100">
+                            <p class="max-w-3xl text-sm sm:text-base leading-relaxed text-zinc-600">
+                                {{ $portfolio->bio }}
+                            </p>
                         </div>
                     @endif
                 </div>
-            </section>
-        @endif
+            </div>
+        </section>
 
-        <!-- ── CTA BANNER ──────────────────────────────────── -->
-        @if ($waLink)
-            <section class="relative overflow-hidden py-20">
-                <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-purple-900 via-gray-950 to-pink-900 opacity-90"></div>
-                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.18),transparent_70%)]"></div>
-                <div class="relative mx-auto max-w-3xl px-5 text-center space-y-4">
-                    <h2 class="text-2xl font-extrabold text-white sm:text-4xl">Siap Memulai Bersama Kami?</h2>
-                    <p class="mx-auto max-w-lg text-sm sm:text-base leading-relaxed text-gray-300">
-                        Hubungi tim kami dan dapatkan konsultasi terbaik untuk mewujudkan kebutuhan Anda secara profesional.
-                    </p>
-                    <div class="pt-3">
-                        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3.5 text-sm font-semibold text-white shadow-xl shadow-purple-900/50">
-                            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                            <span>Chat via WhatsApp</span>
-                        </a>
+        <!-- ── 4. DAFTAR PAKET LAYANAN & JASA ────────────────────── -->
+        <section id="layanan" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-zinc-900 tracking-tight">Daftar Paket Layanan &amp; Jasa</h2>
+                        <p class="mt-1 text-sm text-zinc-600">Pilihan paket pengerjaan profesional yang dapat disesuaikan dengan kebutuhan Anda</p>
+                    </div>
+                    <span class="inline-block self-start sm:self-auto rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700">
+                        {{ count($products) }} Layanan Tersedia
+                    </span>
+                </div>
+
+                @if (count($products) > 0)
+                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        @foreach ($products as $item)
+                            <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 transition-all">
+                                <div>
+                                    <!-- Foto Portofolio Layanan -->
+                                    <div class="aspect-4/3 w-full overflow-hidden bg-zinc-100">
+                                        @if (!empty($item['image'] ?? $item['foto'] ?? null))
+                                            <img src="{{ Storage::url($item['image'] ?? $item['foto']) }}"
+                                                 alt="{{ $item['name'] ?? $item['judul'] ?? 'Layanan' }}"
+                                                 class="h-full w-full object-cover" />
+                                        @else
+                                            <div class="flex h-full w-full items-center justify-center text-zinc-300">
+                                                <span class="text-5xl">🛠️</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Detail Layanan -->
+                                    <div class="p-5 space-y-2">
+                                        <h3 class="text-base font-bold text-zinc-900">
+                                            {{ $item['name'] ?? $item['judul'] ?? 'Paket Layanan' }}
+                                        </h3>
+
+                                        <p class="text-lg font-bold text-emerald-700">
+                                            {{ !empty($item['price']) && $item['price'] > 0 ? 'Mulai Rp ' . number_format($item['price'], 0, ',', '.') : 'Konsultasi Gratis' }}
+                                        </p>
+
+                                        @if (!empty($item['description'] ?? $item['deskripsi'] ?? ''))
+                                            <p class="text-xs leading-relaxed text-zinc-600 line-clamp-2">
+                                                {{ $item['description'] ?? $item['deskripsi'] }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Tombol Booking Langsung ke WhatsApp -->
+                                <div class="border-t border-zinc-100 p-4 pt-3 bg-zinc-50/50">
+                                    @if ($waNumber)
+                                        <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Halo ' . $nama . ', saya mau konsultasi & booking layanan: ' . ($item['name'] ?? $item['judul'] ?? 'Jasa') . ' (' . (!empty($item['price']) && $item['price'] > 0 ? 'Mulai Rp ' . number_format($item['price'], 0, ',', '.') : '') . '). Mohon info jadwal dan persyaratannya ya!') }}"
+                                           target="_blank" rel="noopener noreferrer"
+                                           class="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 py-2.5 text-xs font-bold text-white transition-colors shadow-2xs">
+                                            <span>Booking Layanan Ini (WA)</span>
+                                            <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="rounded-xl border border-zinc-200 bg-white p-12 text-center text-zinc-500">
+                        <span class="text-4xl">🛠️</span>
+                        <p class="mt-3 font-semibold text-zinc-800">Paket Layanan Sedang Diperbarui</p>
+                        <p class="mt-1 text-xs">Silakan hubungi WhatsApp kami langsung untuk konsultasi kebutuhan dan penawaran biaya.</p>
+                    </div>
+                @endif
+            </div>
+        </section>
+
+        <!-- ── 5. KEUNGGULAN JASA ────────────────────────────────── -->
+        <section id="keunggulan" class="border-y border-zinc-200 bg-white py-12">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="grid gap-6 sm:grid-cols-3">
+                    <div class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 space-y-2">
+                        <span class="text-3xl">🎯</span>
+                        <h3 class="text-base font-bold text-zinc-900">Tenaga Ahli Berpengalaman</h3>
+                        <p class="text-xs leading-relaxed text-zinc-600">
+                            Dikerjakan langsung oleh teknisi dan profesional terlatih dengan standar pengerjaan terukur.
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 space-y-2">
+                        <span class="text-3xl">⏱️</span>
+                        <h3 class="text-base font-bold text-zinc-900">Pengerjaan Tepat Waktu</h3>
+                        <p class="text-xs leading-relaxed text-zinc-600">
+                            Estimasi jadwal kerja yang transparan, konsisten, dan memprioritaskan ketepatan deadline klien.
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 space-y-2">
+                        <span class="text-3xl">🤝</span>
+                        <h3 class="text-base font-bold text-zinc-900">Garansi &amp; Konsultasi</h3>
+                        <p class="text-xs leading-relaxed text-zinc-600">
+                            Jaminan kepuasan hasil akhir dan layanan pendampingan bila terdapat hal yang perlu disesuaikan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 6. LOKASI STUDIO & KONTAK ────────────────────────── -->
+        @if ($portfolio->maps_embed_url || $portfolio->alamat)
+            <section id="lokasi" class="py-12 sm:py-16">
+                <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                    <div class="mb-8">
+                        <h2 class="text-xl sm:text-2xl font-bold text-zinc-900 tracking-tight">Lokasi Studio &amp; Jam Layanan</h2>
+                        <p class="mt-1 text-sm text-zinc-600">Kunjungi workshop kami atau buat jadwal janji temu terlebih dahulu</p>
+                    </div>
+
+                    <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xs">
+                        <div class="grid lg:grid-cols-[380px_1fr]">
+                            <div class="flex flex-col justify-between p-6 sm:p-8 space-y-6">
+                                <div class="space-y-4">
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Jam Operasional Studio:</p>
+                                        <p class="mt-1 text-sm font-bold text-zinc-900">Senin &ndash; Sabtu: 08:00 &ndash; 18:00 WIB</p>
+                                    </div>
+                                    @if ($portfolio->alamat)
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Alamat Workshop / Studio:</p>
+                                            <p class="mt-1 text-xs text-zinc-600 leading-relaxed">{{ $portfolio->alamat }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                @if ($waLink)
+                                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
+                                       class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 px-5 py-3 text-xs font-bold text-white transition-colors shadow-xs">
+                                        <span>Jadwalkan Janji Temu (WA)</span>
+                                    </a>
+                                @endif
+                            </div>
+
+                            <div class="min-h-[300px] bg-zinc-100">
+                                @if ($portfolio->maps_embed_url)
+                                    <iframe
+                                        src="{{ $portfolio->maps_embed_url }}"
+                                        class="h-full w-full min-h-[300px] border-0"
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        title="Peta Lokasi {{ $nama }}">
+                                    </iframe>
+                                @else
+                                    <div class="flex h-full min-h-[300px] items-center justify-center text-sm text-zinc-400">
+                                        Peta lokasi belum disematkan
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         @endif
     </main>
 
-    <!-- ── FOOTER ──────────────────────────────────────── -->
-    <footer class="border-t border-white/10 bg-gray-950 py-8">
-        <div class="mx-auto max-w-6xl px-5 text-center space-y-3">
-            <p class="text-sm font-bold text-white">{{ $nama }}</p>
-            <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-medium">
+    <!-- ── 7. FOOTER RESMI ────────────────────────────────────── -->
+    <footer class="border-t border-zinc-200 bg-white py-8 text-center text-xs text-zinc-500">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-2">
+            <p class="font-bold text-zinc-800">{{ $nama }}</p>
+            <div class="flex flex-wrap items-center justify-center gap-4 font-medium text-zinc-600">
                 @if ($waLink)
-                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="text-emerald-400">WhatsApp: {{ $portfolio->whatsapp }}</a>
+                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-700">WhatsApp: {{ $portfolio->whatsapp }}</a>
                 @endif
                 @if ($portfolio->instagram_url)
-                    <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer" class="text-pink-400">Instagram: {{ $portfolio->instagram }}</a>
+                    <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600">Instagram: {{ $portfolio->instagram }}</a>
                 @endif
             </div>
-            <p class="text-xs text-gray-500">&copy; {{ date('Y') }} &bull; Professional Service</p>
+            <p class="text-[11px] text-zinc-400 pt-2">&copy; {{ date('Y') }} {{ $nama }}. Halaman portofolio resmi UMKM.</p>
         </div>
     </footer>
 
-    <!-- ── FLOATING WHATSAPP ───────────────────────────── -->
+    <!-- ── 8. FLOATING WHATSAPP BUTTON ────────────────────────── -->
     @if ($waLink)
-        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp"
-           class="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-green-500/30">
-            <svg class="h-7 w-7 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
+        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
+           class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-[#25D366] px-5 py-3 text-xs font-bold text-white shadow-lg hover:brightness-105 transition-all"
+           style="box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
+            <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
+            <span>Konsultasi Jasa (WA)</span>
         </a>
     @endif
+
 </div>
 @endsection

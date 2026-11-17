@@ -1,75 +1,67 @@
 {{--
   ==============================================================================
-  TEMPLATE PUBLIK: TOKOH PUBLIK, CALEG & KAMPANYE ASPIRASI
+  TEMPLATE PUBLIK: TOKOH PUBLIK, FIGUR, KONSULTAN & PROFESIONAL
   ==============================================================================
-  - Desain bertema resmi merah-putih dengan aksen emas dan navy.
-  - str_pad($idx + 1, 2, '0', STR_PAD_LEFT): Memberi format nomor urut 2 digit (01, 02, ...)
-    pada setiap kartu Program Kerja secara otomatis.
-  - Google Maps Embed: Menampilkan lokasi posko/kantor sekretariat jika URL diisi.
+  - Desain prestisius, editorial, bersih, dan berwibawa khas profil tokoh & profesional resmi.
+  - Banner full-width membentang penuh di bagian paling atas website.
+  - Foto profil lingkaran elegan bertumpuk rapi di bawah banner dengan lencana verifikasi.
+  - Etalase program kerja, karya portofolio, dan buku/layanan dengan tombol kontak WhatsApp.
+  - Informasi alamat kantor sekretariat & peta lokasi terhubung Google Maps.
+  - Bebas efek AI-slop: tanpa gradien norak, tanpa frame tebal bertumpuk, seleksi teks default.
 --}}
 @extends('layouts.app')
 
-@section('title', ($portfolio->nama_umkm ?? 'Tokoh Publik') . ' — ' . ($portfolio->bio ?? 'Profil Resmi & Aspirasi'))
-@section('body_class', 'bg-white text-gray-900 min-h-screen antialiased flex flex-col justify-between selection:bg-red-700 selection:text-white')
+@section('title', ($portfolio->nama_umkm ?? 'Profil Tokoh & Profesional') . ' — ' . ($portfolio->bio ?? 'Portofolio Resmi & Program Kerja'))
+@section('body_class', 'bg-slate-50 text-slate-900 min-h-screen antialiased flex flex-col justify-between')
 
 @section('content')
 @php
-    $RED = '#c0172d';
-    $GOLD = '#c8972a';
-    $DARK = '#1a1a2e';
-
     $waNumber = preg_replace('/[^0-9]/', '', $portfolio->whatsapp ?? '');
-    $waLink = $waNumber ? 'https://wa.me/' . $waNumber . '?text=' . urlencode('Halo Tim ' . $portfolio->nama_umkm . ', saya ingin menyampaikan aspirasi dan dukungan.') : null;
-    $nama = $portfolio->nama_umkm ?? 'Figur Publik';
+    $waLink = $waNumber ? 'https://wa.me/' . $waNumber . '?text=' . urlencode('Halo ' . $portfolio->nama_umkm . ', saya ingin bersilaturahmi / konsultasi perihal kerjasama dan program.') : null;
+    $nama = $portfolio->nama_umkm ?? 'Profil Tokoh Publik';
     $products = $portfolio->products ?? [];
 @endphp
 
-<div class="min-h-screen bg-white font-sans text-gray-800">
+<div class="min-h-screen bg-slate-50 font-sans text-slate-900">
 
-    <!-- ── TOP STRIP MERAH PUTIH ─────────────────────────────── -->
-    <div style="height: 4px; background: linear-gradient(90deg, #c0172d 50%, #ffffff 50%);"></div>
-
-    <!-- ── HEADER STICKY ──────────────────────────────────────── -->
-    <header class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-xs backdrop-blur-md">
-        <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3">
+    <!-- ── 1. HEADER NAVIGASI STICKY ──────────────────────────── -->
+    <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <div class="flex min-w-0 items-center gap-3">
                 @if ($portfolio->logo_path)
-                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#c0172d]" />
+                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-9 w-9 shrink-0 rounded-full object-cover border border-slate-200" />
                 @else
-                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-black text-white shadow-sm" style="background-color: #c0172d;">
-                        {{ substr($nama, 0, 1) }}
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+                        👤
                     </div>
                 @endif
                 <div class="min-w-0">
-                    <p class="truncate text-sm font-bold text-gray-900">{{ $nama }}</p>
-                    <p class="text-[10px] font-semibold uppercase tracking-wider text-[#c0172d]">Aspirasi & Dedikasi</p>
+                    <p class="truncate text-sm font-bold text-slate-900">{{ $nama }}</p>
+                    <p class="text-[11px] font-medium text-slate-500">Laman Profil &amp; Portofolio Resmi</p>
                 </div>
             </div>
 
-            <nav class="hidden items-center gap-6 text-sm font-medium text-gray-600 md:flex">
-                <a href="#program" class="">Program</a>
-                <a href="#profil" class="">Profil</a>
+            <nav class="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
+                <a href="#karya" class="hover:text-slate-900 transition-colors">Program &amp; Karya</a>
+                <a href="#visi" class="hover:text-slate-900 transition-colors">Komitmen</a>
                 @if ($portfolio->maps_embed_url || $portfolio->alamat)
-                    <a href="#lokasi" class="">Posko / Kantor</a>
+                    <a href="#sekretariat" class="hover:text-slate-900 transition-colors">Sekretariat</a>
                 @endif
-                <a href="#dukung" class="">Dukungan</a>
             </nav>
 
             <div class="flex items-center gap-2">
                 @if ($portfolio->instagram_url)
                     <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-pink-600 shadow-xs" title="Instagram Resmi {{ $nama }}">
-                        <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                       class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                        <svg class="h-3.5 w-3.5 fill-current text-pink-600" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         <span class="hidden sm:inline">Instagram</span>
                     </a>
                 @endif
                 @if ($waLink)
                     <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-white shadow-md"
-                       style="background-color: #c0172d; box-shadow: 0 4px 14px rgba(192, 23, 45, 0.35);">
+                       class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shadow-xs">
                         <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                        <span class="hidden sm:inline">Hubungi Tim Kampanye</span>
-                        <span class="sm:hidden">Kontak Tim</span>
+                        <span>Kontak (WA)</span>
                     </a>
                 @endif
             </div>
@@ -77,244 +69,154 @@
     </header>
 
     <main>
-        <!-- ── HERO SECTION ──────────────────────────────────────── -->
-        <section class="relative overflow-hidden" style="background-color: #1a1a2e;">
-            <!-- Pattern Bendera Diagonal Halus -->
-            <div class="pointer-events-none absolute inset-0 opacity-5"
-                 style="background-image: repeating-linear-gradient(45deg, #c0172d 0px, #c0172d 2px, transparent 2px, transparent 22px);"></div>
-
-            <!-- Glow Merah & Gold -->
-            <div class="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full blur-[110px]" style="background: rgba(192, 23, 45, 0.35);"></div>
-            <div class="pointer-events-none absolute -bottom-24 left-0 h-72 w-72 rounded-full blur-[90px]" style="background: rgba(200, 151, 42, 0.25);"></div>
-
-            <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 md:py-20 lg:grid-cols-[1fr_420px]">
-                <!-- Sisi Kiri: Narasi & Aspirasi -->
-                <div class="space-y-6">
-                    <div class="inline-flex items-center gap-2.5 rounded-full border px-4 py-1.5 text-xs font-semibold"
-                         style="border-color: rgba(200, 151, 42, 0.5); background-color: rgba(200, 151, 42, 0.15); color: #c8972a;">
-                        <span class="h-1.5 w-1.5 rounded-full" style="background-color: #c8972a;"></span>
-                        <span>Profil Resmi & Rekam Jejak</span>
-                    </div>
-
-                    <h1 class="text-3xl font-extrabold leading-tight text-white sm:text-4xl md:text-5xl">
-                        {{ $nama }}
-                    </h1>
-
-                    @if ($portfolio->bio)
-                        <p class="max-w-lg text-base leading-relaxed text-gray-300">
-                            {{ $portfolio->bio }}
-                        </p>
-                    @else
-                        <p class="max-w-lg text-base leading-relaxed italic text-gray-400">
-                            "Berdedikasi mengabdi dengan integritas, menghadirkan karya nyata demi kemajuan dan kesejahteraan bersama."
-                        </p>
-                    @endif
-
-                    <div class="flex flex-wrap gap-3">
-                        @if ($waLink)
-                            <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                               class="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-xl"
-                               style="background-color: #c0172d; box-shadow: 0 10px 25px rgba(192, 23, 45, 0.4);">
-                                <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                                <span>Hubungi Tim Aspirasi</span>
-                            </a>
-                        @endif
-                        @if ($portfolio->instagram_url)
-                            <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
-                               class="inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 text-sm font-semibold text-white"
-                               style="border-color: rgba(236, 72, 153, 0.6); background-color: rgba(236, 72, 153, 0.15);">
-                                <svg class="h-4 w-4 fill-current text-pink-400" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                                <span>Instagram Resmi</span>
-                            </a>
-                        @endif
-                        <a href="#program"
-                           class="inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 text-sm font-semibold text-white"
-                           style="border-color: rgba(200, 151, 42, 0.6);">
-                            <span>Lihat Agenda Program</span>
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </a>
-                    </div>
-
-                    <!-- 3 Micro Stats -->
-                    <div class="grid grid-cols-3 gap-3 border-t pt-6" style="border-color: rgba(255, 255, 255, 0.1);">
-                        <div class="text-center">
-                            <p class="text-2xl font-black text-white">{{ count($products) > 0 ? count($products) : '05+' }}</p>
-                            <p class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">Program Kerja</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-black text-[#c8972a]">Nyata</p>
-                            <p class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">Komitmen</p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-black text-white">Rakyat</p>
-                            <p class="mt-1 text-[10px] uppercase tracking-widest text-gray-400">Prioritas</p>
-                        </div>
-                    </div>
+        <!-- ── 2. FULL-WIDTH BANNER WEBSITE DI ATAS ──────────────── -->
+        <section class="relative w-full h-56 sm:h-72 md:h-84 lg:h-96 overflow-hidden bg-slate-900">
+            @if ($portfolio->banner_path)
+                <img src="{{ Storage::url($portfolio->banner_path) }}" alt="{{ $nama }}" class="h-full w-full object-cover" />
+            @else
+                <div class="h-full w-full bg-slate-900 flex flex-col items-center justify-center text-center p-6 text-slate-400">
+                    <span class="text-4xl sm:text-5xl mb-2">🏛️</span>
+                    <p class="text-lg sm:text-xl font-bold text-white tracking-wide">{{ $nama }}</p>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">Dedikasi, Integritas &amp; Pengabdian Nyata</p>
                 </div>
-
-                <!-- Sisi Kanan: Foto Profil Berbingkai Emas -->
-                <div class="relative flex justify-center">
-                    <div class="absolute inset-0 rounded-full opacity-20 blur-3xl" style="background-color: #c0172d;"></div>
-
-                    <div class="relative w-full max-w-[360px]">
-                        <div class="relative overflow-hidden rounded-3xl border-2 p-1.5 shadow-2xl" style="border-color: #c8972a;">
-                            @if ($portfolio->banner_path)
-                                <img src="{{ Storage::url($portfolio->banner_path) }}" alt="{{ $nama }}" class="h-[360px] w-full rounded-2xl object-cover sm:h-[420px]" />
-                            @elseif ($portfolio->logo_path)
-                                <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-[360px] w-full rounded-2xl object-cover sm:h-[420px]" />
-                            @else
-                                <div class="flex h-[360px] w-full flex-col items-center justify-center rounded-2xl sm:h-[420px]"
-                                     style="background: linear-gradient(135deg, #c0172d 0%, #1a1a2e 70%);">
-                                    <div class="space-y-4 px-8 text-center">
-                                        <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-white/10 text-4xl font-black text-white ring-2" style="border-color: #c8972a;">
-                                            {{ substr($nama, 0, 1) }}
-                                        </div>
-                                        <p class="text-xl font-bold text-white">{{ $nama }}</p>
-                                        <p class="text-xs uppercase tracking-wider" style="color: #c8972a;">Profil Resmi Terverifikasi</p>
-                                    </div>
-                                </div>
-                            @endif
-
-                            <!-- Overlay Badge Gold/Navy -->
-                            <div class="absolute bottom-4 left-4 right-4 rounded-xl px-4 py-3 backdrop-blur-md shadow-lg"
-                                 style="background: rgba(26, 26, 46, 0.9); border: 1px solid rgba(200, 151, 42, 0.4);">
-                                <p class="text-[9px] font-bold uppercase tracking-widest" style="color: #c8972a;">Profil Tokoh Terpercaya</p>
-                                <p class="text-sm font-extrabold text-white truncate">{{ $nama }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </section>
 
-        <!-- ── PROFIL & VISI MISI ──────────────────────────────── -->
-        <section id="profil" class="py-16 md:py-24 bg-white">
-            <div class="mx-auto max-w-6xl px-5">
-                <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl">
-                    <div class="grid lg:grid-cols-[1fr_380px]">
-                        <!-- Kolom Kiri: Visi & Gagasan -->
-                        <div class="p-8 md:p-12 space-y-6">
-                            <div class="flex items-center gap-2">
-                                <div class="h-6 w-1.5 rounded-full" style="background-color: #c0172d;"></div>
-                                <span class="text-xs font-bold uppercase tracking-widest" style="color: #c0172d;">Profil & Visi Misi</span>
+        <!-- ── 3. PROFIL TOKOH (OVERLAPPING BANNER) ──────────────── -->
+        <section class="relative bg-white border-b border-slate-200">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="relative -mt-16 sm:-mt-20 pb-8">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+                        <div class="flex flex-col sm:flex-row sm:items-end gap-5">
+                            <!-- Foto Profil Tokoh (Circle Avatar) -->
+                            <div class="h-28 w-28 sm:h-36 sm:w-36 shrink-0 rounded-full border-4 border-white bg-white shadow-md overflow-hidden">
+                                @if ($portfolio->logo_path)
+                                    <img src="{{ Storage::url($portfolio->logo_path) }}" alt="{{ $nama }}" class="h-full w-full object-cover" />
+                                @else
+                                    <div class="h-full w-full bg-slate-900 flex items-center justify-center text-4xl text-white font-black">
+                                        👤
+                                    </div>
+                                @endif
                             </div>
 
-                            <h2 class="text-2xl font-black text-gray-900 sm:text-3xl">Mengenal Lebih Dekat {{ $nama }}</h2>
-
-                            @if ($portfolio->bio)
-                                <div class="prose max-w-none text-sm leading-relaxed text-gray-600 space-y-3">
-                                    <p class="text-base text-gray-700 font-medium leading-relaxed">{{ $portfolio->bio }}</p>
-                                    <p class="text-gray-500">
-                                        Komitmen pelayanan kami berpijak pada aspirasi masyarakat. Melalui transparansi, kerja terencana, dan komunikasi terbuka, kami bertekad memperjuangkan kebijakan serta inisiatif yang membawa kemaslahatan publik secara nyata dan berkelanjutan.
-                                    </p>
+                            <!-- Nama & Gelar/Lencana -->
+                            <div class="space-y-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                                        {{ $nama }}
+                                    </h1>
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-xs font-semibold text-blue-800">
+                                        <svg class="h-3 w-3 fill-current text-blue-600" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                        Profil Resmi
+                                    </span>
                                 </div>
-                            @else
-                                <p class="text-sm leading-relaxed text-gray-600">
-                                    Profil publik resmi ini didedikasikan untuk transparansi informasi, pemaparan agenda pengabdian, serta kanal langsung bagi warga dan relawan untuk menyampaikan saran, ide, dan aspirasi pembangunan lingkungan secara konstruktif.
+                                <p class="text-xs sm:text-sm font-medium text-slate-500">
+                                    Figur Publik &bull; Portofolio &bull; Program Kerja Resmi
                                 </p>
-                            @endif
-
-                            @if ($waLink)
-                                <div class="pt-2">
-                                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                                       class="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-md"
-                                       style="background-color: #c0172d;">
-                                        <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                                        <span>Sampaikan Masukan ke Tim</span>
-                                    </a>
-                                </div>
-                            @endif
+                            </div>
                         </div>
 
-                        <!-- Kolom Kanan: 5 Nilai Utama -->
-                        <div class="flex flex-col justify-center gap-4 p-8 md:p-10 text-white" style="background-color: #1a1a2e;">
-                            <div class="mb-2">
-                                <p class="text-xs font-bold uppercase tracking-widest" style="color: #c8972a;">Landasan Pengabdian</p>
-                                <h3 class="text-lg font-extrabold text-white">5 Nilai Perjuangan</h3>
-                            </div>
+                        <!-- Tombol Kontak Cepat -->
+                        <div class="flex flex-wrap items-center gap-2.5 pt-2 sm:pt-0">
+                            @if ($waLink)
+                                <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-2 rounded-xl bg-slate-900 hover:bg-slate-800 px-5 py-2.5 text-xs font-bold text-white transition-colors shadow-xs">
+                                    <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
+                                    <span>Hubungi Sekretariat (WA)</span>
+                                </a>
+                            @endif
 
-                            @php
-                                $nilaiUtama = [
-                                    ['title' => 'Integritas Tinggi', 'desc' => 'Menjunjung kejujuran dan moralitas dalam setiap langkah tindakan.'],
-                                    ['title' => 'Amanah & Bertanggung Jawab', 'desc' => 'Menjalankan mandat warga dengan kesungguhan hati.'],
-                                    ['title' => 'Peduli & Membumi', 'desc' => 'Hadir langsung di tengah persoalan nyata masyarakat.'],
-                                    ['title' => 'Inovatif & Solutif', 'desc' => 'Merumuskan solusi cerdas berbasis kebutuhan riil.'],
-                                    ['title' => 'Transparan & Terbuka', 'desc' => 'Keterbukaan informasi dan pertanggungjawaban terukur.'],
-                                ];
-                            @endphp
+                            @if ($portfolio->instagram_url)
+                                <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors shadow-2xs">
+                                    <svg class="h-4 w-4 fill-current text-pink-600" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                    <span>Instagram</span>
+                                </a>
+                            @endif
 
-                            <div class="space-y-3.5">
-                                @foreach ($nilaiUtama as $idx => $item)
-                                    <div class="flex items-start gap-3">
-                                        <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-black text-white shadow-xs" style="background-color: #c0172d;">
-                                            {{ $idx + 1 }}
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-white">{{ $item['title'] }}</p>
-                                            <p class="text-[11px] text-gray-400 leading-snug">{{ $item['desc'] }}</p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            <a href="#karya"
+                               class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors shadow-2xs">
+                                <span>Lihat Program</span>
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </a>
                         </div>
                     </div>
+
+                    <!-- Bio Deskripsi -->
+                    @if ($portfolio->bio)
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <p class="max-w-3xl text-sm sm:text-base leading-relaxed text-slate-600">
+                                {{ $portfolio->bio }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>
 
-        <!-- ── PROGRAM KERJA / KATALOG AGENDA ───────────────────── -->
-        <section id="program" class="py-16 md:py-24" style="background-color: #f8fafc;">
-            <div class="mx-auto max-w-6xl px-5">
-                <div class="mb-12">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="h-6 w-1.5 rounded-full" style="background-color: #c0172d;"></div>
-                        <p class="text-xs font-bold uppercase tracking-widest" style="color: #c0172d;">Agenda & Aksi Konkret</p>
+        <!-- ── 4. PROGRAM, PORTOFOLIO & KARYA ────────────────────── -->
+        <section id="karya" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Program, Portofolio &amp; Karya</h2>
+                        <p class="mt-1 text-sm text-slate-600">Rekam jejak program kerja, karya pengabdian, dan inisiatif kemasyarakatan</p>
                     </div>
-                    <h2 class="text-2xl font-black text-gray-900 sm:text-3xl md:text-4xl">Program Kerja Unggulan</h2>
-                    <p class="mt-2 text-sm text-gray-600">Komitmen rencana aksi strategis demi kemajuan bersama</p>
+                    <span class="inline-block self-start sm:self-auto rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">
+                        {{ count($products) }} Inisiatif Tercatat
+                    </span>
                 </div>
 
                 @if (count($products) > 0)
                     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        @foreach ($products as $idx => $item)
-                            <div class="group flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        @foreach ($products as $item)
+                            <div class="flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-all">
                                 <div>
-                                    <!-- Header Nomor & Judul -->
-                                    <div class="flex items-start gap-4 p-6">
-                                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-black text-white shadow-sm" style="background-color: #c0172d;">
-                                            {{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                            <h3 class="text-base font-bold text-gray-900 leading-snug">
-                                                {{ $item['name'] ?? $item['judul'] ?? 'Program Kerja ' . ($idx + 1) }}
-                                            </h3>
-                                            @if (!empty($item['description'] ?? $item['deskripsi'] ?? ''))
-                                                <p class="mt-2 text-xs leading-relaxed text-gray-600">
-                                                    {{ $item['description'] ?? $item['deskripsi'] }}
-                                                </p>
-                                            @endif
-                                        </div>
+                                    <!-- Foto Karya / Program -->
+                                    <div class="aspect-4/3 w-full overflow-hidden bg-slate-100">
+                                        @if (!empty($item['image'] ?? $item['foto'] ?? null))
+                                            <img src="{{ Storage::url($item['image'] ?? $item['foto']) }}"
+                                                 alt="{{ $item['name'] ?? $item['judul'] ?? 'Karya' }}"
+                                                 class="h-full w-full object-cover" />
+                                        @else
+                                            <div class="flex h-full w-full items-center justify-center text-slate-300">
+                                                <span class="text-5xl">🏛️</span>
+                                            </div>
+                                        @endif
                                     </div>
 
-                                    <!-- Foto Program jika ada -->
-                                    @if (!empty($item['image'] ?? $item['foto'] ?? null))
-                                        <div class="aspect-16/8 overflow-hidden bg-gray-100 border-y border-gray-100">
-                                            <img src="{{ Storage::url($item['image'] ?? $item['foto']) }}"
-                                                 alt="{{ $item['name'] ?? $item['judul'] ?? 'Program' }}"
-                                                 class="h-full w-full object-cover" />
-                                        </div>
-                                    @endif
+                                    <!-- Detail Karya -->
+                                    <div class="p-5 space-y-2">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            {{ $item['name'] ?? $item['judul'] ?? 'Inisiatif Program' }}
+                                        </h3>
+
+                                        @if (!empty($item['price']) && $item['price'] > 0)
+                                            <p class="text-base font-bold text-slate-900">
+                                                Rp {{ number_format($item['price'], 0, ',', '.') }}
+                                            </p>
+                                        @else
+                                            <p class="text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                                                Program Pengabdian / Karya
+                                            </p>
+                                        @endif
+
+                                        @if (!empty($item['description'] ?? $item['deskripsi'] ?? ''))
+                                            <p class="text-xs leading-relaxed text-slate-600 line-clamp-2">
+                                                {{ $item['description'] ?? $item['deskripsi'] }}
+                                            </p>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <!-- Footer Card -->
-                                <div class="p-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
-                                    <span class="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Prioritas Terjadwal</span>
+                                <!-- Tombol Aksi WhatsApp -->
+                                <div class="border-t border-slate-100 p-4 pt-3 bg-slate-50/50">
                                     @if ($waNumber)
-                                        <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Halo Tim ' . $nama . ', saya ingin bertanya mengenai program: ' . ($item['name'] ?? $item['judul'] ?? 'Program')) }}"
+                                        <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Halo ' . $nama . ', saya ingin mengetahui informasi lebih lanjut mengenai program: ' . ($item['name'] ?? $item['judul'] ?? 'Program') . '. Mohon arahan dan informasinya ya!') }}"
                                            target="_blank" rel="noopener noreferrer"
-                                           class="inline-flex items-center gap-1.5 text-xs font-bold text-[#c0172d]">
-                                            <span>Dukung Program</span>
-                                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                           class="flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 hover:bg-slate-800 py-2.5 text-xs font-bold text-white transition-colors shadow-2xs">
+                                            <span>Informasi Program (WA)</span>
+                                            <svg class="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
                                         </a>
                                     @endif
                                 </div>
@@ -322,72 +224,89 @@
                         @endforeach
                     </div>
                 @else
-                    <!-- Fallback 3 Program Kerja Default jika belum ada katalog diisi -->
-                    <div class="grid gap-6 sm:grid-cols-3">
-                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-black text-white" style="background-color: #c0172d;">01</div>
-                            <h3 class="mt-4 text-base font-bold text-gray-900">Pemberdayaan Ekonomi Warga</h3>
-                            <p class="mt-2 text-xs leading-relaxed text-gray-600">Pelatihan keterampilan praktis UMKM, akses permodalan bergulir, dan pendampingan pemasaran produk lokal.</p>
-                        </div>
-                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-black text-white" style="background-color: #c0172d;">02</div>
-                            <h3 class="mt-4 text-base font-bold text-gray-900">Kesehatan & Fasilitas Ramah Lansia</h3>
-                            <p class="mt-2 text-xs leading-relaxed text-gray-600">Penyuluhan posyandu terintegrasi, bantuan kesehatan jemput bola, dan jaminan nutrisi ibu dan balita.</p>
-                        </div>
-                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div class="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-black text-white" style="background-color: #c0172d;">03</div>
-                            <h3 class="mt-4 text-base font-bold text-gray-900">Kanal Aspirasi Digital Warga</h3>
-                            <p class="mt-2 text-xs leading-relaxed text-gray-600">Layanan pengaduan tanggap cepat via WhatsApp agar persoalan lingkungan langsung terpantau dan terselesaikan.</p>
-                        </div>
+                    <div class="rounded-xl border border-slate-200 bg-white p-12 text-center text-slate-500">
+                        <span class="text-4xl">🏛️</span>
+                        <p class="mt-3 font-semibold text-slate-800">Dokumentasi Program Sedang Disusun</p>
+                        <p class="mt-1 text-xs">Silakan hubungi WhatsApp kami langsung untuk aspirasi, jadwal, atau informasi kegiatan.</p>
                     </div>
                 @endif
             </div>
         </section>
 
-        <!-- ── POSKO & LOKASI KANTOR ────────────────────────────── -->
+        <!-- ── 5. KOMITMEN & PRINSIP ─────────────────────────────── -->
+        <section id="visi" class="border-y border-slate-200 bg-white py-12">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                <div class="grid gap-6 sm:grid-cols-3">
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-2">
+                        <span class="text-3xl">⚖️</span>
+                        <h3 class="text-base font-bold text-slate-900">Integritas &amp; Transparansi</h3>
+                        <p class="text-xs leading-relaxed text-slate-600">
+                            Berkomitmen menjaga amanah dengan keterbukaan informasi dan pertanggungjawaban program yang jelas.
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-2">
+                        <span class="text-3xl">🗣️</span>
+                        <h3 class="text-base font-bold text-slate-900">Komunikasi Terbuka</h3>
+                        <p class="text-xs leading-relaxed text-slate-600">
+                            Mendengarkan aspirasi dan masukan masyarakat secara langsung melalui berbagai kanal komunikasi resmi.
+                        </p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-6 space-y-2">
+                        <span class="text-3xl">🌟</span>
+                        <h3 class="text-base font-bold text-slate-900">Aksi Nyata &amp; Solutif</h3>
+                        <p class="text-xs leading-relaxed text-slate-600">
+                            Fokus pada realisasi program kerja yang berdampak langsung bagi peningkatan kesejahteraan bersama.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 6. KANTOR SEKRETARIAT & KONTAK ───────────────────── -->
         @if ($portfolio->maps_embed_url || $portfolio->alamat)
-            <section id="lokasi" class="py-16 md:py-20 bg-white border-t border-gray-100">
-                <div class="mx-auto max-w-6xl px-5">
-                    <div class="mb-10 text-center">
-                        <p class="text-xs font-bold uppercase tracking-widest" style="color: #c0172d;">Sekretariat & Posko</p>
-                        <h2 class="mt-2 text-2xl font-black text-gray-900 sm:text-3xl">Pusat Informasi & Koordinasi</h2>
-                        <p class="mt-2 text-sm text-gray-600">Pintu kami selalu terbuka untuk silaturahmi dan dialog warga</p>
+            <section id="sekretariat" class="py-12 sm:py-16">
+                <div class="mx-auto max-w-6xl px-4 sm:px-6">
+                    <div class="mb-8">
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Kantor Sekretariat &amp; Kunjungan</h2>
+                        <p class="mt-1 text-sm text-slate-600">Alamat resmi sekretariat untuk penyampaian aspirasi, audiensi, maupun surat kedinasan</p>
                     </div>
 
-                    <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
+                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
                         <div class="grid lg:grid-cols-[380px_1fr]">
-                            <div class="p-8 space-y-5 flex flex-col justify-between">
-                                <div class="space-y-3">
-                                    <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold text-white" style="background-color: #1a1a2e;">
-                                        <span>📍 Posko Utama</span>
+                            <div class="flex flex-col justify-between p-6 sm:p-8 space-y-6">
+                                <div class="space-y-4">
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-wider text-slate-900">Jam Pelayanan Sekretariat:</p>
+                                        <p class="mt-1 text-sm font-bold text-slate-900">Senin &ndash; Jumat: 09:00 &ndash; 17:00 WIB</p>
                                     </div>
-                                    <h3 class="text-lg font-bold text-gray-900">{{ $nama }}</h3>
                                     @if ($portfolio->alamat)
-                                        <p class="text-sm text-gray-600 leading-relaxed">{{ $portfolio->alamat }}</p>
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-wider text-slate-900">Alamat Kantor:</p>
+                                            <p class="mt-1 text-xs text-slate-600 leading-relaxed">{{ $portfolio->alamat }}</p>
+                                        </div>
                                     @endif
                                 </div>
 
                                 @if ($waLink)
                                     <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                                       class="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs font-bold text-white shadow-md"
-                                       style="background-color: #c0172d;">
-                                        <span>Petunjuk Arah & Konfirmasi Silaturahmi</span>
+                                       class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 hover:bg-slate-800 px-5 py-3 text-xs font-bold text-white transition-colors shadow-xs">
+                                        <span>Ajukan Audiensi / Pertemuan (WA)</span>
                                     </a>
                                 @endif
                             </div>
 
-                            <div class="min-h-[300px] bg-gray-100">
+                            <div class="min-h-[300px] bg-slate-100">
                                 @if ($portfolio->maps_embed_url)
                                     <iframe
                                         src="{{ $portfolio->maps_embed_url }}"
-                                        class="h-full w-full min-h-[320px] border-0"
+                                        class="h-full w-full min-h-[300px] border-0"
                                         loading="lazy"
                                         referrerpolicy="no-referrer-when-downgrade"
                                         title="Peta Lokasi {{ $nama }}">
                                     </iframe>
                                 @else
-                                    <div class="flex h-full min-h-[300px] items-center justify-center text-sm text-gray-400">
-                                        Peta belum disematkan
+                                    <div class="flex h-full min-h-[300px] items-center justify-center text-sm text-slate-400">
+                                        Peta lokasi belum disematkan
                                     </div>
                                 @endif
                             </div>
@@ -396,70 +315,31 @@
                 </div>
             </section>
         @endif
-
-        <!-- ── DUKUNGAN & AJAKAN ─────────────────────────────────── -->
-        <section id="dukung" class="relative overflow-hidden py-20" style="background-color: #1a1a2e;">
-            <div class="pointer-events-none absolute inset-0 opacity-15"
-                 style="background-image: radial-gradient(circle at 25% 50%, #c0172d, transparent 65%), radial-gradient(circle at 75% 50%, #c8972a, transparent 55%);"></div>
-
-            <div class="relative mx-auto max-w-3xl px-5 text-center space-y-6">
-                <div class="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold"
-                     style="border-color: rgba(200, 151, 42, 0.5); color: #c8972a;">
-                    <span>Bersatu Untuk Kebaikan</span>
-                </div>
-
-                <h2 class="text-3xl font-extrabold text-white sm:text-4xl md:text-5xl leading-tight">
-                    Bersama Wujudkan<br /><span style="color: #c8972a;">Perubahan Nyata</span>
-                </h2>
-
-                <p class="mx-auto max-w-xl text-sm leading-relaxed text-gray-300">
-                    Dukungan, doa, dan masukan Anda adalah energi terbesar bagi langkah pengabdian ini. Mari bersinergi dan bergotong-royong membangun masa depan yang berkeadilan.
-                </p>
-
-                <div class="pt-4 flex flex-wrap justify-center gap-4">
-                    @if ($waLink)
-                        <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center gap-2.5 rounded-xl px-8 py-4 text-sm font-bold text-white shadow-2xl"
-                           style="background-color: #c0172d; box-shadow: 0 10px 30px rgba(192, 23, 45, 0.5);">
-                            <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-                            <span>Sampaikan Aspirasi via WA</span>
-                        </a>
-                    @endif
-                    @if ($portfolio->instagram_url)
-                        <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center gap-2.5 rounded-xl border px-8 py-4 text-sm font-bold text-white shadow-lg"
-                           style="border-color: rgba(236, 72, 153, 0.6); background-color: rgba(236, 72, 153, 0.2);">
-                            <svg class="h-4 w-4 fill-current text-pink-400" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                            <span>Ikuti di Instagram</span>
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </section>
     </main>
 
-    <!-- ── FOOTER RESMI ───────────────────────────────────────── -->
-    <footer class="py-8 text-center text-xs text-gray-400" style="background-color: #1a1a2e; border-top: 1px solid rgba(255,255,255,0.08);">
-        <div class="mx-auto max-w-6xl px-5 space-y-2">
-            <p class="font-bold text-white">{{ $nama }} &bull; Saluran Aspirasi & Informasi Resmi</p>
-            @if ($portfolio->instagram_url)
-                <p>
-                    <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer" class="text-pink-400 underline">
-                        Instagram Resmi: {{ '@' . ltrim(parse_url($portfolio->instagram_url, PHP_URL_PATH), '/') }}
-                    </a>
-                </p>
-            @endif
-            <p>&copy; 2026 Hanan Aria Santagama | XII RPL 1</p>
+    <!-- ── 7. FOOTER RESMI ────────────────────────────────────── -->
+    <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-2">
+            <p class="font-bold text-slate-800">{{ $nama }}</p>
+            <div class="flex flex-wrap items-center justify-center gap-4 font-medium text-slate-600">
+                @if ($waLink)
+                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900">WhatsApp: {{ $portfolio->whatsapp }}</a>
+                @endif
+                @if ($portfolio->instagram_url)
+                    <a href="{{ $portfolio->instagram_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600">Instagram: {{ $portfolio->instagram }}</a>
+                @endif
+            </div>
+            <p class="text-[11px] text-slate-400 pt-2">&copy; {{ date('Y') }} {{ $nama }}. Halaman portofolio resmi UMKM.</p>
         </div>
     </footer>
 
-    <!-- ── FLOATING WHATSAPP BUTTON ──────────────────────────── -->
+    <!-- ── 8. FLOATING WHATSAPP BUTTON ────────────────────────── -->
     @if ($waLink)
         <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-           class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-[#25D366] px-5 py-3 text-xs font-bold text-white shadow-2xl"
-           style="box-shadow: 0 8px 25px rgba(37, 211, 102, 0.45);">
+           class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-[#25D366] px-5 py-3 text-xs font-bold text-white shadow-lg hover:brightness-105 transition-all"
+           style="box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);">
             <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z"/></svg>
-            <span>Kirim Aspirasi</span>
+            <span>Hubungi Tokoh (WA)</span>
         </a>
     @endif
 

@@ -16,9 +16,14 @@
 
 ## 2. Diagram ERD (Entity Relationship Diagram) — Notasi Peter Chen
 
+File visual siap cetak & presentasi telah digenerate:
+* **Format Gambar PNG (Ultra High Definition 3400x2200):** [ERD_CMS_Web_Builder.png](file:///c:/laragon/www/CMSWebBuilder_Hanan/Dokumen/ERD_CMS_Web_Builder.png)
+* **Format Gambar JPG:** [ERD_CMS_Web_Builder.jpg](file:///c:/laragon/www/CMSWebBuilder_Hanan/Dokumen/ERD_CMS_Web_Builder.jpg)
+* **Format Vektor SVG:** [ERD_CMS_Web_Builder.svg](file:///c:/laragon/www/CMSWebBuilder_Hanan/Dokumen/ERD_CMS_Web_Builder.svg)
+
 Diagram ini menggunakan standar **Notasi Peter Chen (Conceptual Data Model)**:
 * **Persegi Panjang** = Entitas (`admins`, `portfolios`, `activity_logs`, `slug_histories`)
-* **Belah Ketupat (Diamond)** = Relasi (`mengelola`, `mencatat`, `menjadi_objek`, `memiliki`)
+* **Belah Ketupat (Diamond)** = Relasi (`mengelola`, `mencatat`, `merekam`, `memiliki`)
 * **Elips / Oval** = Atribut data (dengan teks bergaris bawah `<u>...</u>` untuk Primary Key)
 * **Kardinalitas** = One to Many (`1 : N`)
 
@@ -33,7 +38,7 @@ flowchart TB
     %% Relasi (Belah Ketupat / Diamond)
     R_KELOLA{"mengelola"}
     R_CATAT{"mencatat"}
-    R_AUDIT{"menjadi_objek"}
+    R_AUDIT{"merekam"}
     R_RIWAYAT{"memiliki"}
 
     %% Kardinalitas One to Many (1 : N)

@@ -76,7 +76,10 @@
 
             <!-- Tombol Hapus -->
             <form action="{{ route('admin.portfolios.destroy', $portfolio->id) }}" method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus portofolio {{ $portfolio->nama_umkm }} secara permanen?');">
+
+                  {{-- // TEMPAT KODE POPUP KONFIRMASI HAPUS DETAIL PORTOFOLIO DI SINI // --}}
+
+            >
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-rose-950/80 text-rose-400 border border-rose-800/60 text-xs font-bold cursor-pointer">

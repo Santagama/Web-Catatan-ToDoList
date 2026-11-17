@@ -23,14 +23,10 @@
     {{-- Dark Overlay semi-transparan untuk keterbacaan teks --}}
     <div class="absolute inset-0 bg-black/30"></div>
 
-    {{-- Brand & Tombol Kembali — Pojok Kiri Atas --}}
-    <div class="absolute left-4 top-4 z-20 flex flex-col items-start gap-2.5 lg:left-8 lg:top-8">
-        <div>
-            <h2 class="text-sm font-bold tracking-tight text-white lg:text-base">CMS Web Builder</h2>
-            <p class="text-[10px] uppercase tracking-widest text-white/50">Management System</p>
-        </div>
+    {{-- Tombol Kembali — Pojok Kiri Atas --}}
+    <div class="absolute left-4 top-4 z-20 lg:left-8 lg:top-8">
         <a href="{{ route('home') }}"
-           class="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3.5 py-2 text-xs font-semibold text-white shadow-sm"
+           class="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 hover:bg-white/15 px-3.5 py-2 text-xs font-semibold text-white transition-colors"
            title="Kembali ke Halaman Web">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -42,7 +38,7 @@
     {{-- Status badge — Pojok Kanan Atas --}}
     <div class="absolute right-4 top-4 z-10 lg:right-8 lg:top-8">
         <div class="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
-            <span class="h-2 w-2 rounded-full bg-green-400"></span>
+            <span class="h-2 w-2 rounded-full bg-white"></span>
             <span class="text-xs font-semibold text-white">Panel Admin</span>
         </div>
     </div>
@@ -52,7 +48,7 @@
 
         {{-- Logo + Judul Platform --}}
         <div class="mb-6 text-center lg:mb-8">
-            <div class="mx-auto mb-5 flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-2xl shadow-teal-500/40 lg:mb-6 lg:h-28 lg:w-28">
+            <div class="mx-auto mb-5 flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-white border border-white/20 lg:mb-6 lg:h-28 lg:w-28">
                 <img
                     src="/assets/logo.png"
                     alt="CMS Web Builder Logo"
@@ -60,16 +56,16 @@
                     onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('hidden');"
                 />
                 <div class="hidden text-center">
-                    <div class="text-xl font-black uppercase tracking-tight text-teal-600 lg:text-2xl">CMS</div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wider text-teal-500 lg:text-xs">WEB</div>
+                    <div class="text-xl font-black uppercase tracking-tight text-slate-900 lg:text-2xl">CMS</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-600 lg:text-xs">WEB</div>
                 </div>
             </div>
             <h1 class="mb-1 text-2xl font-black text-white lg:text-3xl">CMS Web Builder</h1>
-            <p class="text-xs font-semibold text-teal-400 lg:text-sm">Multi-Template Landing Page Platform</p>
+            <p class="text-xs font-semibold uppercase tracking-widest text-white/60 lg:text-sm">Management System</p>
         </div>
 
         {{-- Form Card --}}
-        <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-2xl shadow-black/40">
+        <div class="overflow-hidden rounded-2xl border border-white/15 bg-white/10">
 
             {{-- Card Header --}}
             <div class="border-b border-white/10 bg-white/5 px-6 py-4 lg:px-7 lg:py-5">
@@ -164,15 +160,15 @@
                         </div>
                     </div>
 
-                    {{-- Tombol Submit Form --}}
+                    {{-- Tombol Submit Form (Putih Bersih Flat, Tanpa Shadow) --}}
                     <button
                         type="submit"
                         id="submitBtn"
-                        class="w-full rounded-xl bg-teal-600 py-3.5 text-sm font-bold text-white lg:py-4 lg:text-base cursor-pointer flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
+                        class="w-full rounded-xl bg-white hover:bg-zinc-100 py-3.5 text-sm font-bold text-gray-950 lg:py-4 lg:text-base cursor-pointer flex items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <span id="submitText" class="flex items-center justify-center gap-2">
-                            Masuk ke Panel Admin
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <span>Masuk ke Panel Admin</span>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </span>
@@ -187,9 +183,9 @@
                             href="https://wa.me/62895324392999?text=Halo%20Developer%20Hanan%20Aria%20Santagama,%20saya:%20[SEBUT%20NAMA]%20mengalami%20kendala%20lupa%20password%20pada%20Panel%20Admin%20CMS%20Web%20Builder.%20Mohon%20izin%20bantuan%20untuk%20melakukan%20reset%20akses%20akun%20Admin%20saya.%20Terima%20kasih."
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 font-bold text-teal-400"
+                            class="inline-flex items-center gap-1.5 font-medium text-white/60 hover:text-white transition-colors"
                         >
-                            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-3.5 w-3.5 text-white/70 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.46-.01z" />
                             </svg>
                             <span>Lupa password?</span>

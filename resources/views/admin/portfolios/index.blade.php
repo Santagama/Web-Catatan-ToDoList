@@ -114,7 +114,7 @@
                             </td>
 
                             <!-- Kolom: Slug (URL Bersih) -->
-                            <td class="px-5 py-4 font-mono text-xs text-teal-400 font-bold">
+                            <td class="px-5 py-4 font-mono text-xs text-white font-bold">
                                 /{{ $porto->slug }}
                             </td>
 
@@ -177,7 +177,10 @@
                                       Form DELETE dengan konfirmasi javascript dan token CSRF (@csrf + @method('DELETE')).
                                     --}}
                                     <form action="{{ route('admin.portfolios.destroy', $porto->id) }}" method="POST"
-                                          onsubmit="return confirm('Yakin ingin menghapus portofolio {{ $porto->nama_umkm }}?')">
+
+                                          {{-- // TEMPAT KODE POPUP KONFIRMASI HAPUS PORTOFOLIO DI SINI // --}}
+
+                                    >
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 rounded-xl bg-[#101116] border border-zinc-800 text-zinc-300 cursor-pointer" title="Hapus Portofolio">

@@ -292,7 +292,7 @@
                                     @if ($item->id === 1)
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-teal-500/15 border border-teal-500/30 text-teal-300 text-xs font-bold">
                                             <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                                            Admin Utama (Founder)
+                                            Admin Utama
                                         </span>
                                     @elseif ($item->id === auth()->id())
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold">
@@ -325,7 +325,11 @@
                                         </span>
                                     @else
                                         {{-- Form Hapus Admin Biasa --}}
-                                        <form action="{{ route('admin.settings.admins.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin {{ $item->name }} ({{ '@' . $item->username }})? Tindakan ini tidak dapat dibatalkan.');">
+                                        <form action="{{ route('admin.settings.admins.destroy', $item->id) }}" method="POST" class="inline-block"
+
+                                              {{-- // TEMPAT KODE POPUP KONFIRMASI HAPUS ADMIN DI SINI // --}}
+
+                                        >
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -359,10 +363,6 @@
                     <span>Database MySQL</span>
                 </div>
                 <p class="text-xs font-mono text-zinc-400">{{ config('database.connections.mysql.database', 'db_cmswebbuilder') }}</p>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-teal-400 pt-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <span>Terhubung Aktif</span>
-                </div>
             </div>
 
             <!-- Storage -->
@@ -372,10 +372,6 @@
                     <span>Media Storage</span>
                 </div>
                 <p class="text-xs font-mono text-zinc-400">storage/app/public</p>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-teal-400 pt-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <span>Siap Tulis &amp; Baca</span>
-                </div>
             </div>
 
             <!-- Mode Engine -->
@@ -385,10 +381,6 @@
                     <span>Framework &amp; Engine</span>
                 </div>
                 <p class="text-xs font-mono text-zinc-400">Laravel 13 &bull; PHP {{ PHP_VERSION }}</p>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-teal-400 pt-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <span>Optimal</span>
-                </div>
             </div>
 
             <!-- Akses Publik -->
@@ -398,10 +390,6 @@
                     <span>Dynamic Slug Routing</span>
                 </div>
                 <p class="text-xs font-mono text-zinc-400">Aktif via /{slug}</p>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-teal-400 pt-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <span>SEO 301 Redirect Aktif</span>
-                </div>
             </div>
         </div>
     </div>
