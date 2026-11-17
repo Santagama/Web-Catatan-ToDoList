@@ -1,39 +1,26 @@
-# Catatan Dokumentasi: Folder Views Settings (`resources/views/admin/settings/`)
+# Catatan Dokumentasi: View Pengaturan Akun (`resources/views/admin/settings/`)
 
 ---
 
-## [FUNGSI]
-Folder ini berisi antarmuka pengguna (View Blade) untuk modul **Pengaturan Akun Administrator (`admin.settings`)**. Memfasilitasi admin untuk memperbarui profil identitas dirinya (Nama Lengkap, Username) serta mengganti kata sandi dengan mekanisme verifikasi kata sandi lama yang aman.
+## 1. Apa itu File `index.blade.php` di Folder Settings? (Bahasa Santai)
+Ini adalah halaman **Pengaturan Akun Pengelola & Tim Admin**! ⚙️
+Di sini admin bisa:
+1. Mengubah nama lengkap dan username miliknya.
+2. Mengganti kata sandi lama ke kata sandi baru.
+3. Menambahkan akun admin pengelola baru (Multi-User Admin).
+4. Melihat tabel daftar seluruh admin terdaftar dan menghapus admin lain.
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
-```
-1. Admin mengklik menu 'Pengaturan Akun' di sidebar
-   └── Masuk ke rute: admin.settings.index
-   └── View index.blade.php menampilkan data nama dan username admin saat ini
-
-2. Admin mengubah nama atau username, lalu klik Simpan
-   └── Form mengirim HTTP PUT ke rute admin.settings.update
-   └── SettingsController@update memvalidasi keunikan username baru
-       (unique:admins,username,ID) agar tidak bentrok dengan akun lain
-
-3. Admin ingin mengganti password baru:
-   └── Mengisi 'Kata Sandi Saat Ini' dan 'Kata Sandi Baru' beserta konfirmasinya
-   └── Sistem mencocokkan kata sandi lama menggunakan Hash::check()
-       - Jika salah: Kembali ke form dengan pesan error
-       - Jika cocok: Password baru dienkripsi otomatis dengan Bcrypt via Model Admin
-   └── Aksi dicatat ke tabel activity_logs dengan keterangan 'GANTI_PENGATURAN'
-```
+## 2. Fitur Keamanan Istimewa di Halaman Ini:
+1.  **Proteksi Anti-Kudeta untuk Admin Utama**:
+    *   Akun Founder (ID 1 / Hanan) memiliki lencana khusus bertuliskan *"Admin Utama (Founder)"* dan tombol hapusnya dinonaktifkan secara permanen (`cursor-not-allowed`) demi menjaga kedaulatan sistem.
+2.  **Proteksi Anti-Self Delete**:
+    *   Admin yang sedang login tidak bisa menghapus akunnya sendiri (muncul label *"Akun Anda"*).
+3.  **Verifikasi Password Lama**:
+    *   Admin tidak bisa langsung mengganti password baru tanpa mengetahui password lamanya terlebih dahulu.
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
-
-### 1. `index.blade.php`
-*   **Fungsi**: Halaman formulir pembaruan kredensial dan profil admin.
-*   **Fitur Keamanan**:
-    *   *Verifikasi Password Dua Lapis*: Mengharuskan pengisian `current_password` sebelum kata sandi baru diterima.
-    *   *Konfirmasi Kata Sandi*: Validasi `confirmed` di Laravel memastikan admin tidak salah mengetik kata sandi barunya.
-    *   *Kartu Edukasi Bcrypt*: Teks informasi teknis tentang algoritma hashing satu arah Bcrypt untuk bahan penjelasan ke penguji.
-
+## 3. 💡 Jawaban Mantap untuk Penguji:
+> *"Modul Pengaturan ini menerapkan prinsip Role & Identity Management yang aman. Sistem melindungi akun Administrator Utama (ID 1) dari penghapusan dan mencegah self-deletion agar sistem tidak pernah kehilangan akun aktif."*

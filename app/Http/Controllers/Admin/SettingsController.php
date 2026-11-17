@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+// Mengimpor class dasar Controller, model ActivityLog & Admin, dan fasilitas Hash Laravel
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Admin;
@@ -11,35 +12,37 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 /**
- * SettingsController (Pengontrol Halaman Pengaturan Akun Admin)
+ * SettingsController (Pengontrol Pengaturan Akun Admin & Multi-User)
  *
  * Menangani:
- * 1. Pembaruan profil admin aktif (nama, username, kata sandi)
- * 2. CRUD manajemen multi-user akun Admin (Tambah, Tampil, Hapus)
- *    dilengkapi proteksi Anti-Kudeta untuk Admin Utama (ID 1)
- *    dan proteksi Anti-Self Delete.
+ * 1. Pembaruan profil admin yang sedang login (Nama, Username, dan Ganti Password).
+ * 2. Tambah akun admin baru untuk kolaborasi tim pengelola.
+ * 3. Hapus akun admin dengan 2 lapis keamanan tingkat tinggi:
+ *    - Proteksi Anti-Kudeta: Akun Admin Utama (ID 1 / Hanan) tidak bisa dihapus oleh siapapun!
+ *    - Proteksi Anti-Self Delete: Admin tidak bisa menghapus akun miliknya sendiri yang sedang login.
  */
 class SettingsController extends Controller
 {
     /**
-     * Menampilkan halaman pengaturan akun admin dan daftar akun admin terdaftar.
+     * 1. Menampilkan halaman form pengaturan profil dan daftar seluruh akun admin terdaftar.
      */
     public function index(): View
     {
-        // Mengambil seluruh data admin diurutkan dari akun pertama (Founder)
+        // Ambil semua data akun admin diurutkan dari akun pertama kali dibuat (Founder)
         $admins = Admin::oldest('id')->get();
 
         return view('admin.settings.index', compact('admins'));
     }
 
     /**
-     * Memproses pembaruan data profil dan/atau kata sandi admin.
+     * 2. Memproses pembaruan data profil dan ganti kata sandi admin yang sedang login.
      */
     public function update(Request $request): RedirectResponse
     {
+        // Ambil data admin yang sedang aktif login saat ini
         $admin = auth()->user();
 
-        // 1. Validasi input profil
+        // LANGKAH 1: VALIDASI INPUT PROFIL & PASSWORD
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'username' => ['required', 'string', 'min:5', 'max:50', 'unique:admins,username,'.$admin->id],
@@ -49,31 +52,31 @@ class SettingsController extends Controller
             'name.required' => 'Nama lengkap wajib diisi.',
             'username.required' => 'Username wajib diisi.',
             'username.min' => 'Username minimal 5 karakter.',
-            'username.unique' => 'Username sudah digunakan.',
-            'current_password.required_with' => 'Password saat ini wajib diisi untuk mengganti password.',
+            'username.unique' => 'Username sudah digunakan admin lain.',
+            'current_password.required_with' => 'Password saat ini wajib diisi jika ingin mengganti password.',
             'new_password.min' => 'Password baru minimal 6 karakter.',
             'new_password.confirmed' => 'Konfirmasi password baru tidak cocok.',
         ]);
 
-        // 2. Jika admin ingin mengganti kata sandi
+        // LANGKAH 2: JIKA ADMIN INGIN MENGGANTI PASSWORD
         if ($request->filled('new_password')) {
-            // Verifikasi kata sandi lama terlebih dahulu
+            // Verifikasi kecocokan password lama dengan hash yang tersimpan di database
             if (! Hash::check($request->input('current_password'), $admin->password)) {
                 return back()->withErrors([
                     'current_password' => 'Password saat ini tidak sesuai.',
                 ]);
             }
 
-            // Update password baru (otomatis di-hash via Model $casts)
+            // Ganti password (otomatis dienkripsi hash Bcrypt lewat Model casts)
             $admin->password = $validated['new_password'];
         }
 
-        // 3. Update profil nama dan username
+        // LANGKAH 3: UPDATE DATA NAMA DAN USERNAME
         $admin->name = $validated['name'];
         $admin->username = $validated['username'];
         $admin->save();
 
-        // 4. Catat jejak audit
+        // LANGKAH 4: CATAT KE LOG AKTIVITAS
         ActivityLog::record(
             'GANTI_PENGATURAN',
             'Admin '.$admin->name.' memperbarui pengaturan profil/password.'
@@ -84,10 +87,11 @@ class SettingsController extends Controller
     }
 
     /**
-     * Menambahkan akun admin pengelola baru ke sistem.
+     * 3. Menambahkan akun admin pengelola baru ke dalam sistem.
      */
     public function storeAdmin(Request $request): RedirectResponse
     {
+        // Validasi input akun baru
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'username' => ['required', 'string', 'min:4', 'max:50', 'alpha_dash', 'unique:admins,username'],
@@ -96,18 +100,20 @@ class SettingsController extends Controller
             'name.required' => 'Nama lengkap admin wajib diisi.',
             'username.required' => 'Username login wajib diisi.',
             'username.min' => 'Username minimal 4 karakter.',
-            'username.alpha_dash' => 'Username hanya boleh berupa huruf, angka, tanda strip (-), atau garis bawah (_).',
-            'username.unique' => 'Username tersebut sudah terdaftar pada sistem.',
+            'username.alpha_dash' => 'Username hanya boleh berupa huruf, angka, strip, dan underscore.',
+            'username.unique' => 'Username tersebut sudah digunakan oleh akun lain.',
             'password.required' => 'Password akun admin wajib diisi.',
             'password.min' => 'Password minimal 6 karakter.',
         ]);
 
+        // Simpan data admin baru ke tabel admins
         $newAdmin = Admin::create([
             'name' => $validated['name'],
             'username' => strtolower($validated['username']),
-            'password' => $validated['password'], // Otomatis di-hash via Model casts
+            'password' => $validated['password'], // Otomatis di-hash oleh model
         ]);
 
+        // Catat ke log aktivitas
         ActivityLog::record(
             'TAMBAH_ADMIN',
             'Menambahkan akun admin baru: '.$newAdmin->name.' (@'.$newAdmin->username.')'
@@ -118,28 +124,29 @@ class SettingsController extends Controller
     }
 
     /**
-     * Menghapus akun admin tertentu dari sistem.
-     *
-     * Dilengkapi 2 lapis proteksi keamanan:
-     * 1. Anti-Kudeta: Admin ID 1 (Founder/Primary Admin) terlindungi secara permanen dari penghapusan.
-     * 2. Anti-Self Delete: Admin tidak diizinkan menghapus akun miliknya sendiri saat sesi login aktif.
+     * 4. Menghapus akun admin tertentu dari sistem (dengan 2 Lapis Proteksi).
      */
     public function destroyAdmin(Admin $admin): RedirectResponse
     {
-        // Proteksi 1: Anti-Kudeta (Admin Utama ID 1 dilindungi)
+        // LAPIS PROTEKSI 1: ANTI-KUDETA
+        // Akun Admin ID 1 (Founder / Hanan Aria Santagama) dilindungi selamanya dan tidak boleh dihapus!
         if ($admin->id === 1) {
             return back()->with('error', 'Akun Admin Utama (Founder) dilindungi secara permanen dan tidak dapat dihapus oleh siapapun!');
         }
 
-        // Proteksi 2: Anti-Self Delete (Mencegah admin menghapus dirinya sendiri)
+        // LAPIS PROTEKSI 2: ANTI-SELF DELETE
+        // Admin dilarang menghapus akun dirinya sendiri saat sedang aktif login
         if ($admin->id === auth()->id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri saat sedang aktif masuk!');
         }
 
         $deletedName = $admin->name;
         $deletedUsername = $admin->username;
+
+        // Hapus akun dari database
         $admin->delete();
 
+        // Catat ke log aktivitas
         ActivityLog::record(
             'HAPUS_ADMIN',
             'Menghapus akun admin: '.$deletedName.' (@'.$deletedUsername.')'

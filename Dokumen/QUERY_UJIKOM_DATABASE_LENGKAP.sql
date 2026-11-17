@@ -1,16 +1,28 @@
 -- ==============================================================================
--- QUERY DATABASE UJIKOM SMK RPL (DATABASE: db_cmswebbuilderhanan)
+-- DOKUMEN QUERY RESMI DATABASE UJIKOM SMK REKAYASA PERANGKAT LUNAK (RPL)
+-- APLIKASI: CMS Web Builder — Platform Web Portofolio UMKM
+-- SISWA   : Hanan Aria Santagama (Kelas XII RPL 1 — SMKN 1 Majalengka)
+-- DATABASE: db_cmswebbuilderhanan (MySQL / MariaDB via phpMyAdmin)
+-- SOAL NO : 6 (Operasi Relasional, Stored Procedure, Function, Trigger, Commit & Rollback)
 -- ==============================================================================
+--
+-- PANDUAN PENGGUNAAN:
+-- 1. Buka phpMyAdmin -> klik nama database `db_cmswebbuilderhanan`.
+-- 2. Klik tab "SQL" di bagian atas.
+-- 3. Copy-paste query per bagian di bawah ini, lalu klik tombol "Kirim" / "Go".
+--
+-- ==============================================================================
+
+USE db_cmswebbuilderhanan;
+
 
 -- ==============================================================================
 -- 1. TRIGGER (UTAMA: OTOMATIS CATAT LOG AKTIVITAS)
--- Fungsi: Setiap kali data portofolio DITAMBAH atau DIUBAH, sistem otomatis
---         mencatat audit jejak aktivitas ke tabel activity_logs.
+-- Fungsi: Saat data portofolio DITAMBAH / DIUBAH, otomatis catat ke activity_logs
 -- ==============================================================================
-
 DELIMITER $$
 
--- A. Trigger Setelah Tambah Data (AFTER INSERT)
+-- A. Trigger Setelah Tambah (AFTER INSERT)
 DROP TRIGGER IF EXISTS trg_after_insert_portfolio$$
 CREATE TRIGGER trg_after_insert_portfolio
 AFTER INSERT ON portfolios
@@ -26,7 +38,7 @@ BEGIN
     );
 END$$
 
--- B. Trigger Setelah Ubah Data (AFTER UPDATE)
+-- B. Trigger Setelah Ubah (AFTER UPDATE)
 DROP TRIGGER IF EXISTS trg_after_update_portfolio$$
 CREATE TRIGGER trg_after_update_portfolio
 AFTER UPDATE ON portfolios
@@ -44,47 +56,45 @@ END$$
 
 DELIMITER ;
 
--- CARA CEK TRIGGER:
+-- CARA CEK:
 SHOW TRIGGERS LIKE 'portfolios';
 SELECT * FROM activity_logs ORDER BY id DESC LIMIT 3;
 
 
 -- ==============================================================================
--- 2. STORED FUNCTION (CEK KETERSEDIAAN SLUG)
--- Fungsi: Mengecek apakah slug/URL sudah dipakai (0 = tersedia, > 0 = terpakai).
+-- 2. STORED FUNCTION (CEK SLUG)
+-- Fungsi: Cek apakah slug sudah dipakai (0 = tersedia, > 0 = terpakai)
 -- ==============================================================================
-
 DELIMITER $$
 
 DROP FUNCTION IF EXISTS CekKetersediaanSlug$$
-CREATE FUNCTION CekKetersediaanSlug(p_slug VARCHAR(150))
+CREATE FUNCTION CekKetersediaanSlug(p_slug VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci)
 RETURNS INT
 DETERMINISTIC
 READS SQL DATA
 BEGIN
     DECLARE total INT;
-    SELECT COUNT(*) INTO total FROM portfolios WHERE slug = p_slug;
+    SELECT COUNT(*) INTO total FROM portfolios WHERE slug = p_slug COLLATE utf8mb4_0900_ai_ci;
     RETURN total;
 END$$
 
 DELIMITER ;
 
--- CARA PANGGIL FUNCTION:
+-- CARA PANGGIL:
 SELECT CekKetersediaanSlug('toko-roti-baru') AS status_slug;
 
 
 -- ==============================================================================
--- 3. STORED PROCEDURE (TAMBAH PORTOFOLIO DENGAN VALIDASI)
--- Fungsi: Menambah portofolio secara aman. Jika slug sudah ada, transaksi ditolak.
+-- 3. STORED PROCEDURE (TAMBAH PORTOFOLIO)
+-- Fungsi: Menambah data portofolio aman (cek function slug dulu, jika ganda tolak)
 -- ==============================================================================
-
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS TambahPortfolio$$
 CREATE PROCEDURE TambahPortfolio(
     IN p_admin_id      BIGINT UNSIGNED,
     IN p_nama_umkm     VARCHAR(150),
-    IN p_slug          VARCHAR(150),
+    IN p_slug          VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
     IN p_bio           TEXT,
     IN p_whatsapp      VARCHAR(20),
     IN p_template_id   VARCHAR(50),
@@ -101,21 +111,20 @@ END$$
 
 DELIMITER ;
 
--- CARA PANGGIL PROCEDURE:
+-- CARA PANGGIL:
 CALL TambahPortfolio(1, 'Keripik Renyah', 'keripik-renyah', 'Camilan enak', '0895324392999', 'makanan', 'publish');
 
 
 -- ==============================================================================
--- 4. OPERASI RELASIONAL (JOIN ANTAR TABEL)
--- Fungsi: Menampilkan data gabungan antar tabel berelasi (FK).
+-- 4. OPERASI RELASIONAL (JOIN)
+-- Fungsi: Menampilkan data gabungan antar tabel relasi
 -- ==============================================================================
-
--- A. Portofolio + Nama Admin Pembuat (INNER JOIN)
+-- A. Portofolio + Nama Admin Pembuat
 SELECT p.id, p.nama_umkm, p.slug, p.status, a.name AS nama_admin
 FROM portfolios p
 INNER JOIN admins a ON p.admin_id = a.id;
 
--- B. Riwayat Perubahan Slug SEO 301 (JOIN 3 Tabel)
+-- B. Riwayat Slug SEO 301 (3 Tabel)
 SELECT sh.id, p.nama_umkm, sh.slug_lama, sh.slug_baru, a.name AS admin_pembuat
 FROM slug_histories sh
 INNER JOIN portfolios p ON sh.portfolio_id = p.id
@@ -123,20 +132,19 @@ INNER JOIN admins a ON p.admin_id = a.id;
 
 
 -- ==============================================================================
--- 5. COMMIT & ROLLBACK (TRANSAKSI DATABASE)
--- Fungsi: Membatalkan perubahan (ROLLBACK) atau menyimpan permanen (COMMIT).
+-- 5. COMMIT & ROLLBACK (TRANSAKSI)
+-- Fungsi: Batal simpan (ROLLBACK) atau simpan permanen (COMMIT)
 -- ==============================================================================
-
--- A. DEMO ROLLBACK (Batal Simpan)
+-- A. DEMO ROLLBACK (Batal)
 START TRANSACTION;
 INSERT INTO portfolios (admin_id, nama_umkm, slug, template_id, status, created_at, updated_at)
 VALUES (1, 'Toko Batal', 'toko-batal-99', 'makanan', 'draft', NOW(), NOW());
 ROLLBACK;
-SELECT * FROM portfolios WHERE slug = 'toko-batal-99'; -- Hasil: Kosong
+SELECT * FROM portfolios WHERE slug = 'toko-batal-99'; -- Kosong
 
--- B. DEMO COMMIT (Simpan Permanen)
+-- B. DEMO COMMIT (Permanen)
 START TRANSACTION;
 INSERT INTO portfolios (admin_id, nama_umkm, slug, template_id, status, created_at, updated_at)
 VALUES (1, 'Toko Resmi', 'toko-resmi-99', 'makanan', 'publish', NOW(), NOW());
 COMMIT;
-SELECT * FROM portfolios WHERE slug = 'toko-resmi-99'; -- Hasil: Tersimpan
+SELECT * FROM portfolios WHERE slug = 'toko-resmi-99'; -- Tersimpan

@@ -2,29 +2,37 @@
 
 namespace Database\Seeders;
 
+// Mengimpor Model Admin, class Seeder bawaan, dan utilitas Hash
 use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Seeder Akun Admin Default
+ * AdminSeeder (Penyuntik Data Akun Admin Default)
  *
- * Bertugas menyuntikkan (inject) data akun pengelola utama ke tabel 'admins'
- * agar aplikasi langsung memiliki kredensial siap pakai untuk login pertama kali.
+ * Bertugas memasukkan data akun admin pengelola utama pertama kali ke database.
+ * Sangat berguna agar saat aplikasi baru diinstal di komputer penguji,
+ * kita tidak perlu repot membuat akun secara manual dari phpMyAdmin.
  */
 class AdminSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Menjalankan proses pengisian data database (Seed).
      */
     public function run(): void
     {
-        // Menggunakan updateOrCreate untuk mencegah duplikasi jika seeder dijalankan lebih dari satu kali
+        // Menggunakan method updateOrCreate()
+        // Keuntungan: Mencegah error duplikasi jika seeder tidak sengaja dijalankan 2x atau lebih!
         Admin::updateOrCreate(
-            ['username' => 'hanan'], // Kunci pencarian unik
             [
+                // Kunci pencarian: Cari apakah admin dengan username 'hanan' sudah ada di database?
+                'username' => 'hanan',
+            ],
+            [
+                // Jika belum ada, buatkan data baru berikut ini:
                 'name' => 'Hanan Aria Santagama',
-                'password' => Hash::make('hanan123'), // Password di-hash menggunakan algoritma Bcrypt
+                // Password di-hash menggunakan algoritma Bcrypt yang aman
+                'password' => Hash::make('hanan123'),
             ]
         );
     }

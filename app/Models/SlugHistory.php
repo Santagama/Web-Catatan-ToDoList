@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+// Mengimpor class Model dan Relasi Eloquent
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,46 +10,40 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Model SlugHistory
  *
- * Merepresentasikan pencatatan riwayat perubahan slug URL portofolio UMKM
- * untuk mendukung fitur SEO HTTP 301 Permanent Redirect.
+ * Ini adalah model untuk mencatat riwayat perubahan URL slug portofolio UMKM.
+ * Model ini adalah pondasi fitur SEO "HTTP 301 Permanent Redirect".
+ * Contoh: Jika slug diubah dari "/toko-roti" menjadi "/bakery-lezat",
+ * pengunjung yang masih membuka link lama "/toko-roti" tidak akan error 404,
+ * melainkan otomatis diarahkan ke "/bakery-lezat".
  */
 class SlugHistory extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel di database MySQL.
-     */
+    // 1. Menentukan nama tabel di database MySQL
     protected $table = 'slug_histories';
 
-    /**
-     * Menonaktifkan updated_at karena tabel ini hanya mencatat kapan riwayat terjadi (created_at).
-     */
+    // 2. Kita matikan updated_at karena riwayat URL hanya butuh kapan perubahan itu terjadi (created_at)
     public $timestamps = false;
 
-    /**
-     * Kolom-kolom yang boleh diisi secara massal (Mass Assignment).
-     */
+    // 3. Kolom-kolom yang boleh diisi langsung (Mass Assignment)
     protected $fillable = [
-        'portfolio_id',
-        'slug_lama',
-        'slug_baru',
-        'created_at',
+        'portfolio_id', // ID portofolio pemilik slug ini
+        'slug_lama',    // Alamat slug sebelum diubah (contoh: "toko-roti")
+        'slug_baru',    // Alamat slug setelah diubah (contoh: "bakery-lezat")
+        'created_at',   // Waktu saat pergantian slug dilakukan
     ];
 
-    /**
-     * Pengaturan casting tipe data otomatis bawaan Laravel.
-     */
+    // 4. Casting tipe data otomatis dari Laravel
     protected function casts(): array
     {
         return [
+            // Mengubah created_at menjadi objek Carbon (tanggal & waktu)
             'created_at' => 'datetime',
         ];
     }
 
-    /**
-     * Relasi Many-to-One: Riwayat slug dimiliki oleh satu Portofolio.
-     */
+    // 5. RELASI: Catatan riwayat ini dimiliki oleh satu Portofolio UMKM (Many-to-One)
     public function portfolio(): BelongsTo
     {
         return $this->belongsTo(Portfolio::class, 'portfolio_id');

@@ -1,77 +1,46 @@
-# Catatan Dokumentasi: Folder Views Portfolios (`resources/views/admin/portfolios/`)
+# Catatan Dokumentasi: View Portofolio UMKM (`resources/views/admin/portfolios/`)
 
 ---
 
-## [FUNGSI]
-Folder ini berisi seluruh antarmuka pengguna (View Blade) untuk **Manajemen Portofolio UMKM**. Di sinilah admin dapat melihat direktori semua UMKM, menyaring berdasarkan status, menambah portofolio baru dengan pemilihan template visual, mengedit data bisnis dan katalog produk, melihat detail lengkap, serta memperpanjang masa aktif paket langganan.
+## 1. Apa Fungsi Folder Ini? (Bahasa Santai)
+Ini adalah **Dapur Inti Aplikasi**! 🍲
+Di sinilah admin mengelola seluruh website portofolio klien UMKM, mulai dari melihat tabel data, membuat website baru, mengedit, melihat detail, hingga memperpanjang masa aktif paket.
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
-```
-1. Admin membuka menu 'Direktori UMKM' di sidebar
-   └── Masuk ke rute: admin.portfolios.index
-   └── View index.blade.php menampilkan tabel daftar portofolio, search bar,
-       dan tab filter status (Semua, Aktif, Draft, Expired)
+## 2. Penjelasan Tiap File View
 
-2. Admin menekan tombol '+ Tambah Portofolio'
-   └── Masuk ke rute: admin.portfolios.create
-   └── View create.blade.php menampilkan 5 kartu template visual,
-       form profil usaha (dengan auto-generate slug realtime),
-       kotak upload logo & banner dengan live preview gambar,
-       dan section dinamis '+ Tambah Produk' untuk menambah baris barang
+### A. `index.blade.php` (Tabel Master Portofolio)
+*   **Fungsinya**: Menampilkan seluruh website UMKM yang sudah dibuat.
+*   **Fitur Keren**:
+    *   **Kotak Pencarian**: Bisa cari berdasarkan nama toko atau slug URL.
+    *   **Filter Tab Status**: Tombol cepat untuk memfilter: `Semua`, `Publish` (Aktif), dan `Draft` (Konsep).
+    *   **Tombol Aksi**: Buka website publik di tab baru, Edit data, dan Hapus portofolio.
+    *   **Paginasi Otomatis**: Membagi data jadi 10 baris per halaman (`$portfolios->links()`).
 
-3. Admin menekan tombol 'Detail' pada baris portofolio
-   └── Masuk ke rute: admin.portfolios.show
-   └── View show.blade.php menampilkan profil lengkap, katalog produk,
-       embed peta Google Maps, sisa masa aktif paket, dan bukti riwayat slug lama (SEO 301)
-   └── Admin bisa klik tombol 'Perpanjang Paket' untuk membuka modal perpanjangan masa aktif
+### B. `create.blade.php` (Form Pembuatan Website Baru)
+*   **Fungsinya**: Formulir lengkap untuk mendaftarkan website portofolio baru.
+*   **Fitur Keren yang Bikin Penguji Kagum**:
+    1.  *Pilihan 5 Template*: Kartu visual untuk memilih tema (Minuman, Makanan, Barang, Tokoh, Jasa).
+    2.  *Auto-Slug Realtime (Vanilla JS)*: Saat admin mengetik *"Kopi Kenangan Senja"*, input slug di bawahnya otomatis terisi *"kopi-kenangan-senja"* tanpa spasi!
+    3.  *Live Preview Foto*: Saat admin memilih file gambar logo atau banner dari laptop, gambarnya langsung muncul di layar sebelum tombol simpan ditekan!
+    4.  *Daftar Produk Dinamis*: Tombol `+ Tambah Produk` bisa diklik berkali-kali untuk menambah produk baru tanpa batas secara dinamis lewat JavaScript!
 
-4. Admin menekan tombol 'Edit'
-   └── Masuk ke rute: admin.portfolios.edit
-   └── View edit.blade.php menampilkan form berisi data lama
-   └── Jika admin mengubah slug, muncul peringatan otomatis bahwa slug lama akan dialihkan
+### C. `edit.blade.php` (Form Edit Portofolio)
+*   **Fungsinya**: Mengubah data portofolio yang sudah ada.
+*   **Fitur Andalan**:
+    *   *Peringatan Ganti Slug (SEO 301)*: Jika admin mengganti nama slug URL, muncul kotak peringatan ramah bahwa link lama otomatis dialihkan agar tidak terjadi broken link.
+    *   Menampilkan gambar logo dan banner lama yang sedang aktif.
 
-5. Admin menekan tombol 'Hapus'
-   └── Muncul konfirmasi alert JavaScript
-   └── Data dan seluruh file gambar di storage dihapus bersih via PortfolioController@destroy
-```
+### D. `show.blade.php` (Halaman Tinjauan / Detail Lengkap)
+*   **Fungsinya**: Melihat seluruh profil portofolio secara komprehensif.
+*   **Fitur Andalan**:
+    *   Menghitung sisa hari aktif paket (`remainingDays()`).
+    *   Peta Google Maps interaktif yang disematkan langsung.
+    *   Tabel riwayat perubahan slug URL (`slug_histories`) sebagai bukti implementasi SEO 301.
+    *   Modal popup untuk memperpanjang paket langganan (3 bulan atau 1 tahun).
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
-
-### 1. `index.blade.php`
-*   **Fungsi**: Halaman tabel direktori seluruh portofolio UMKM.
-*   **Fitur**:
-    *   *Search Bar*: Mencari nama usaha atau slug via parameter `?search=...`.
-    *   *Tab Filter Status*: Filter cepat `Semua`, `publish` (Aktif), `draft` (Tertunda), dan `expired` (Kadaluarsa).
-    *   *Tombol Aksi Cepat*:
-        *   **Lihat Web**: Membuka halaman publik `/{slug}` di tab baru (`target="_blank"`).
-        *   **Salin**: Menyalin URL publik ke clipboard secara instan menggunakan JavaScript `navigator.clipboard.writeText()`.
-        *   **Detail, Edit, Hapus**: Navigasi ke modul manajemen portofolio terkait.
-    *   *Paginasi Laravel*: Menampilkan navigasi halaman jika data melebihi 10 entri (`$portfolios->links()`).
-
-### 2. `create.blade.php`
-*   **Fungsi**: Halaman formulir pendaftaran portofolio UMKM baru.
-*   **Fitur Cerdas (Nilai Plus Penguji)**:
-    *   *Pemilihan Template*: Radio button bergaya kartu interaktif untuk 5 template (`minuman`, `makanan`, `barang`, `tokoh`, `jasa`).
-    *   *Auto-Slug Generator (Vanilla JS)*: Saat admin mengetik *"Kopi Senja Nusantara"*, input slug otomatis terisi *"kopi-senja-nusantara"*.
-    *   *Live Image Preview (Vanilla JS)*: Saat admin memilih file logo atau banner, gambar langsung tampil di layar sebelum klik Simpan.
-    *   *Dynamic Product Row*: Admin bisa klik `+ Tambah Produk` untuk menambah baris produk (nama, harga, deskripsi, foto) tanpa batas secara dinamis di browser.
-
-### 3. `edit.blade.php`
-*   **Fungsi**: Halaman pembaruan data portofolio.
-*   **Fitur Khusus**:
-    *   Mendeteksi perubahan slug: Jika admin mengganti slug URL asli, JavaScript memunculkan peringatan bahwa URL lama akan dialihkan otomatis via HTTP 301.
-    *   Menampilkan thumbnail gambar logo dan banner yang saat ini sedang aktif.
-    *   Menampilkan seluruh baris produk yang sudah tersimpan sebelumnya untuk dapat diedit atau dihapus.
-
-### 4. `show.blade.php`
-*   **Fungsi**: Halaman tinjauan komprehensif satu portofolio UMKM.
-*   **Fitur**:
-    *   Menampilkan status masa aktif dengan perhitungan sisa hari menggunakan Carbon (`remainingDays()`).
-    *   Menampilkan daftar katalog produk unggulan dalam format kartu grid.
-    *   Menampilkan riwayat pengalihan slug lama $\rightarrow$ slug baru dari tabel `slug_histories` (bukti implementasi SEO 301 untuk penguji).
-    *   Modal interaktif untuk memperpanjang paket langganan (3 bulan atau 1 tahun) yang memanggil route `admin.portfolios.extend`.
-
+## 3. 💡 Jawaban Mantap untuk Penguji:
+> *"Modul Portofolio ini mengintegrasikan Form Request, penanganan upload multimedia, dan komponen dinamis berbasis Vanilla JavaScript (Auto-Slug dan Live Image Preview) yang ringan tanpa membebani browser pengguna."*

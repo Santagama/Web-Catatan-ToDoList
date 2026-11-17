@@ -2,81 +2,90 @@
 
 namespace App\Http\Controllers;
 
+// Mengimpor Model Portfolio dan SlugHistory untuk query data ke database
 use App\Models\Portfolio;
 use App\Models\SlugHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 /**
- * PublicController (Pengontrol Halaman Publik / Pengunjung)
+ * PublicController (Pengontrol Halaman Publik / Pengunjung Umum)
  *
- * Menangani halaman yang dapat diakses tanpa login:
- * - Landing page promosi jasa web builder
- * - Halaman portofolio UMKM berdasarkan slug URL
- * - Pengalihan SEO 301 Redirect jika slug pernah diubah
- * - Penanganan error 404 untuk slug yang tidak ditemukan
+ * Controller ini menangani halaman yang dapat diakses oleh siapa saja tanpa perlu login:
+ * 1. Landing Page utama promosi jasa web builder kami.
+ * 2. Halaman portofolio website UMKM berdasarkan alamat URL / slug.
+ * 3. Fitur cerdas SEO 301 Redirect jika alamat slug pernah diganti.
+ * 4. Penanganan halaman Error 404 jika alamat web tidak ditemukan atau sudah expired.
  */
 class PublicController extends Controller
 {
     /**
-     * Menampilkan landing page utama perusahaan jasa web builder.
+     * Menampilkan Landing Page promosi utama.
+     * Siapapun yang membuka alamat web utama (root '/') akan diarahkan ke sini.
      */
     public function landing(): View
     {
-        // Ambil portofolio yang sudah publish untuk ditampilkan di section showcase
+        // 1. Ambil maksimal 6 data portofolio UMKM yang statusnya sudah 'publish'
+        // Diurutkan dari yang paling baru diupdate untuk dipamerkan di section showcase
         $showcasePortfolios = Portfolio::where('status', 'publish')
             ->latest('updated_at')
             ->take(6)
             ->get();
 
+        // 2. Kirim data portofolio tersebut ke file tampilan 'resources/views/public/landing.blade.php'
         return view('public.landing', compact('showcasePortfolios'));
     }
 
     /**
-     * Menampilkan halaman portofolio UMKM berdasarkan slug URL unik.
+     * Menampilkan halaman website UMKM berdasarkan slug URL unik (misal: /kopi-kenangan).
      *
-     * Alur kerja (sangat penting untuk dijelaskan ke penguji):
-     * 1. Cari slug di tabel portfolios -> jika ditemukan & publish -> tampilkan template
-     * 2. Cari slug di tabel slug_histories -> jika ditemukan -> redirect 301 ke slug baru
-     * 3. Jika tidak ditemukan di mana pun -> tampilkan halaman 404
+     * ALUR LOGIKA PENTING (Bagus banget untuk dijelaskan saat Ujikom):
+     * Langkah 1: Cari slug di tabel 'portfolios'.
+     *             - Jika ketemu & status publish & belum expired -> Tampilkan template websitenya!
+     * Langkah 2: Jika tidak ketemu, cari slug di tabel riwayat 'slug_histories'.
+     *             - Jika ketemu -> Berarti slug ini pernah diganti! Langsung Redirect 301 ke slug baru!
+     * Langkah 3: Jika di tabel riwayat pun tidak ada -> Lempar error 404 (Halaman Tidak Ditemukan).
      */
     public function show(string $slug): View|RedirectResponse
     {
-        // Langkah 1: Cari portofolio berdasarkan slug di tabel utama
+        // --- LANGKAH 1: Cari data portofolio berdasarkan slug di tabel utama ---
         $portfolio = Portfolio::where('slug', $slug)->first();
 
-        // Jika ditemukan
+        // Jika data UMKM ditemukan di tabel utama:
         if ($portfolio) {
-            // Periksa apakah statusnya sudah publish
+            // Cek 1A: Apakah statusnya sudah publish? Kalau masih draft, jangan boleh dilihat orang luar!
             if ($portfolio->status !== 'publish') {
-                abort(404); // Portofolio masih draft, tidak bisa diakses publik
+                abort(404); // Tampilkan halaman 404 Not Found
             }
 
-            // Periksa apakah paket sudah kadaluarsa
+            // Cek 1B: Apakah masa aktif paketnya sudah habis (kadaluarsa)?
             if ($portfolio->isExpired()) {
-                abort(404); // Paket sudah kadaluarsa
+                abort(404); // Jika paket habis, sembunyikan dari publik
             }
 
-            // Render template yang sesuai dengan pilihan template_id
+            // Tentukan nama file Blade template berdasarkan template_id yang dipilih UMKM (minuman/makanan/barang/tokoh/jasa)
             $viewName = 'public.templates.'.$portfolio->template_id;
 
-            // Cek apakah file template Blade-nya ada
+            // Jika template tidak ditemukan di folder, gunakan template 'minuman' sebagai cadangan aman (fallback)
             if (! view()->exists($viewName)) {
-                $viewName = 'public.templates.minuman'; // Fallback ke template default
+                $viewName = 'public.templates.minuman';
             }
 
+            // Tampilkan halaman website UMKM kepada pengunjung
             return view($viewName, compact('portfolio'));
         }
 
-        // Langkah 2: Cek apakah slug ini adalah slug LAMA yang pernah diubah
+        // --- LANGKAH 2: Cek apakah slug ini adalah SLUG LAMA yang pernah diganti nama ---
         $history = SlugHistory::where('slug_lama', $slug)->latest('created_at')->first();
 
+        // Jika riwayat slug lama ditemukan:
         if ($history) {
-            // Redirect permanen (HTTP 301) ke slug baru untuk menjaga SEO
+            // Lakukan pengalihan permanen (HTTP Status Code 301 Moved Permanently) ke slug yang baru!
+            // Ini sangat penting untuk menjaga nilai SEO Google agar link lama tidak rusak/mati
             return redirect()->to('/'.$history->slug_baru, 301);
         }
 
-        // Langkah 3: Slug tidak ditemukan di mana pun -> tampilkan 404
+        // --- LANGKAH 3: Jika dicari ke mana-mana memang tidak ada, tampilkan halaman 404 ---
         abort(404);
     }
 }

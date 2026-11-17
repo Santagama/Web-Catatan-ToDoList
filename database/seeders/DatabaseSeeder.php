@@ -2,25 +2,26 @@
 
 namespace Database\Seeders;
 
+// Mengimpor trait dan class Seeder bawaan Laravel
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 /**
- * Seeder Utama (Master Database Seeder)
+ * DatabaseSeeder (Master Seeder / Titik Masuk Utama)
  *
- * Titik masuk utama saat perintah 'php artisan db:seed' dijalankan.
- * Hanya memanggil AdminSeeder untuk akun login admin default.
+ * Ini adalah konduktor utama yang pertama kali dipanggil saat kita mengetik:
+ * php artisan db:seed
  */
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Menjalankan seluruh proses seeder aplikasi.
      */
     public function run(): void
     {
-        // Inisialisasi Akun Admin Default
+        // Panggil AdminSeeder untuk membuat akun login admin default ('hanan' / 'hanan123')
         $this->call(AdminSeeder::class);
     }
 }

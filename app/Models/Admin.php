@@ -2,66 +2,58 @@
 
 namespace App\Models;
 
+// Mengimpor trait dan class bawaan Laravel yang kita butuhkan
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Agar model ini bisa dipakai login (Auth Laravel)
 use Illuminate\Notifications\Notifiable;
 
 /**
  * Model Admin
  *
- * Mewarisi Authenticatable agar dapat digunakan oleh sistem autentikasi Laravel (Session Auth)
- * untuk menangani proses login dan proteksi route dashboard.
+ * Ini adalah model untuk mengelola data akun Admin (pengelola sistem).
+ * Model ini mewarisi (extends) Authenticatable agar dikenali sistem Auth bawaan Laravel.
  */
 class Admin extends Authenticatable
 {
+    // Mengaktifkan fitur factory (untuk data uji coba) dan notifikasi bawaan Laravel
     use HasFactory, Notifiable;
 
-    /**
-     * Nama tabel di database MySQL.
-     */
+    // 1. Menentukan nama tabel di database MySQL kita
     protected $table = 'admins';
 
-    /**
-     * Kolom-kolom yang boleh diisi secara massal (Mass Assignment).
-     */
+    // 2. Kolom-kolom yang boleh diisi langsung dari form (Mass Assignment)
     protected $fillable = [
-        'name',
-        'username',
-        'password',
+        'name',     // Menyimpan nama lengkap admin (contoh: "Hanan Aria Santagama")
+        'username', // Menyimpan username unik untuk login (contoh: "hanan")
+        'password', // Menyimpan kata sandi yang akan otomatis di-hash
     ];
 
-    /**
-     * Kolom yang disembunyikan saat data diubah menjadi array atau JSON demi keamanan.
-     */
+    // 3. Kolom rahasia yang disembunyikan agar password tidak pernah bocor ke tampilan JSON / API
     protected $hidden = [
         'password',
     ];
 
-    /**
-     * Pengaturan casting tipe data otomatis bawaan Laravel.
-     */
+    // 4. Pengaturan tipe data (Casting) otomatis dari Laravel
     protected function casts(): array
     {
         return [
-            // Otomatis mengenkripsi password dengan Bcrypt saat di-assign
+            // Setiap kali kita mengisi password baru, Laravel otomatis mengubahnya jadi hash Bcrypt yang aman
             'password' => 'hashed',
         ];
     }
 
-    /**
-     * Relasi One-to-Many: Satu admin dapat mengelola banyak portofolio UMKM.
-     */
+    // 5. RELASI: Satu admin bisa membuat atau mengelola BANYAK data portofolio UMKM (One-to-Many)
     public function portfolios(): HasMany
     {
+        // Hubungkan foreign key 'admin_id' di tabel portfolios dengan 'id' admin ini
         return $this->hasMany(Portfolio::class, 'admin_id');
     }
 
-    /**
-     * Relasi One-to-Many: Satu admin memiliki banyak catatan riwayat aktivitas.
-     */
+    // 6. RELASI: Satu admin memiliki BANYAK catatan log aktivitas (One-to-Many)
     public function activityLogs(): HasMany
     {
+        // Hubungkan foreign key 'admin_id' di tabel activity_logs dengan 'id' admin ini
         return $this->hasMany(ActivityLog::class, 'admin_id');
     }
 }

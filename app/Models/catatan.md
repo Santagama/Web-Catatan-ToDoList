@@ -2,72 +2,83 @@
 
 ---
 
-## [FUNGSI]
-Folder ini berisi **Model Eloquent ORM (Object-Relational Mapping)**. Model berfungsi sebagai jembatan penghubung antara logika pemrograman PHP dengan tabel-tabel di database MySQL. Dengan Model, kita dapat melakukan manipulasi data (Create, Read, Update, Delete) menggunakan sintaks objek yang bersih tanpa perlu menulis query SQL manual.
+## 1. Apa itu Folder Models? (Bahasa Santai)
+Folder ini adalah tempat tinggalnya **Model Eloquent ORM**. 
+Kalau diibaratkan, **Model itu seperti jembatan atau kurir pribadi antara codingan PHP kita dengan tabel database MySQL**. 
+Tanpa model, kita harus ngetik query SQL panjang kayak `SELECT * FROM portfolios WHERE ...` secara manual. Tapi berkat Model, kita cukup panggil `Portfolio::all()` atau `Portfolio::create([...])`, semuanya beres otomatis, cepat, dan aman dari bahaya hacker (SQL Injection).
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
+## 2. Alur Cara Kerjanya (Flowchart Sederhana)
 ```
-Admin melakukan aksi di antarmuka (misal: simpan data UMKM baru)
-                             │
-                             ▼
-Controller menerima request data dan memanggil method Model:
-Contoh: Portfolio::create([...])
-                             │
-                             ▼
-Model Portfolio memeriksa $fillable dan melakukan casting otomatis:
-- Array produk diubah menjadi string JSON untuk MySQL ($casts)
-- Field expired_at diubah menjadi objek Carbon/Datetime
-                             │
-                             ▼
-Eloquent ORM menyusun query SQL 'INSERT INTO portfolios ...'
-dan mengeksekusinya ke database MySQL secara aman (terhindar dari SQL Injection).
-                             │
-                             ▼
-Data berhasil disimpan, Model mengembalikan objek data ke Controller.
+Admin klik simpan data di website
+                │
+                ▼
+Controller panggil Model:
+Portfolio::create([...])
+                │
+                ▼
+Model Portfolio bekerja otomatis:
+- Cek kolom mana yang boleh diisi ($fillable)
+- Ubah array produk jadi teks JSON MySQL ($casts)
+- Ubah format tanggal kedaluwarsa jadi Carbon ($casts)
+                │
+                ▼
+Eloquent kirim perintah aman ke MySQL:
+INSERT INTO portfolios ...
+                │
+                ▼
+Data tersimpan rapi di Database!
 ```
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
+## 3. Penjelasan Tiap File & Contekan Jawaban Ujikom
 
-### 1. `Admin.php`
-*   **Fungsi**: Merepresentasikan akun pengelola platform.
-*   **Keistimewaan**: Meng-extend class `Illuminate\Foundation\Auth\User as Authenticatable`. Hal ini wajib agar model ini dapat dikenali oleh sistem autentikasi dan session Laravel (`Auth::attempt()`, `auth()->user()`).
-*   **Atribut Kunci**:
-    *   `$fillable`: `['name', 'username', 'password']`.
-    *   `$hidden`: Menyembunyikan hash password agar tidak bocor saat data di-serialize.
-    *   `$casts`: `'password' => 'hashed'` memastikan password terenkripsi otomatis dengan Bcrypt.
-*   **Relasi**:
-    *   `portfolios()`: Relasi `hasMany` (satu admin dapat mengelola banyak portofolio).
-    *   `activityLogs()`: Relasi `hasMany` (satu admin memiliki banyak jejak riwayat aktivitas).
+### A. `Admin.php`
+*   **Fungsinya buat apa?**
+    Mengatur data akun login pengelola sistem (nama, username, password).
+*   **Kenapa extends `Authenticatable`?**
+    Supaya model ini otomatis dikenali oleh sistem login bawaan Laravel (`Auth::attempt()`, `auth()->user()`).
+*   **Hal Penting di File Ini:**
+    *   `$fillable = ['name', 'username', 'password']`: Menentukan kolom mana saja yang boleh diinput dari form.
+    *   `$hidden = ['password']`: Password disembunyikan agar tidak pernah bocor ke tampilan.
+    *   `$casts = ['password' => 'hashed']`: Setiap kali admin simpan password baru, Laravel otomatis mengubahnya menjadi enkripsi Bcrypt.
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"Pak/Bu, model Admin ini meng-extend class Authenticatable agar terintegrasi langsung dengan Auth Guard Laravel. Password-nya juga otomatis kami enkripsi Bcrypt lewat fitur casts `password => hashed` demi keamanan data pengguna."*
 
-### 2. `Portfolio.php`
-*   **Fungsi**: Jantung data dari aplikasi, merepresentasikan profil dan konfigurasi satu halaman portofolio UMKM.
-*   **Fitur Andalan (Jawaban Penguji)**:
-    *   `$casts = ['products' => 'array', 'expired_at' => 'datetime']`: Menggunakan fitur **Attribute Casting** Laravel. Di MySQL datanya disimpan sebagai teks JSON, tetapi saat diakses di kode PHP/Blade, datanya langsung menjadi Array murni tanpa perlu `json_decode()` manual!
-    *   `mapsEmbedUrl()` (Accessor & Mutator): Menggunakan fitur Attribute mutator & accessor modern untuk membersihkan input Google Maps. Jika pengguna menempelkan seluruh kode tag HTML `<iframe>...</iframe>`, sistem otomatis mengekstrak URL bersih dari `src="..."` sehingga mencegah error 404 pada template.
-*   **Helper Method**:
-    *   `isExpired()`: Mengecek apakah tanggal kadaluarsa paket sudah lewat waktu sekarang.
-    *   `remainingDays()`: Menghitung sisa hari aktif paket portofolio menggunakan library Carbon.
-*   **Relasi**:
-    *   `admin()`: Relasi `belongsTo` ke `Admin`.
-    *   `activityLogs()`: Relasi `hasMany` ke `ActivityLog`.
-    *   `slugHistories()`: Relasi `hasMany` ke `SlugHistory`.
+---
 
-### 3. `ActivityLog.php`
-*   **Fungsi**: Mencatat rekam jejak audit (*audit trail*) setiap aksi krusial yang dilakukan admin untuk transparansi sistem.
-*   **Fitur Praktis**:
-    *   `$timestamps = false`: Menonaktifkan `updated_at` karena log bersifat permanen (*immutable*) dan hanya memerlukan `created_at`.
-    *   `record($action, $description, $portfolioId)`: Method statis pembantu agar controller dapat mencatat log hanya dalam 1 baris kode saja.
-*   **Relasi**:
-    *   `admin()`: Relasi `belongsTo` ke `Admin` (pelaku aksi).
-    *   `portfolio()`: Relasi `belongsTo` ke `Portfolio` (objek yang dimodifikasi, opsional).
+### B. `Portfolio.php` (Model Utama Paling Penting!)
+*   **Fungsinya buat apa?**
+    Menampung seluruh data website UMKM (nama toko, slug URL, tema template, foto logo/banner, no WA, Instagram, Google Maps, dan katalog produk).
+*   **Fitur Keren di File Ini:**
+    1.  `$casts = ['products' => 'array', 'expired_at' => 'datetime']`
+        *   **Kelebihannya**: Di MySQL produk disimpan sebagai teks JSON. Tapi saat ditarik ke PHP/Blade, otomatis berubah jadi **Array murni**, jadi kita tidak perlu `json_decode()` manual!
+    2.  `mapsEmbedUrl()` (Accessor & Mutator):
+        *   Membersihkan input link Google Maps secara otomatis. Mau admin menempelkan link langsung atau kode tag `<iframe src="...">` lengkap, sistem pintar ini langsung mengekstrak URL bersihnya agar tidak error 404 di tampilan web.
+    3.  `isExpired()` & `remainingDays()`:
+        *   Fungsi pembantu untuk mengecek apakah paket langganan web UMKM sudah habis dan menghitung sisa hari aktifnya.
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"Model Portfolio ini menyimpan data produk fleksibel menggunakan kolom JSON di MySQL dan kami optimalkan dengan Eloquent Casting `'products' => 'array'`. Sehingga data produk bisa langsung di-looping di Blade template tanpa perlu decode manual."*
 
-### 4. `SlugHistory.php`
-*   **Fungsi**: Menyimpan riwayat perubahan slug URL untuk mendukung fitur SEO **HTTP 301 Permanent Redirect**.
-*   **Cara Kerja**: Ketika ada slug yang diubah, sistem mencatat `slug_lama` dan `slug_baru`. Jika ada pengunjung yang mengakses URL lama, controller akan mencari ke model ini dan mengarahkan pengunjung ke URL yang baru.
-*   **Relasi**:
-    *   `portfolio()`: Relasi `belongsTo` ke `Portfolio`.
+---
 
+### C. `ActivityLog.php`
+*   **Fungsinya buat apa?**
+    Mencatat jejak audit (*audit trail*) semua aksi admin di sistem (siapa yang login, siapa yang tambah data UMKM, siapa yang edit, siapa yang hapus).
+*   **Hal Keren di File Ini:**
+    *   `public $timestamps = false`: Kita matikan `updated_at` bawaan Laravel, karena log aktivitas itu catatan sejarah yang permanen (hanya butuh waktu dibuat `created_at`).
+    *   `ActivityLog::record(...)`: Fungsi pembantu statis agar kita bisa mencatat aktivitas dari Controller mana saja hanya dengan 1 baris kode singkat.
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"Tabel activity_logs ini kami sediakan untuk transparansi dan audit trail sistem. Jadi kalau ada data yang dihapus atau diubah, kita bisa tahu pasti siapa admin pelakunya dan kapan kejadiannya."*
+
+---
+
+### D. `SlugHistory.php`
+*   **Fungsinya buat apa?**
+    Menyimpan catatan sejarah alamat URL slug yang pernah dipakai UMKM.
+*   **Untuk Apa? (Fitur SEO 301 Permanent Redirect)**:
+    Misal nama toko awal adalah `toko-roti`, lalu pemilik toko ganti nama jadi `bakery-lezat`. Pengunjung yang masih punya link lama `toko-roti` tidak akan tersesat ke halaman 404, karena sistem otomatis mengecek tabel ini dan mengarahkan pengunjung ke link baru `bakery-lezat`.
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"File ini mendukung optimasi SEO (Search Engine Optimization) dengan teknik HTTP 301 Permanent Redirect. Sehingga jika UMKM mengganti alamat webnya, ranking Google dan pelanggan lamanya tidak akan hilang karena broken link."*

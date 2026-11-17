@@ -1,15 +1,17 @@
 {{--
   ==============================================================================
-  STARTER TEMPLATE (REDIRECT KE LANDING PAGE UTAMA)
+  STARTER FALLBACK (REDIRECT KE LANDING PAGE UTAMA)
   ==============================================================================
-  File default Laravel ini disederhanakan agar bersih tanpa animasi/efek berat,
-  dan otomatis mengarahkan pengunjung ke halaman utama publik (route 'home').
+  Ini adalah file default bawaan Laravel.
+  Jika suatu saat rute memanggil view 'welcome', halaman ini otomatis
+  mengalihkan (redirect 0 detik) pengunjung ke halaman utama publik (route 'home').
 --}}
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- Meta refresh 0 detik: Langsung mengalihkan pengunjung ke rute 'home' --}}
     <meta http-equiv="refresh" content="0; url={{ route('home') }}">
     <title>{{ config('app.name', 'CMS Web Builder') }}</title>
 </head>

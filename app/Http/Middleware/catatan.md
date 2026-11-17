@@ -1,22 +1,35 @@
-# Dokumentasi Middleware Aplikasi
+# Catatan Dokumentasi: Folder Middleware (`app/Http/Middleware/`)
 
-## 1. PreventBackHistory.php
+---
 
-### [FUNGSI]
-Middleware ini berfungsi mengamankan halaman panel admin dari kerentanan navigasi riwayat browser (*Back-Forward Cache* / *BFCache*). Memastikan bahwa saat admin menekan tombol "Keluar Sesi" (logout), admin tidak dapat kembali melihat data sensitif dashboard hanya dengan menekan tombol "Back" di browser.
+## 1. Apa itu Middleware? (Bahasa Santai)
+Middleware itu ibarat **"Satpam Penjaga Pintu"** di depan gedung aplikasi kita! 👮‍♂️
+Sebelum permintaan tamu (request) boleh masuk ke dalam ruangan (Controller), satpam ini akan memeriksa terlebih dahulu:
+- *"Apakah kamu sudah punya kartu akses login?"*
+- *"Apakah data kamu aman atau bawa virus/hacker?"*
+- *"Apakah browser kamu boleh menyimpan rekaman ruangan ini ke cache?"*
 
-### [ALUR SISTEM/USER FLOW]
-1. Admin sedang berada di dashboard sistem atau halaman kelola portofolio.
-2. Admin menekan tombol "Keluar Sesi" -> Session dihancurkan (`invalidate`), token CSRF diregenerasi (`regenerateToken`), dan status otentikasi dicabut (`Auth::logout()`).
-3. Pengguna dialihkan (redirect 302) ke halaman `/admin/login`.
-4. Jika seseorang menekan tombol "Back" di peramban (browser):
-   - Tanpa middleware ini, browser modern akan menampilkan halaman dari memori RAM (*disk/memory cache*), sehingga tampilan dashboard tetap terlihat meski sudah logout.
-   - Dengan middleware ini, browser dipaksa menghubungi server. Server mendeteksi sesi sudah tidak valid, lalu middleware `auth` langsung melempar pengguna kembali ke `/admin/login`.
+---
 
-### [PENJELASAN TEKNIS]
-- Header HTTP yang disuntikkan ke seluruh respon web:
-  - `Cache-Control: no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0` (memberitahu peramban agar tidak pernah menyimpan salinan halaman HTML ke disk maupun memory cache).
-  - `Pragma: no-cache` (kompatibilitas untuk klien protokol HTTP/1.0 lawas).
-  - `Expires: Sun, 02 Jan 1990 00:00:00 GMT` (membuat respon langsung dianggap usang/kedaluwarsa sejak detik pertama diterima).
-- Didaftarkan secara global pada grup `web` di `bootstrap/app.php` menggunakan `$middleware->web(append: [...])`.
-- Dilengkapi pendeteksi sisi klien via JavaScript `pageshow` di `resources/views/layouts/admin.blade.php` serta *pushState trap* di `resources/views/admin/auth/login.blade.php` untuk perlindungan 3 lapis (*defense-in-depth*).
+## 2. File di Folder Ini: `PreventBackHistory.php`
+
+### Masalah Nyata yang Sering Terjadi:
+Bayangkan kamu sedang login di lab sekolah atau warnet. Setelah selesai mengelola web UMKM, kamu menekan tombol **"Logout"**. 
+Lalu kamu beranjak pergi. Tiba-tiba teman sebelahmu iseng menekan tombol panah **"Back" (Kembali)** di browser. 
+Pada website biasa, halaman dashboard admin langsung terbuka lagi dari memori cache browser! Bahaya banget kan?
+
+### Solusi Cerdas yang Kita Buat:
+Middleware `PreventBackHistory` ini menyuntikkan header khusus ke browser pengunjung:
+```http
+Cache-Control: no-cache, private, no-store, must-revalidate
+Pragma: no-cache
+Expires: Sun, 02 Jan 1990 00:00:00 GMT
+```
+Artinya kita berpesan ke browser: *"Jangan pernah sekali-kali simpan halaman ini di memori komputer! Setiap kali tombol Back ditekan, kamu WAJIB tanya ulang ke server!"*
+
+Saat browser bertanya ulang ke server, Laravel tahu bahwa sesi login sudah dihancurkan, sehingga browser langsung ditolak dan otomatis dilempar ke halaman login!
+
+---
+
+## 3. 💡 Jawaban Mantap untuk Penguji:
+> *"Pak/Bu, middleware PreventBackHistory ini kami terapkan untuk mengatasi celah keamanan Back-Forward Cache (BFCache). Dengan menyuntikkan header HTTP `no-store, no-cache, must-revalidate`, browser dipaksa merefresh status otentikasi dari server saat tombol Back ditekan pasca logout, sehingga data dashboard tidak dapat diintip kembali."*

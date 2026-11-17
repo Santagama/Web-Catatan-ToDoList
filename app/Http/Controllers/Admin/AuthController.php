@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+// Mengimpor class Controller dasar, Model ActivityLog, dan fasilitas Auth Laravel
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use Illuminate\Http\RedirectResponse;
@@ -12,33 +13,38 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
- * AuthController (Pengontrol Autentikasi Admin)
+ * AuthController (Pengontrol Autentikasi Masuk & Keluar Admin)
  *
- * Bertanggung jawab menangani alur otentikasi login dan logout pengelola platform,
- * mencatat jejak audit login ke activity_logs, serta mengamankan session ID.
+ * Bertanggung jawab menangani alur keamanan login dan logout:
+ * - Menampilkan formulir login admin.
+ * - Memverifikasi username dan password terenkripsi.
+ * - Melindungi sistem dari serangan Brute-Force (penebakan password berulang).
+ * - Mencegah serangan Session Fixation dengan regenerasi Session ID.
+ * - Mencatat otomatis log audit masuk/keluar ke tabel activity_logs.
  */
 class AuthController extends Controller
 {
     /**
-     * Menampilkan formulir login admin.
-     * Jika admin sudah login sebelumnya, otomatis dialihkan langsung ke dashboard.
+     * Menampilkan halaman formulir login admin.
      */
     public function showLoginForm(): View|RedirectResponse
     {
-        // Pengecekan status login: Cegah admin yang sudah login melihat form login lagi
+        // Pengecekan awal: Jika admin ternyata SUDAH dalam posisi login,
+        // jangan biarkan dia membuka form login lagi, langsung lempar ke dashboard!
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');
         }
 
+        // Tampilkan halaman view resources/views/admin/auth/login.blade.php
         return view('admin.auth.login');
     }
 
     /**
-     * Memproses verifikasi kredensial login admin.
+     * Memproses verifikasi username dan password saat tombol Login ditekan.
      */
     public function login(Request $request): RedirectResponse
     {
-        // 1. Validasi data input form
+        // 1. VALIDASI INPUT FORM: Pastikan input username dan password tidak dibiarkan kosong
         $credentials = $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -47,42 +53,44 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        // 2. Proteksi Brute-Force: Batasi maksimal 5 percobaan login gagal per menit
+        // 2. PROTEKSI BRUTE-FORCE: Batasi maksimal 5 kali percobaan login gagal dari 1 IP per menit
         $throttleKey = Str::transliterate(Str::lower($request->input('username')).'|'.$request->ip());
 
+        // Cek apakah user ini sudah gagal mencoba lebih dari 5 kali?
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            // Hitung sisa berapa detik lagi dia harus menunggu hukuman selesai
             $seconds = RateLimiter::availableIn($throttleKey);
 
             return back()
-                ->withInput($request->only('username'))
+                ->withInput($request->only('username')) // Ingat username yang diketik
                 ->withErrors([
                     'username' => 'Terlalu banyak percobaan login gagal. Silakan coba lagi dalam '.$seconds.' detik.',
                 ]);
         }
 
-        // 3. Verifikasi kecocokan username dan enkripsi hash password
+        // 3. PROSES AUTENTIKASI: Cocokkan username dan hash password dengan data di tabel admins
         if (Auth::attempt($credentials)) {
-            // Bersihkan pencatat kegagalan rate limiter saat sukses login
+            // Kalau login berhasil, reset/bersihkan pencatat hukuman rate limiter
             RateLimiter::clear($throttleKey);
 
-            // Mencegah serangan Session Fixation dengan meregenerasi session ID baru
+            // KEAMANAN SIBER: Mencegah Session Fixation dengan membuat ID sesi baru yang segar
             $request->session()->regenerate();
 
-            // Catat log aktivitas bahwa admin berhasil login
+            // Catat ke tabel riwayat audit bahwa admin ini berhasil login
             ActivityLog::record(
                 'LOGIN',
                 'Admin '.Auth::user()->name.' berhasil masuk ke dashboard sistem.'
             );
 
-            // Redirect ke halaman yang semula dituju, atau default ke dashboard
+            // Alihkan admin ke halaman yang ingin dituju sebelumnya, atau default ke dashboard
             return redirect()->intended(route('admin.dashboard'))
                 ->with('success', 'Selamat datang kembali, '.Auth::user()->name.'!');
         }
 
-        // Catat satu kali kegagalan login (kunci 60 detik jika mencapai 5 kegagalan berturut-turut)
+        // 4. JIKA LOGIN GAGAL: Tambah 1 catatan kegagalan (kunci selama 60 detik jika sudah 5x)
         RateLimiter::hit($throttleKey, 60);
 
-        // 4. Jika gagal, kembalikan ke form login dengan pesan error
+        // Kembalikan ke form login dengan pesan kesalahan
         return back()
             ->withInput($request->only('username'))
             ->withErrors([
@@ -91,25 +99,28 @@ class AuthController extends Controller
     }
 
     /**
-     * Memproses logout, membersihkan session, dan mencatat log aktivitas.
+     * Memproses keluar sistem (Logout) dan membersihkan seluruh sesi.
      */
     public function logout(Request $request): RedirectResponse
     {
+        // 1. Jika masih ada data admin yang aktif, catat log dulu sebelum sesinya dihancurkan
         if (Auth::check()) {
-            // Catat log sebelum sesi dihapus
             ActivityLog::record(
                 'LOGOUT',
                 'Admin '.Auth::user()->name.' logout dari sistem.'
             );
         }
 
-        // Hapus status otentikasi pengguna
+        // 2. Cabut status otentikasi login admin dari Laravel Auth Guard
         Auth::logout();
 
-        // Hancurkan session lama dan buat token CSRF baru demi keamanan
+        // 3. KEAMANAN SESSION: Hancurkan seluruh data sesi di memori server
         $request->session()->invalidate();
+
+        // 4. KEAMANAN CSRF: Buat token keamanan CSRF baru agar token lama tidak bisa dibajak
         $request->session()->regenerateToken();
 
+        // 5. Kembalikan admin ke halaman login dengan pesan informasi
         return redirect()->route('admin.login')
             ->with('info', 'Berhasil logout.');
     }

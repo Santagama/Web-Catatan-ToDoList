@@ -2,78 +2,79 @@
 
 ---
 
-## [FUNGSI]
-Folder ini berfungsi sebagai **manajemen skema database (Database Version Control)**. Semua struktur tabel, tipe data kolom, foreign key, dan relasi dibuat dalam bentuk kode PHP sehingga database MySQL dapat dibangun secara otomatis, konsisten, dan dapat dilacak perubahannya tanpa perlu membuat tabel secara manual di phpMyAdmin.
+## 1. Apa itu Database Migration? (Bahasa Santai)
+Migration itu ibarat **"Cetak Biru (Blueprint) Arsitektur Database"**! 🏗️
+Daripada kita membuat tabel satu per satu lewat phpMyAdmin (yang rawan salah klik tipe data atau lupa pasang Primary Key), kita menulis rancangan tabelnya lewat kode PHP di Migration.
+Saat kita mengetik:
+```bash
+php artisan migrate
+```
+Laravel otomatis membangun seluruh tabel, kolom, tipe data, dan relasi antar tabel di database MySQL dalam hitungan detik!
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
+## 2. Alur Pembentukan Tabel
 ```
-Developer / Siswa mengetik 'php artisan migrate' di terminal
+Siswa / Penguji mengetik: php artisan migrate
                      │
                      ▼
-Laravel membaca seluruh file migration secara berurutan sesuai timestamp
+Laravel membaca file migration berurutan dari atas ke bawah:
+1. admins_table         => Buat tabel akun admin
+2. portfolios_table     => Buat tabel profil & katalog UMKM (relasi ke admins)
+3. activity_logs_table  => Buat tabel jejak audit (relasi ke admins & portfolios)
+4. slug_histories_table => Buat tabel riwayat URL (relasi ke portfolios)
                      │
                      ▼
-Method up() dieksekusi satu per satu:
-1. Buat tabel 'admins'
-2. Buat tabel 'portfolios' (berelasi ke admins)
-3. Buat tabel 'activity_logs' (berelasi ke admins & portfolios)
-4. Buat tabel 'slug_histories' (berelasi ke portfolios)
-                     │
-                     ▼
-MySQL mengeksekusi perintah DDL (Data Definition Language)
-dan mencatat daftar batch di tabel internal 'migrations'.
+Database MySQL terstruktur rapi dengan Foreign Key dan Indexing!
 ```
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
+## 3. Penjelasan 4 Tabel Inti Aplikasi & Contekan Ujikom
 
-### 1. `..._create_admins_table.php`
-*   **Fungsi**: Membentuk tabel `admins` yang menampung data kredensial login admin pengelola sistem.
-*   **Struktur Kolom**:
-    *   `id`: Primary key auto-increment.
-    *   `name` (varchar 100): Nama lengkap admin ("Hanan Aria Santagama").
-    *   `username` (varchar 50): Username unik (`unique()`), mencegah adanya username ganda.
-    *   `password` (varchar 255): Password yang sudah terenkripsi Bcrypt hash.
-    *   `timestamps()`: Mencatat tanggal `created_at` dan `updated_at`.
+### A. Tabel `admins`
+*   **Fungsinya**: Menyimpan data akun login pengelola sistem.
+*   **Kolom Kunci**:
+    *   `id`: Primary key auto increment.
+    *   `name`: Nama lengkap ("Hanan Aria Santagama").
+    *   `username`: Diberi aturan `->unique()` agar tidak ada username kembar.
+    *   `password`: Menyimpan hash password Bcrypt (panjang 255 karakter).
+    *   `timestamps()`: Menyimpan tanggal `created_at` dan `updated_at`.
 
-### 2. `..._create_portfolios_table.php`
-*   **Fungsi**: Membentuk tabel utama `portfolios` untuk menyimpan seluruh profil bisnis UMKM, pilihan template, paket, dan katalog produk.
-*   **Struktur Kolom**:
-    *   `id`: Primary key auto-increment.
-    *   `admin_id`: Foreign key ke `admins.id` dengan relasi `cascadeOnDelete()`.
-    *   `template_id` (varchar 50): Menyimpan kode template visual (`minuman`, `makanan`, `barang`, `tokoh`, `jasa`).
-    *   `nama_umkm` (varchar 150): Nama usaha atau entitas UMKM.
-    *   `slug` (varchar 150): URL unik publik (`unique()`), menjadi alamat web UMKM (contoh: `/kopi-kita`).
-    *   `bio` (text, nullable): Cerita singkat atau profil usaha.
-    *   `alamat` (text, nullable): Alamat fisik UMKM.
-    *   `whatsapp` (varchar 20, nullable): Nomor kontak WA untuk pemesanan langsung.
-    *   `maps_embed_url` (text, nullable): URL sematan peta Google Maps (tipe TEXT agar muat menampung URL maupun kode tag iframe).
-    *   `logo_path` & `banner_path` (varchar 255, nullable): Lokasi file gambar di disk public storage.
-    *   `products` (json, nullable): **Fitur modern array JSON** untuk menampung daftar produk unggulan (nama, harga, deskripsi, foto) tanpa perlu tabel tambahan yang membebani query.
-    *   `paket` (varchar 20, nullable): Jenis durasi langganan (`3_bulan`, `1_tahun`, `tanpa_batas`).
-    *   `expired_at` (timestamp, nullable): Batas waktu aktif portofolio untuk fitur otomasi Task Scheduler.
-    *   `status` (varchar 20, default 'draft'): Status visibilitas (`draft` atau `publish`).
-    *   `timestamps()`: Tanggal pembuatan dan pembaruan.
+---
 
-### 3. `..._create_activity_logs_table.php`
-*   **Fungsi**: Membentuk tabel `activity_logs` untuk mencatat jejak audit (*audit trail*) setiap perubahan data penting di platform.
-*   **Struktur Kolom**:
-    *   `id`: Primary key auto-increment.
-    *   `admin_id`: Foreign key ke `admins.id`.
-    *   `portfolio_id`: Foreign key opsional (`nullable()`) ke `portfolios.id` dengan aturan `nullOnDelete()`. Jika portofolio dihapus, riwayat log tetap tersimpan untuk akuntabilitas.
-    *   `action` (varchar 100): Label aksi singkat (`LOGIN`, `TAMBAH_PORTFOLIO`, `EDIT_PORTFOLIO`, `HAPUS_PORTFOLIO`, `AUTO_DRAFT`, `GANTI_PASSWORD`).
-    *   `description` (text): Keterangan kalimat lengkap tentang kejadian.
-    *   `created_at`: Waktu aksi dicatat (`useCurrent()`).
+### B. Tabel `portfolios` (Tabel Utama)
+*   **Fungsinya**: Menyimpan seluruh profil bisnis UMKM, pilihan template, foto, hingga katalog produk.
+*   **Kolom Istimewa**:
+    *   `admin_id`: Foreign key ke `admins.id` dengan aturan `cascadeOnDelete()`.
+    *   `template_id`: Kode template visual (`minuman`, `makanan`, `barang`, `tokoh`, `jasa`).
+    *   `slug`: Alamat URL unik web UMKM (`->unique()`), contoh: `/kopi-kenangan`.
+    *   `maps_embed_url` (text, nullable): Link peta Google Maps.
+    *   `products` (json, nullable): **Fitur Modern!** Kolom bertipe JSON untuk menyimpan banyak produk (nama, harga, deskripsi, foto) tanpa perlu repot membuat tabel tambahan yang membebani query!
+    *   `paket` & `expired_at`: Durasi aktif langganan dan tanggal kadaluarsa untuk otomasi sistem.
+    *   `status`: Visibilitas (`draft` atau `publish`).
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"Struktur tabel portfolios kami rancang modern dengan memanfaatkan tipe data JSON untuk kolom `products`. Pendekatan NoSQL-in-SQL ini membuat penyimpanan katalog produk UMKM sangat fleksibel dan performa read-nya sangat cepat karena tidak perlu melakukan join relasi tabel produk terpisah."*
 
-### 4. `..._create_slug_histories_table.php`
-*   **Fungsi**: Membentuk tabel `slug_histories` untuk mendukung fitur SEO **HTTP 301 Permanent Redirect**. Jika nama usaha/slug diubah, pengunjung yang mengakses URL lama otomatis dialihkan ke URL baru.
-*   **Struktur Kolom**:
-    *   `id`: Primary key auto-increment.
-    *   `portfolio_id`: Foreign key ke `portfolios.id` dengan `cascadeOnDelete()`.
-    *   `slug_lama` (varchar 150): Slug lama sebelum diubah, diberi indeks `index()` untuk kecepatan lookup query.
-    *   `slug_baru` (varchar 150): Slug baru tujuan pengalihan.
-    *   `created_at`: Waktu pergantian slug dicatat.
+---
 
+### C. Tabel `activity_logs`
+*   **Fungsinya**: Mencatat jejak audit (*audit trail*) siapa melakukan apa dan kapan terjadinya.
+*   **Kolom Kunci**:
+    *   `admin_id`: Siapa admin yang melakukan aksi.
+    *   `portfolio_id`: ID UMKM terkait (menggunakan `nullOnDelete()`, jadi kalau UMKM-nya dihapus, catatan riwayat log-nya tetap abadi tersimpan untuk bukti audit).
+    *   `action`: Kode aksi singkat (`LOGIN`, `TAMBAH_PORTFOLIO`, `HAPUS_PORTFOLIO`, dll).
+    *   `description`: Penjelasan kalimat yang mudah dibaca.
+    *   `created_at`: Menggunakan `useCurrent()` untuk mencatat detik kejadian.
+
+---
+
+### D. Tabel `slug_histories`
+*   **Fungsinya**: Mendukung fitur SEO **HTTP 301 Permanent Redirect**.
+*   **Kolom Kunci**:
+    *   `portfolio_id`: Pemilik slug terkait.
+    *   `slug_lama`: Alamat web lama sebelum diedit, diberi `->index()` agar pencarian di database super cepat saat pengunjung mengakses link lama.
+    *   `slug_baru`: Alamat web baru tujuan pengalihan.
+    *   `created_at`: Waktu perubahan URL.
+*   💡 **Jawaban Mantap untuk Penguji:**
+    > *"Tabel slug_histories ini kami optimalkan dengan Indexing pada kolom `slug_lama`. Hal ini menjamin proses pencarian saat pengunjung mengakses URL lama berjalan instan dalam hitungan milidetik sebelum browser dialihkan ke URL baru."*

@@ -1,44 +1,34 @@
-# Catatan Dokumentasi: Folder Views Logs (`resources/views/admin/logs/`)
+# Catatan Dokumentasi: View Activity Log (`resources/views/admin/logs/`)
 
 ---
 
-## [FUNGSI]
-Folder ini berisi antarmuka pengguna (View Blade) untuk modul **Jejak Audit & Log Aktivitas (`activity_logs`)**. Modul ini memenuhi syarat wajib pengujian dari **PT Sawala** dan **Soal Resmi UKK RPL** untuk memastikan seluruh aksi krusial yang dilakukan pengguna sistem dapat diaudit secara transparan dan akuntabel.
+## 1. Apa itu File `index.blade.php` di Folder Logs? (Bahasa Santai)
+Ini adalah halaman **Buku Catatan Sejarah (Audit Trail)**! 📜
+Setiap kali ada admin yang:
+- Login atau Logout
+- Menambah UMKM baru
+- Mengubah data UMKM
+- Menghapus UMKM
+- Menambah admin baru
+Semua aksinya tercatat otomatis di sini lengkap dengan jam, menit, detik, nama pelakunya, dan keterangan kejadiannya.
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
-```
-1. Admin mengklik menu 'Log Aktivitas' di sidebar
-   └── Masuk ke rute: admin.logs.index
-   └── ActivityLogController@index mengambil data log dari tabel activity_logs
-       beserta relasi admin dan portofolionya (Eager Loading with('admin', 'portfolio'))
-
-2. View index.blade.php merender:
-   ├── 3 Kartu Ringkasan: Total Tambah, Edit, dan Hapus pada bulan berjalan
-   ├── Filter Periode: Pilihan dropdown Bulan dan Tahun
-   └── Tabel Linimasa: Menampilkan timestamp, nama admin, badge warna aksi,
-       dan narasi detail aksi yang dilakukan
-
-3. Jika aksi terkait portofolio tertentu:
-   └── Tampil tautan cepat 'Lihat UMKM: [Nama]' yang langsung mengarah ke halaman detail
-```
+## 2. Fitur-Fitur Keren di Halaman Ini:
+1.  **Filter Periode Bulan & Tahun**:
+    *   Penguji bisa memilih dropdown bulan (Januari - Desember) dan tahun untuk memfilter riwayat aksi secara fleksibel.
+2.  **4 Kartu Angka Statistik**:
+    *   Menghitung akumulasi total aksi bulan ini: Berapa total aksi, berapa yang ditambah, berapa yang diedit, dan berapa yang dihapus.
+3.  **Warna Lencana (Badge) yang Berbeda**:
+    *   `LOGIN` / `LOGOUT`: Biru
+    *   `TAMBAH_PORTFOLIO`: Hijau
+    *   `EDIT_PORTFOLIO`: Kuning
+    *   `HAPUS_PORTFOLIO`: Merah
+    *   `AUTO_DRAFT`: Ungu (otomasi task scheduler Laravel)
+4.  **Waktu Ramah Manusia**:
+    *   Menggunakan fungsi Carbon `diffForHumans()` seperti *"5 menit yang lalu"* atau *"2 jam yang lalu"* sehingga sangat mudah dibaca.
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
-
-### 1. `index.blade.php`
-*   **Fungsi**: Halaman tabel linimasa pencatatan aktivitas sistem.
-*   **Komponen Visual**:
-    *   *Kartu Metrik Bulan Berjalan*: Menghitung akumulasi frekuensi aksi penambahan, pembaruan, dan penghapusan data UMKM dalam bulan aktif.
-    *   *Form Filter*: Memungkinkan penguji memfilter riwayat aktivitas berdasarkan bulan dan tahun spesifik menggunakan request query string `?bulan=...&tahun=...`.
-    *   *Pembeda Warna Badge Aksi*:
-        *   `LOGIN` / `LOGOUT`: Biru / Netral
-        *   `TAMBAH_PORTFOLIO`: Hijau Emerald
-        *   `EDIT_PORTFOLIO`: Kuning Amber
-        *   `HAPUS_PORTFOLIO`: Merah Rose
-        *   `PERPANJANG_PAKET`: Teal
-        *   `AUTO_DRAFT`: Ungu Purple (otomasi scheduler)
-    *   *Format Waktu Ramah Manusia*: Menggunakan Carbon `diffForHumans()` (contoh: *"2 jam yang lalu"*, *"kemarin"*) dipadukan dengan format kalender presisi `d M Y, H:i`.
-
+## 3. 💡 Jawaban Mantap untuk Penguji:
+> *"Modul Activity Log ini kami sediakan untuk memenuhi standar transparansi sistem. Setiap operasi CRUD dan otentikasi terekam secara otomatis ke tabel `activity_logs` dan ditampilkan dalam bentuk linimasa interaktif lengkap dengan filter periode."*

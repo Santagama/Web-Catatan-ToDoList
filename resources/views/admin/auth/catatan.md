@@ -1,19 +1,30 @@
-# Dokumentasi View Otentikasi Admin
+# Catatan Dokumentasi: View Login Admin (`resources/views/admin/auth/`)
 
-## 1. login.blade.php
+---
 
-### [FUNGSI]
-Menyediakan antarmuka (UI) formulir login pengelola platform CMS Web Builder. Dilengkapi masukan kredensial (username dan kata sandi), visual peringatan error validasi, serta kartu bantuan kredensial default untuk mempermudah penilaian oleh dewan penguji UKK.
+## 1. Apa itu File `login.blade.php`? (Bahasa Santai)
+Ini adalah halaman **Pintu Gerbang Masuk Admin**! 🚪
+Tampilannya berdesain minimalis gelap modern dengan kartu di tengah layar (*centered card*).
 
-### [ALUR SISTEM/USER FLOW]
-1. Pengunjung/penguji mengakses alamat `/admin/login` atau otomatis diarahkan ke sini saat mencoba membuka rute terproteksi tanpa login session.
-2. Pengguna mengisi username dan kata sandi (disediakan petunjuk default: `hanan` / `hanan123`).
-3. Form mengirim permintaan POST ke rute `admin.login.post` yang diproses oleh `AuthController@login`.
-4. Jika valid, admin dialihkan ke `/admin/dashboard`. Jika salah, muncul pesan galat merah di bawah bidang input yang keliru.
-5. Jika pengguna baru saja logout dan mencoba menekan tombol "Back" pada peramban, skrip proteksi di halaman ini menahan navigasi agar pengguna tetap berada di formulir login.
+---
 
-### [PENJELASAN TEKNIS]
-- Menginduk ke tata letak `layouts.app` dengan tema *Dark Zinc* (`bg-zinc-950`).
-- Token proteksi `@csrf` wajib disertakan untuk mencegah serangan *Cross-Site Request Forgery*.
-- Menyematkan komponen alert `@include('components.alert')` untuk menangkap pesan flash sesi (`success`, `error`, `info`).
-- Menggunakan skrip *history trap* berbasis `window.history.pushState` dan `window.onpopstate` untuk mencegah navigasi mundur ke sesi dashboard setelah proses keluar sesi berhasil.
+## 2. Fitur Keren di Halaman Ini:
+1.  **Latar Video Animasi Halus**:
+    *   Menggunakan tag `<video autoplay loop muted>` dengan file `/assets/login-bg.mp4` agar terlihat modern dan elegan.
+2.  **Tombol Kembali ke Web**:
+    *   Di pojok kiri atas ada tombol kembali ke halaman landing page utama (`route('home')`).
+3.  **Pesan Error Otomatis**:
+    *   Jika salah memasukkan username atau password, muncul pesan peringatan merah di bawah input form menggunakan `@error('username')`.
+4.  **Anti-Back Trap (Keamanan Riwayat Browser)**:
+    *   Ada script JavaScript `window.history.pushState` di bagian bawah agar saat admin sudah logout, pengunjung lain di komputer yang sama tidak bisa menekan tombol "Back" di browser untuk mengintip kembali.
+
+---
+
+## 3. Akun Login untuk Demo Ujikom:
+- **Username**: `hanan`
+- **Password**: `hanan123`
+
+---
+
+## 4. 💡 Jawaban Mantap untuk Penguji:
+> *"Halaman login ini kami lindungi dengan token `@csrf` untuk mencegah penipuan request, serta script deteksi navigasi peramban agar sesi yang telah logout tidak dapat diakses kembali melalui tombol Back browser."*

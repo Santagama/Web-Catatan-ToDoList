@@ -16,9 +16,9 @@
 
 ---
 
-## 1. FLOWCHART 1: Proses Login Admin ke Dashboard
+## A. PROSES LOGIN ADMIN KE DASHBOARD (Poin 3.a Soal Ujikom)
 
-### A. Deskripsi Alur Proses
+### 1. Deskripsi Alur Proses
 1. **Mulai:** Pengguna membuka peramban (*browser*) dan mengakses alamat URL `/admin/login`.
 2. **Pengecekan Sesi Aktif:** Sistem memeriksa apakah admin sudah dalam status login.
    * Jika **Ya** (sudah login), sistem langsung mengalihkan (*redirect*) ke `/admin/dashboard`.
@@ -38,7 +38,62 @@
 
 ---
 
-### B. Diagram Alur (Flowchart 1)
+### 2. Pseudocode (Kode Semu Algoritma Login)
+```pascal
+ALGORITMA LoginAdmin
+DEKLARASI:
+    username, password : STRING
+    admin              : RECORD
+    isMatch            : BOOLEAN
+
+DESKRIPSI:
+    MULAI
+        Buka halaman "/admin/login"
+        
+        JIKA sesi_admin_aktif = TRUE MAKA
+            REDIRECT("/admin/dashboard")
+            SELESAI
+        AKHIR JIKA
+
+        TAMPILKAN form_login
+        INPUT username, password
+        KLIK tombol_masuk
+
+        // 1. Validasi Keberadaan Input
+        JIKA username = "" ATAU password = "" MAKA
+            TAMPILKAN notifikasi "Username dan password wajib diisi!"
+            KEMBALI KE form_login
+        AKHIR JIKA
+
+        // 2. Query Akun ke Database
+        admin <- QUERY "SELECT * FROM admins WHERE username = :username LIMIT 1"
+
+        JIKA admin TIDAK DITEMUKAN MAKA
+            TAMPILKAN notifikasi "Kredensial akun tidak cocok!"
+            KEMBALI KE form_login
+        AKHIR JIKA
+
+        // 3. Verifikasi Hash Password Bcrypt
+        isMatch <- CEK_HASH_BCRYPT(password, admin.password)
+
+        JIKA isMatch = TRUE MAKA
+            BUAT_SESI_LOGIN(admin.id)
+            SIMPAN_LOG_AKTIVITAS("LOGIN", "Admin berhasil masuk ke dashboard")
+            REDIRECT("/admin/dashboard")
+            TAMPILKAN "Selamat datang di Panel Admin CMS Web Builder!"
+        LAINNYA
+            TAMPILKAN notifikasi "Password salah!"
+            KEMBALI KE form_login
+        AKHIR JIKA
+    SELESAI
+```
+
+---
+
+### 3. Diagram Alur (Flowchart Login)
+
+*File Gambar Tersedia: [Dokumen/Flowchart_Login_Admin.png](file:///c:/laragon/www/CMSWebBuilder_Hanan/Dokumen/Flowchart_Login_Admin.png) dan [Dokumen/Flowchart_Login_Admin.svg](file:///c:/laragon/www/CMSWebBuilder_Hanan/Dokumen/Flowchart_Login_Admin.svg)*
+
 ```mermaid
 flowchart TD
     Start([Mulai: Buka /admin/login]) --> CheckAuth{Apakah Sudah Login?}
@@ -82,9 +137,9 @@ flowchart TD
 
 ---
 
-## 2. FLOWCHART 2: Input Data, Validasi Slug, dan Penerbitan Portofolio UMKM
+## B. PROSES INPUT DATA & PENERBITAN PORTOFOLIO UMKM (Poin 3.b Soal Ujikom)
 
-### A. Deskripsi Alur Proses
+### 1. Deskripsi Alur Proses
 1. **Mulai:** Admin memilih menu **Buat Web Baru** di dashboard (`/admin/portfolios/create`).
 2. **Tampilkan Form:** Sistem menampilkan formulir penginputan portofolio UMKM.
 3. **Input Data Portofolio:** Admin mengisikan data lengkap UMKM:
@@ -105,14 +160,69 @@ flowchart TD
    * Berkas logo dan banner diunggah ke storage disk publik (`storage/app/public/uploads`).
    * Sistem menghitung tanggal berakhir paket (`expired_at`).
    * Data disimpan ke tabel `portfolios` dengan status `publish` atau `draft`.
-   * Sistem mencatat log audit ke tabel `activity_logs` (`action = 'TAMBAH_PORTFOLIO'`).
+   * Sistem mencatat log audit ke tabel `activity_logs` (`action = 'TAMBAH_PORTOFOLIO'`).
    * Sistem melakukan `COMMIT` transaksi database.
 8. **Tampilkan Sukses & Redirect:** Sistem menampilkan notifikasi sukses dan mengalihkan halaman ke Direktori Portofolio (`/admin/portfolios`).
 9. **Selesai:** Website portofolio UMKM resmi terbit dan aktif.
 
 ---
 
-### B. Diagram Alur (Flowchart 2)
+### 2. Pseudocode (Kode Semu Input Data & Penerbitan)
+```pascal
+ALGORITMA TerbitkanPortofolioUMKM
+DEKLARASI:
+    nama_umkm, slug, template_id, bio, alamat, whatsapp, paket, status : STRING
+    logo_file, banner_file                                             : FILE
+    products_array                                                     : ARRAY
+    isSlugUsed                                                         : BOOLEAN
+
+DESKRIPSI:
+    MULAI
+        TAMPILKAN form_tambah_portofolio
+        INPUT nama_umkm, slug, template_id, bio, alamat, whatsapp, logo_file, banner_file, products_array, paket, status
+        KLIK tombol_terbitkan
+
+        // 1. Validasi Format & Aturan Input Server
+        JIKA nama_umkm = "" ATAU slug = "" ATAU template_id = "" MAKA
+            TAMPILKAN notifikasi "Nama UMKM, Slug, dan Template wajib diisi!"
+            KEMBALI KE form_tambah_portofolio
+        AKHIR JIKA
+
+        // 2. Validasi Ketersediaan Slug (Memanggil Function SQL CekKetersediaanSlug)
+        isSlugUsed <- CEK_SLUG_DATABASE(slug)
+        JIKA isSlugUsed = TRUE MAKA
+            TAMPILKAN notifikasi "Error: Slug URL sudah dipakai UMKM lain!"
+            KEMBALI KE form_tambah_portofolio
+        AKHIR JIKA
+
+        // 3. Database Transaction & File Upload
+        START_TRANSACTION()
+        COBA
+            logo_path <- SIMPAN_FILE(logo_file, "public/uploads")
+            banner_path <- SIMPAN_FILE(banner_file, "public/uploads")
+            products_json <- JSON_ENCODE(products_array)
+            expired_at <- HITUNG_KADALUARSA(paket)
+
+            INSERT INTO portfolios (admin_id, nama_umkm, slug, template_id, bio, alamat, whatsapp, logo_path, banner_path, products, paket, expired_at, status)
+            VALUES (SESSION.admin_id, nama_umkm, slug, template_id, bio, alamat, whatsapp, logo_path, banner_path, products_json, paket, expired_at, status)
+
+            portfolio_id <- LAST_INSERT_ID()
+            INSERT INTO activity_logs (admin_id, portfolio_id, action, description, created_at)
+            VALUES (SESSION.admin_id, portfolio_id, "TAMBAH_PORTOFOLIO", CONCAT("Menerbitkan website: ", nama_umkm), NOW())
+
+            COMMIT_TRANSACTION()
+            REDIRECT("/admin/portfolios")
+            TAMPILKAN notifikasi "Website portofolio berhasil diterbitkan!"
+        TANGKAP_ERROR
+            ROLLBACK_TRANSACTION()
+            TAMPILKAN notifikasi "Terjadi kesalahan sistem saat menyimpan data!"
+        AKHIR COBA
+    SELESAI
+```
+
+---
+
+### 3. Diagram Alur (Flowchart 2)
 ```mermaid
 flowchart TD
     Start([Mulai: Buka Form Buat Web Baru]) --> ShowCreateForm[/Tampilkan Form Input Portofolio/]
@@ -155,9 +265,9 @@ flowchart TD
 
 ---
 
-## 3. FLOWCHART 3: Akses Publik Halaman Portofolio (Termasuk 404 & 301 Redirect)
+## C. PROSES AKSES PUBLIK & REDIRECT 301 / ERROR 404 (Poin 3.c Soal Ujikom)
 
-### A. Deskripsi Alur Proses
+### 1. Deskripsi Alur Proses
 1. **Mulai:** Calon pelanggan atau pengunjung membuka peramban dan mengetik URL website UMKM: `domain.com/{slug}` (misalnya: `/kopi-senja`).
 2. **Pencarian Slug Utama:** Sistem menjalankan query database ke tabel utama `portfolios` berdasarkan kolom `slug`.
 3. **Kondisi 1: Slug Ditemukan di Tabel `portfolios`:**
@@ -177,7 +287,50 @@ flowchart TD
 
 ---
 
-### B. Diagram Alur (Flowchart 3)
+### 2. Pseudocode (Kode Semu Akses Publik & SEO Redirect)
+```pascal
+ALGORITMA AksesPublikWebsite
+DEKLARASI:
+    slug_request : STRING
+    portfolio    : RECORD
+    history      : RECORD
+
+DESKRIPSI:
+    MULAI
+        Buka URL "/{slug_request}"
+
+        // 1. Cek di Tabel Utama Portfolios
+        portfolio <- QUERY "SELECT * FROM portfolios WHERE slug = :slug_request LIMIT 1"
+
+        JIKA portfolio DITEMUKAN MAKA
+            JIKA portfolio.status = "publish" MAKA
+                template <- portfolio.template_id
+                RENDER_VIEW("public.templates." + template, portfolio)
+                HTTP_RESPONSE(200, "OK")
+                SELESAI
+            LAINNYA
+                TAMPILKAN "Website ini masih berstatus draft oleh pemilik usaha."
+                SELESAI
+            AKHIR JIKA
+        AKHIR JIKA
+
+        // 2. Jika Tidak Ada di Portfolios, Cek Riwayat SEO 301 (slug_histories)
+        history <- QUERY "SELECT * FROM slug_histories WHERE slug_lama = :slug_request LIMIT 1"
+
+        JIKA history DITEMUKAN MAKA
+            REDIRECT_PERMANENT_301("/" + history.slug_baru)
+            SELESAI
+        AKHIR JIKA
+
+        // 3. Jika Benar-Benar Tidak Ada di Mana Pun
+        TAMPILKAN_HALAMAN_ERROR_404()
+        HTTP_RESPONSE(404, "Not Found")
+    SELESAI
+```
+
+---
+
+### 3. Diagram Alur (Flowchart 3)
 ```mermaid
 flowchart TD
     Start([Mulai: Pengunjung Buka URL /{slug}]) --> QueryPortfolio[Query SELECT ke Tabel portfolios WHERE slug = :slug]

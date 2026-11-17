@@ -1,38 +1,27 @@
-# Catatan Dokumentasi: Folder Views Errors (`resources/views/errors/`)
+# Catatan Dokumentasi: View Penanganan Error (`resources/views/errors/`)
 
 ---
 
-## [FUNGSI]
-Folder ini berisi antarmuka khusus untuk menangani kode status kesalahan HTTP (*HTTP Error Status Code*). Di dalamnya terdapat penanganan khusus untuk error **404 Not Found** yang disesuaikan dengan tema visual platform (Dark Zinc & Emerald Green), sehingga pengunjung tidak disajikan halaman error putih polos bawaan server yang membingungkan.
+## 1. Apa itu File `404.blade.php`? (Bahasa Santai)
+Ini adalah halaman khusus yang muncul saat pengunjung membuka alamat web yang **TIDAK DITEMUKAN** (Error 404 Not Found)! 🚫
+Contohnya saat pengunjung mengetik URL yang salah:
+`http://localhost:8000/toko-yang-tidak-pernah-ada`
+
+Daripada pengunjung disajikan halaman putih polos bawaan browser yang jelek dan membingungkan, Laravel otomatis memanggil file `404.blade.php` ini!
 
 ---
 
-## [ALUR SISTEM / USER FLOW]
-```
-Pengunjung memasukkan URL slug yang salah atau tidak terdaftar:
-Contoh: localhost:8000/toko-yang-tidak-ada
-                             │
-                             ▼
-PublicController@show mencari slug di tabel portfolios dan slug_histories
-                             │
-                             ▼
-Data tidak ditemukan (atau ada tapi statusnya masih 'draft')
-                             │
-                             ▼
-Laravel mengeksekusi: abort(404)
-                             │
-                             ▼
-Framework otomatis merender view: resources/views/errors/404.blade.php
-Menampilkan pesan informatif dan tombol kembali ke halaman beranda utama.
-```
+## 2. Fitur Ramah Pengunjung di Halaman 404:
+1.  **Tipografi Angka 404 Merah Tegas**:
+    *   Ukuran besar dan jelas memberi tahu pengunjung bahwa halaman tidak tersedia.
+2.  **Pesan Penjelasan yang Jelas & Santun**:
+    *   Memberi tahu bahwa mungkin alamat URL salah ketik, website sudah dipindahkan, atau pemilik toko belum mempublikasikannya.
+3.  **Tombol Kembali ke Beranda**:
+    *   Membawa pengunjung pulang ke halaman utama dengan satu kali klik.
+4.  **Tombol Tanya Admin via WhatsApp**:
+    *   Menyediakan tombol bantuan langsung ke WhatsApp admin jika pengunjung membutuhkan panduan.
 
 ---
 
-## [PENJELASAN TEKNIS MASING-MASING FILE]
-
-### 1. `404.blade.php`
-*   **Fungsi**: Halaman tampilan ketika rute/slug portofolio tidak ditemukan.
-*   **Fitur**:
-    *   Badge kode status `404` dengan bayangan halus bernuansa gelap.
-    *   Pesan penjelasan yang santun bahwa URL belum terdaftar atau masih dalam status draft oleh pengelola.
-    *   Tombol navigasi `Kembali ke Beranda Utama` (`route('home')`) dan tombol cepat `Tanya Admin via WA`.
+## 3. 💡 Jawaban Mantap untuk Penguji:
+> *"Pak/Bu, custom error page 404 ini kami sediakan untuk meningkatkan User Experience (UX). Dengan menyajikan tombol navigasi kembali dan integrasi bantuan WhatsApp, pengunjung tidak akan mengalami jalan buntu (dead-end page) saat terjadi kesalahan input URL."*

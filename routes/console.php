@@ -1,39 +1,57 @@
 <?php
 
+// Mengimpor Model ActivityLog dan Portfolio, serta utilitas Scheduler bawaan Laravel
 use App\Models\ActivityLog;
 use App\Models\Portfolio;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
+/*
+|--------------------------------------------------------------------------
+| Console Routes & Task Scheduler
+|--------------------------------------------------------------------------
+|
+| File ini berisi perintah Artisan berbasis baris perintah (CLI)
+| serta tugas otomasi berjadwal (Task Scheduler) yang berjalan otomatis di background.
+|
+*/
+
+// Perintah bawaan Laravel untuk menampilkan kutipan motivasi (php artisan inspire)
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
 /*
 |--------------------------------------------------------------------------
-| Task Scheduler: Auto-Draft Paket Kadaluarsa
+| TUGAS OTOMATIS: AUTO-DRAFT PAKET KADALUARSA (Task Scheduler)
 |--------------------------------------------------------------------------
 |
-| Tugas otomatis ini berjalan setiap hari tepat jam 00:00 tengah malam.
-| Sistem mencari portofolio UMKM yang statusnya 'publish' tapi masa aktif
-| paketnya (expired_at) sudah lewat dari waktu sekarang. Jika ditemukan,
-| statusnya otomatis diubah menjadi 'draft' dan dicatat ke activity_logs.
+| Tugas otomasi ini berjalan otomatis setiap hari tepat jam 00:00 tengah malam.
+| CARA KERJA:
+| 1. Sistem mencari portofolio UMKM yang statusnya masih 'publish' tapi
+|    tanggal expired_at-nya sudah melewati waktu saat ini.
+| 2. Jika ditemukan, sistem otomatis mengubah statusnya menjadi 'draft'
+|    sehingga website UMKM tersebut tidak lagi bisa dilihat pengunjung publik.
+| 3. Sistem mencatat kejadian penonaktifan ini ke tabel activity_logs secara otomatis.
 |
-| Untuk menguji manual: php artisan schedule:run
+| CARA UJI MANUAL DI TERMINAL:
+| Ketik: php artisan schedule:run
+|
 */
 Schedule::call(function () {
-    // Cari semua portofolio yang publish tapi sudah melewati tanggal kadaluarsa
+    // 1. Cari semua portofolio yang aktif (publish) namun tanggal masa aktifnya sudah lewat
     $portfolioExpired = Portfolio::where('status', 'publish')
         ->whereNotNull('expired_at')
         ->where('expired_at', '<', now())
         ->get();
 
+    // 2. Looping data yang kadaluarsa untuk dinonaktifkan satu per satu
     foreach ($portfolioExpired as $portfolio) {
-        // Ubah status menjadi draft
+        // Ubah status tayang menjadi draft
         $portfolio->update(['status' => 'draft']);
 
-        // Catat ke tabel activity_logs secara otomatis
+        // Catat otomatis ke tabel riwayat audit
         ActivityLog::create([
             'admin_id' => $portfolio->admin_id,
             'portfolio_id' => $portfolio->id,
@@ -43,5 +61,5 @@ Schedule::call(function () {
             'created_at' => now(),
         ]);
     }
-})->dailyAt('00:00')
+})->dailyAt('00:00') // Jadwalkan jalan setiap hari jam 12 malam
     ->description('Memeriksa dan menonaktifkan portofolio yang paketnya sudah kadaluarsa');
