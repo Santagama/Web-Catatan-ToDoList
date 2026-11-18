@@ -8,7 +8,7 @@
 
     {{--
       Latar Belakang Video & Overlay
-      Menggunakan tag <video> dengan fallback background warna gelap jika video tidak dimuat.
+      Menggunakan tag <video> dengan fallback background jika video tidak dimuat.
     --}}
     <video
         autoplay
@@ -20,7 +20,7 @@
         <source src="/assets/login-bg.mp4" type="video/mp4" />
     </video>
 
-    {{-- Dark Overlay semi-transparan untuk keterbacaan teks --}}
+    {{-- Overlay semi-transparan untuk keterbacaan teks di atas video --}}
     <div class="absolute inset-0 bg-black/30"></div>
 
     {{-- Tombol Kembali — Pojok Kiri Atas --}}
@@ -165,7 +165,7 @@
                       // UBAH WARNA TOMBOL LOGIN:
                       // Jika penguji minta warna TEAL : ganti 'bg-white text-gray-950' jadi 'bg-teal-600 text-white'
                       // Jika penguji minta warna BIRU : ganti jadi 'bg-blue-600 text-white'
-                      // Jika penguji minta warna HITAM: ganti jadi 'bg-zinc-900 text-white border border-zinc-700'
+                      // Jika penguji minta warna ABU  : ganti jadi 'bg-zinc-200 text-zinc-900 border border-zinc-300'
                     --}}
                     <button
                         type="submit"

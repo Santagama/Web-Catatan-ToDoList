@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
     {{-- Tailwind CSS v4 via Vite --}}
     @vite(['resources/css/app.css'])
 </head>
-<body class="bg-[#0f1014] text-zinc-100 min-h-screen antialiased flex flex-col font-sans">
+<body class="bg-zinc-50 text-zinc-900 min-h-screen antialiased flex flex-col font-sans">
 
     {{--
       ==========================================================================
@@ -23,7 +23,7 @@
       ==========================================================================
       Menutup area konten saat sidebar terbuka di layar HP agar fokus pada navigasi.
     --}}
-    <div id="sidebar-backdrop" onclick="toggleAdminSidebar()" class="fixed inset-0 bg-black/75 z-40 hidden lg:hidden"></div>
+    <div id="sidebar-backdrop" onclick="toggleAdminSidebar()" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
 
     {{--
       ==========================================================================
@@ -32,19 +32,19 @@
       Di layar desktop (lg:) tampil statis di sebelah kiri (w-72).
       Di layar mobile, disembunyikan (-translate-x-full) dan dapat dibuka via toggle.
     --}}
-    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#14151a] border-r border-zinc-800/80 flex flex-col justify-between shrink-0 -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-zinc-200/80 flex flex-col justify-between shrink-0 -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
         <div class="flex flex-col h-full overflow-y-auto">
             <!-- Header Brand & Logo -->
-            <div class="h-20 px-6 border-b border-zinc-800/80 flex items-center justify-between shrink-0">
+            <div class="h-20 px-6 border-b border-zinc-200/80 flex items-center justify-between shrink-0">
                 <div class="flex items-center gap-3.5 select-none">
-                    <div class="w-10 h-10 rounded-xl bg-white p-1 border border-white/20 flex items-center justify-center shrink-0 shadow-md overflow-hidden">
+                    <div class="w-10 h-10 rounded-xl bg-white p-1 border border-zinc-200 flex items-center justify-center shrink-0 shadow-md overflow-hidden">
                         <img src="/assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'" />
                     </div>
-                    <span class="text-base font-extrabold tracking-tight text-white">CMS Web Builder</span>
+                    <span class="text-base font-extrabold tracking-tight text-zinc-900">CMS Web Builder</span>
                 </div>
 
                 <!-- Tombol Close Sidebar Khusus HP -->
-                <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 rounded-xl text-zinc-400 bg-zinc-800/60 cursor-pointer" aria-label="Tutup Menu">
+                <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 rounded-xl text-zinc-500 bg-zinc-100 cursor-pointer" aria-label="Tutup Menu">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -55,14 +55,14 @@
               sehingga menu yang sedang dibuka otomatis mendapatkan styling aktif (highlight teal).
 
               // UBAH WARNA MENU AKTIF SIDEBAR DI SINI:
-              // Jika penguji minta warna BIRU: ganti 'bg-teal-500/15 text-teal-400 border-teal-500/30' jadi 'bg-blue-500/15 text-blue-400 border-blue-500/30'
-              // Jika penguji minta warna MERAH: ganti jadi 'bg-rose-500/15 text-rose-400 border-rose-500/30'
-              // Jika penguji minta warna UNGU : ganti jadi 'bg-purple-500/15 text-purple-400 border-purple-500/30'
+              // Jika penguji minta warna BIRU: ganti 'bg-teal-500/15 text-teal-600 border-teal-500/30' jadi 'bg-blue-500/15 text-blue-600 border-blue-500/30'
+              // Jika penguji minta warna MERAH: ganti jadi 'bg-rose-500/15 text-rose-600 border-rose-500/30'
+              // Jika penguji minta warna UNGU : ganti jadi 'bg-purple-500/15 text-purple-600 border-purple-500/30'
             --}}
             <nav class="p-4 sm:p-5 space-y-2 flex-1">
                 <!-- 1. Dashboard -->
                 <a href="{{ route('admin.dashboard') }}"
-                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.dashboard') ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30' : 'text-zinc-400' }}">
+                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.dashboard') ? 'bg-teal-500/15 text-teal-600 border border-teal-500/30' : 'text-zinc-500' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
@@ -71,7 +71,7 @@
 
                 <!-- 2. Direktori Web (Portofolio Klien) -->
                 <a href="{{ Route::has('admin.portfolios.index') ? route('admin.portfolios.index') : '#' }}"
-                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.portfolios.*') ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30' : 'text-zinc-400' }}">
+                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.portfolios.*') ? 'bg-teal-500/15 text-teal-600 border border-teal-500/30' : 'text-zinc-500' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                     </svg>
@@ -80,7 +80,7 @@
 
                 <!-- 3. Activity Log (Riwayat Audit Jejak Sistem) -->
                 <a href="{{ Route::has('admin.logs.index') ? route('admin.logs.index') : '#' }}"
-                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.logs.*') ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30' : 'text-zinc-400' }}">
+                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.logs.*') ? 'bg-teal-500/15 text-teal-600 border border-teal-500/30' : 'text-zinc-500' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -89,7 +89,7 @@
 
                 <!-- 4. Pengaturan Sistem -->
                 <a href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"
-                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.settings.*') ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30' : 'text-zinc-400' }}">
+                   class="flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold {{ request()->routeIs('admin.settings.*') ? 'bg-teal-500/15 text-teal-600 border border-teal-500/30' : 'text-zinc-500' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
@@ -98,11 +98,11 @@
             </nav>
 
             <!-- Profil Admin Bawah & Tombol Logout -->
-            <div class="p-4 sm:p-5 border-t border-zinc-800/80 bg-[#101116] shrink-0 space-y-3">
-                <div class="p-3.5 rounded-2xl bg-[#18191f] border border-zinc-800 space-y-1">
-                    <p class="text-[11px] font-medium text-zinc-400">Logged in as</p>
-                    <p class="text-sm font-extrabold text-white truncate">{{ auth()->user()->name ?? 'Hanan Aria Santagama' }}</p>
-                    <p class="text-xs font-semibold text-teal-400">Admin</p>
+            <div class="p-4 sm:p-5 border-t border-zinc-200/80 bg-zinc-50 shrink-0 space-y-3">
+                <div class="p-3.5 rounded-2xl bg-white border border-zinc-200 space-y-1">
+                    <p class="text-[11px] font-medium text-zinc-500">Logged in as</p>
+                    <p class="text-sm font-extrabold text-zinc-900 truncate">{{ auth()->user()->name ?? 'Hanan Aria Santagama' }}</p>
+                    <p class="text-xs font-semibold text-teal-600">Admin</p>
                 </div>
 
                 {{--
@@ -116,9 +116,9 @@
 
                 >
                     @csrf
-                    {{-- // UBAH WARNA TOMBOL LOGOUT: Ganti 'bg-rose-950/40 text-rose-300 border-rose-900/60' (contoh: jadi 'bg-red-600 text-white') // --}}
+                    {{-- // UBAH WARNA TOMBOL LOGOUT: Ganti 'bg-rose-50 text-rose-500 border-rose-200' (contoh: jadi 'bg-red-600 text-white') // --}}
                     <button type="submit"
-                            class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-rose-300 bg-rose-950/40 border border-rose-900/60 cursor-pointer">
+                            class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-rose-500 bg-rose-50 border border-rose-200 cursor-pointer">
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
@@ -139,24 +139,24 @@
     --}}
     <div class="pl-0 lg:pl-72 flex-1 flex flex-col min-h-screen">
         <!-- Topbar Mobile Khusus Layar Kecil (lg:hidden) -->
-        <header class="lg:hidden h-16 border-b border-zinc-800/80 bg-[#14151a] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+        <header class="lg:hidden h-16 border-b border-zinc-200/80 bg-white px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
             <div class="flex items-center gap-3">
                 <!-- Tombol Hamburger Mobile -->
-                <button type="button" onclick="toggleAdminSidebar()" class="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 cursor-pointer" aria-label="Buka Menu Sidebar">
+                <button type="button" onclick="toggleAdminSidebar()" class="p-2 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-700 cursor-pointer" aria-label="Buka Menu Sidebar">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
 
                 <div class="flex items-center gap-2.5 select-none">
-                    <div class="w-8 h-8 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+                    <div class="w-8 h-8 rounded-xl bg-white p-1 border border-zinc-200 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                         <img src="/assets/logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'" />
                     </div>
-                    <span class="text-sm font-extrabold text-white">CMS Web Builder</span>
+                    <span class="text-sm font-extrabold text-zinc-900">CMS Web Builder</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-3 py-1">
-                <span class="h-2 w-2 rounded-full bg-teal-400"></span>
-                <span class="text-xs font-bold text-teal-300">Admin</span>
+                <span class="h-2 w-2 rounded-full bg-teal-500"></span>
+                <span class="text-xs font-bold text-teal-600">Admin</span>
             </div>
         </header>
 
@@ -168,7 +168,7 @@
         </main>
 
         <!-- Footer Admin -->
-        <footer class="px-4 sm:px-8 py-5 border-t border-zinc-800/80 text-center text-xs text-zinc-500">
+        <footer class="px-4 sm:px-8 py-5 border-t border-zinc-200/80 text-center text-xs text-zinc-400">
             &copy; 2026 Hanan Aria Santagama | XII RPL 1
         </footer>
     </div>

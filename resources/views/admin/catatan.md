@@ -4,7 +4,7 @@
 
 ## 1. Apa Fungsi Folder Ini? (Bahasa Santai)
 Folder ini berisi seluruh tampilan untuk **Panel Kontrol Admin (Dashboard)**.
-Tema visual yang kita gunakan adalah **Dark Modern (Zinc & Teal)** yang terlihat profesional, fokus, elegan, dan nyaman di mata penguji.
+Tema visual yang kita gunakan adalah **Light Modern (White & Teal)** yang terlihat profesional, bersih, elegan, dan nyaman di mata penguji.
 
 Semua halaman di dalam folder ini otomatis mewarisi layout `@extends('layouts.admin')`, jadi sidebar kiri, foto profil admin, dan navigasi menu sudah otomatis tersedia di setiap halaman.
 

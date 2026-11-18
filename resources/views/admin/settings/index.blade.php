@@ -15,37 +15,37 @@
 
     <!-- ================= HEADER SECTION ================= -->
     <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Pengaturan Sistem</h1>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">Pengaturan Sistem</h1>
     </div>
 
     <!-- ================= SECTION 1: RINGKASAN AKUN ================= -->
-    <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 space-y-6 shadow-sm">
-        <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
-            <div class="w-10 h-10 rounded-2xl bg-teal-500/10 text-teal-400 flex items-center justify-center shrink-0">
+    <div class="rounded-3xl bg-white border border-zinc-200 p-6 sm:p-8 space-y-6 shadow-sm">
+        <div class="flex items-center gap-3 pb-4 border-b border-zinc-200">
+            <div class="w-10 h-10 rounded-2xl bg-teal-500/10 text-teal-600 flex items-center justify-center shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             </div>
             <div>
-                <h2 class="text-lg font-bold text-white">Profil Admin</h2>
+                <h2 class="text-lg font-bold text-zinc-900">Profil Admin</h2>
             </div>
         </div>
 
         <!-- 4 Kartu Ringkasan -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="p-4 rounded-2xl bg-[#101116] border border-zinc-800 space-y-1">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">NAMA LENGKAP</span>
-                <p class="text-sm font-extrabold text-white">{{ auth()->user()->name }}</p>
+            <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-1">
+                <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">NAMA LENGKAP</span>
+                <p class="text-sm font-extrabold text-zinc-900">{{ auth()->user()->name }}</p>
             </div>
-            <div class="p-4 rounded-2xl bg-[#101116] border border-zinc-800 space-y-1">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">USERNAME LOGIN</span>
-                <p class="text-sm font-extrabold text-white font-mono">{{ '@' . auth()->user()->username }}</p>
+            <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-1">
+                <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">USERNAME LOGIN</span>
+                <p class="text-sm font-extrabold text-zinc-900 font-mono">{{ '@' . auth()->user()->username }}</p>
             </div>
-            <div class="p-4 rounded-2xl bg-[#101116] border border-zinc-800 space-y-1">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">STATUS AKSES</span>
-                <p class="text-sm font-extrabold text-white">Admin</p>
+            <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-1">
+                <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">STATUS AKSES</span>
+                <p class="text-sm font-extrabold text-zinc-900">Admin</p>
             </div>
-            <div class="p-4 rounded-2xl bg-[#101116] border border-zinc-800 space-y-1">
-                <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">TERDAFTAR SEJAK</span>
-                <p class="text-xs font-bold text-zinc-300">
+            <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-1">
+                <span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">TERDAFTAR SEJAK</span>
+                <p class="text-xs font-bold text-zinc-700">
                     {{ auth()->user()->created_at?->locale('id')->translatedFormat('d F Y') ?? '24 September 2026' }}
                 </p>
             </div>
@@ -62,83 +62,83 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <!-- Nama Lengkap -->
                 <div>
-                    <label for="name" class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">
-                        Nama Lengkap <span class="text-rose-400">*</span>
+                    <label for="name" class="block text-xs font-bold text-zinc-700 mb-2 uppercase tracking-wider">
+                        Nama Lengkap <span class="text-rose-500">*</span>
                     </label>
                     <input type="text"
                            name="name"
                            id="name"
                            value="{{ old('name', auth()->user()->name) }}"
                            required
-                           class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('name') border-rose-500 @else border-zinc-800 @enderror text-white text-sm outline-none font-medium" />
+                           class="w-full px-4 py-3 rounded-xl bg-zinc-50 border @error('name') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm outline-none font-medium" />
                     @error('name')
-                        <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
+                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Username Login -->
                 <div>
-                    <label for="username" class="block text-xs font-bold text-zinc-300 mb-2 uppercase tracking-wider">
-                        Username Login <span class="text-rose-400">*</span>
+                    <label for="username" class="block text-xs font-bold text-zinc-700 mb-2 uppercase tracking-wider">
+                        Username Login <span class="text-rose-500">*</span>
                     </label>
                     <input type="text"
                            name="username"
                            id="username"
                            value="{{ old('username', auth()->user()->username) }}"
                            required
-                           class="w-full px-4 py-3 rounded-xl bg-[#101116] border @error('username') border-rose-500 @else border-zinc-800 @enderror text-white text-sm font-mono outline-none font-medium" />
+                           class="w-full px-4 py-3 rounded-xl bg-zinc-50 border @error('username') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm font-mono outline-none font-medium" />
                     @error('username')
-                        <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
+                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
             <!-- Ganti Password -->
-            <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-4">
+            <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-4">
                 <div>
-                    <h3 class="text-sm font-bold text-white">Ganti Password</h3>
-                    <p class="text-xs text-zinc-400">Kosongkan kolom password di bawah ini jika Anda tidak ingin mengubah password.</p>
+                    <h3 class="text-sm font-bold text-zinc-900">Ganti Password</h3>
+                    <p class="text-xs text-zinc-500">Kosongkan kolom password di bawah ini jika Anda tidak ingin mengubah password.</p>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label for="current_password" class="block text-xs font-bold text-zinc-300 mb-1.5">
+                        <label for="current_password" class="block text-xs font-bold text-zinc-700 mb-1.5">
                             Password Saat Ini
                         </label>
                         <input type="password"
                                name="current_password"
                                id="current_password"
                                placeholder="Masukkan password saat ini..."
-                               class="w-full sm:w-2/3 px-4 py-2.5 rounded-xl bg-[#18191f] border @error('current_password') border-rose-500 @else border-zinc-800 @enderror text-white text-sm outline-none" />
+                               class="w-full sm:w-2/3 px-4 py-2.5 rounded-xl bg-white border @error('current_password') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm outline-none" />
                         @error('current_password')
-                            <p class="mt-1 text-xs text-rose-400">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="new_password" class="block text-xs font-bold text-zinc-300 mb-1.5">
+                            <label for="new_password" class="block text-xs font-bold text-zinc-700 mb-1.5">
                                 Password Baru
                             </label>
                             <input type="password"
                                    name="new_password"
                                    id="new_password"
                                    placeholder="Masukkan password baru..."
-                                   class="w-full px-4 py-2.5 rounded-xl bg-[#18191f] border @error('new_password') border-rose-500 @else border-zinc-800 @enderror text-white text-sm outline-none" />
+                                   class="w-full px-4 py-2.5 rounded-xl bg-white border @error('new_password') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm outline-none" />
                             @error('new_password')
-                                <p class="mt-1 text-xs text-rose-400">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="new_password_confirmation" class="block text-xs font-bold text-zinc-300 mb-1.5">
+                            <label for="new_password_confirmation" class="block text-xs font-bold text-zinc-700 mb-1.5">
                                 Konfirmasi Password Baru
                             </label>
                             <input type="password"
                                    name="new_password_confirmation"
                                    id="new_password_confirmation"
                                    placeholder="Ulangi password baru..."
-                                   class="w-full px-4 py-2.5 rounded-xl bg-[#18191f] border border-zinc-800 text-white text-sm outline-none" />
+                                   class="w-full px-4 py-2.5 rounded-xl bg-white border border-zinc-200 text-zinc-900 text-sm outline-none" />
                         </div>
                     </div>
                 </div>
@@ -159,28 +159,28 @@
     </div>
 
     <!-- ================= SECTION 2: KELOLA AKUN ADMIN (MULTI-USER & ANTI-KUDETA) ================= -->
-    <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 space-y-6 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800">
+    <div class="rounded-3xl bg-white border border-zinc-200 p-6 sm:p-8 space-y-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-teal-500/10 text-teal-400 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-2xl bg-teal-500/10 text-teal-600 flex items-center justify-center shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                 </div>
                 <div>
-                    <h2 class="text-lg font-bold text-white">Kelola Akun Admin (Multi-User)</h2>
-                    <p class="text-xs text-zinc-400">Manajemen akun pengelola CMS. Admin Utama dilindungi sistem secara permanen.</p>
+                    <h2 class="text-lg font-bold text-zinc-900">Kelola Akun Admin (Multi-User)</h2>
+                    <p class="text-xs text-zinc-500">Manajemen akun pengelola CMS. Admin Utama dilindungi sistem secara permanen.</p>
                 </div>
             </div>
-            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-bold w-fit">
-                <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-700 text-xs font-bold w-fit">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
                 {{ $admins->count() }} Admin Terdaftar
             </span>
         </div>
 
         {{-- Form Tambah Admin Baru --}}
-        <div class="p-5 sm:p-6 rounded-2xl bg-[#101116] border border-zinc-800 space-y-4">
+        <div class="p-5 sm:p-6 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-4">
             <div>
-                <h3 class="text-sm font-bold text-white">Tambah Admin Pengelola Baru</h3>
-                <p class="text-xs text-zinc-400">Buat kredensial login tambahan untuk rekan pengelola portofolio UMKM.</p>
+                <h3 class="text-sm font-bold text-zinc-900">Tambah Admin Pengelola Baru</h3>
+                <p class="text-xs text-zinc-500">Buat kredensial login tambahan untuk rekan pengelola portofolio UMKM.</p>
             </div>
 
             <form action="{{ route('admin.settings.admins.store') }}" method="POST" class="space-y-4">
@@ -188,8 +188,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <!-- Nama Lengkap Admin -->
                     <div>
-                        <label for="admin_name" class="block text-xs font-bold text-zinc-300 mb-1.5 uppercase tracking-wider">
-                            Nama Lengkap <span class="text-rose-400">*</span>
+                        <label for="admin_name" class="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wider">
+                            Nama Lengkap <span class="text-rose-500">*</span>
                         </label>
                         <input type="text"
                                name="name"
@@ -197,16 +197,16 @@
                                value="{{ old('name') }}"
                                placeholder="Masukkan nama lengkap..."
                                required
-                               class="w-full px-4 py-2.5 rounded-xl bg-[#18191f] border @error('name') border-rose-500 @else border-zinc-800 @enderror text-white text-sm outline-none font-medium" />
+                               class="w-full px-4 py-2.5 rounded-xl bg-white border @error('name') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm outline-none font-medium" />
                         @error('name')
-                            <p class="mt-1 text-xs text-rose-400">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Username Login -->
                     <div>
-                        <label for="admin_username" class="block text-xs font-bold text-zinc-300 mb-1.5 uppercase tracking-wider">
-                            Username Login <span class="text-rose-400">*</span>
+                        <label for="admin_username" class="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wider">
+                            Username Login <span class="text-rose-500">*</span>
                         </label>
                         <input type="text"
                                name="username"
@@ -214,25 +214,25 @@
                                value="{{ old('username') }}"
                                placeholder="Masukkan username..."
                                required
-                               class="w-full px-4 py-2.5 rounded-xl bg-[#18191f] border @error('username') border-rose-500 @else border-zinc-800 @enderror text-white text-sm font-mono outline-none font-medium" />
+                               class="w-full px-4 py-2.5 rounded-xl bg-white border @error('username') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm font-mono outline-none font-medium" />
                         @error('username')
-                            <p class="mt-1 text-xs text-rose-400">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Password Baru -->
                     <div>
-                        <label for="admin_password" class="block text-xs font-bold text-zinc-300 mb-1.5 uppercase tracking-wider">
-                            Password <span class="text-rose-400">*</span>
+                        <label for="admin_password" class="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wider">
+                            Password <span class="text-rose-500">*</span>
                         </label>
                         <input type="password"
                                name="password"
                                id="admin_password"
                                placeholder="Masukkan password..."
                                required
-                               class="w-full px-4 py-2.5 rounded-xl bg-[#18191f] border @error('password') border-rose-500 @else border-zinc-800 @enderror text-white text-sm outline-none" />
+                               class="w-full px-4 py-2.5 rounded-xl bg-white border @error('password') border-rose-500 @else border-zinc-200 @enderror text-zinc-900 text-sm outline-none" />
                         @error('password')
-                            <p class="mt-1 text-xs text-rose-400">{{ $message }}</p>
+                            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -253,12 +253,12 @@
 
         {{-- Tabel Daftar Seluruh Admin --}}
         <div class="space-y-3">
-            <h3 class="text-sm font-bold text-white">Daftar Admin Aktif</h3>
+            <h3 class="text-sm font-bold text-zinc-900">Daftar Admin Aktif</h3>
 
-            <div class="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#101116]">
+            <div class="overflow-x-auto rounded-2xl border border-zinc-200 bg-zinc-50">
                 <table class="w-full text-left text-xs sm:text-sm border-collapse">
                     <thead>
-                        <tr class="border-b border-zinc-800 text-[11px] font-bold text-zinc-400 uppercase tracking-wider bg-[#14151a]">
+                        <tr class="border-b border-zinc-200 text-[11px] font-bold text-zinc-500 uppercase tracking-wider bg-zinc-100">
                             <th class="py-3.5 px-4 text-center w-12">No</th>
                             <th class="py-3.5 px-4">Nama Pengelola</th>
                             <th class="py-3.5 px-4">Username</th>
@@ -267,54 +267,54 @@
                             <th class="py-3.5 px-4 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-800/80">
+                    <tbody class="divide-y divide-zinc-200">
                         @foreach ($admins as $index => $item)
-                            <tr>
+                            <tr class="bg-white">
                                 <!-- Nomor -->
-                                <td class="py-3.5 px-4 text-center text-zinc-400 font-bold">
+                                <td class="py-3.5 px-4 text-center text-zinc-500 font-bold">
                                     {{ $index + 1 }}
                                 </td>
 
                                 <!-- Nama & Avatar -->
                                 <td class="py-3.5 px-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full {{ $item->id === 1 ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40' : 'bg-zinc-800 text-zinc-300' }} flex items-center justify-center font-bold text-xs shrink-0">
+                                        <div class="w-8 h-8 rounded-full {{ $item->id === 1 ? 'bg-teal-500/20 text-teal-700 border border-teal-500/40' : 'bg-zinc-100 text-zinc-600' }} flex items-center justify-center font-bold text-xs shrink-0">
                                             {{ strtoupper(substr($item->name, 0, 1)) }}
                                         </div>
                                         <div>
-                                            <p class="font-bold text-white">{{ $item->name }}</p>
+                                            <p class="font-bold text-zinc-900">{{ $item->name }}</p>
                                             @if ($item->id === auth()->id())
-                                                <span class="text-[10px] text-teal-400 font-semibold">(Sedang Anda Gunakan)</span>
+                                                <span class="text-[10px] text-teal-600 font-semibold">(Sedang Anda Gunakan)</span>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
 
                                 <!-- Username -->
-                                <td class="py-3.5 px-4 font-mono text-zinc-300">
+                                <td class="py-3.5 px-4 font-mono text-zinc-700">
                                     {{ '@' . $item->username }}
                                 </td>
 
                                 <!-- Peran / Hak Akses -->
                                 <td class="py-3.5 px-4">
                                     @if ($item->id === 1)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-teal-500/15 border border-teal-500/30 text-teal-300 text-xs font-bold">
-                                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-teal-500/15 border border-teal-500/30 text-teal-700 text-xs font-bold">
+                                            <svg class="w-3.5 h-3.5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                             Admin Utama
                                         </span>
                                     @elseif ($item->id === auth()->id())
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-700 text-xs font-bold">
                                             Admin Aktif (Anda)
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-semibold">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 text-zinc-600 border border-zinc-200 text-xs font-semibold">
                                             Admin Pengelola
                                         </span>
                                     @endif
                                 </td>
 
                                 <!-- Terdaftar -->
-                                <td class="py-3.5 px-4 text-xs text-zinc-400">
+                                <td class="py-3.5 px-4 text-xs text-zinc-500">
                                     {{ $item->created_at?->translatedFormat('d M Y') ?? '12 Nov 2026' }}
                                 </td>
 
@@ -322,13 +322,13 @@
                                 <td class="py-3.5 px-4 text-right">
                                     @if ($item->id === 1)
                                         {{-- Admin Utama Dilindungi Secara Permanen (Anti-Kudeta) --}}
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-800/80 border border-zinc-700/60 text-zinc-400 text-xs font-semibold cursor-not-allowed" title="Admin Utama dilindungi sistem dan tidak dapat dihapus">
-                                            <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-500 text-xs font-semibold cursor-not-allowed" title="Admin Utama dilindungi sistem dan tidak dapat dihapus">
+                                            <svg class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                             Dilindungi
                                         </span>
                                     @elseif ($item->id === auth()->id())
                                         {{-- Mencegah Hapus Diri Sendiri Saat Sedang Login --}}
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-800/60 border border-zinc-700/40 text-zinc-500 text-xs font-semibold cursor-not-allowed" title="Anda tidak dapat menghapus akun yang sedang Anda gunakan">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-400 text-xs font-semibold cursor-not-allowed" title="Anda tidak dapat menghapus akun yang sedang Anda gunakan">
                                             Akun Anda
                                         </span>
                                     @else
@@ -341,7 +341,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-950/40 border border-rose-900/60 text-rose-300 text-xs font-bold cursor-pointer">
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold cursor-pointer">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                 <span>Hapus</span>
                                             </button>
@@ -357,55 +357,55 @@
     </div>
 
     <!-- ================= SECTION 3: LIVE SYSTEM STATUS ================= -->
-    <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 space-y-5 shadow-sm">
-        <div class="pb-4 border-b border-zinc-800">
-            <h2 class="text-lg font-bold text-white">Status Sistem & Server</h2>
-            <p class="text-xs text-zinc-400">Pemantauan langsung konektivitas database, media upload, dan routing publik</p>
+    <div class="rounded-3xl bg-white border border-zinc-200 p-6 sm:p-8 space-y-5 shadow-sm">
+        <div class="pb-4 border-b border-zinc-200">
+            <h2 class="text-lg font-bold text-zinc-900">Status Sistem & Server</h2>
+            <p class="text-xs text-zinc-500">Pemantauan langsung konektivitas database, media upload, dan routing publik</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Database -->
-            <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-2">
-                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
-                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+            <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2">
+                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-700">
+                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
                     <span>Database MySQL</span>
                 </div>
-                <p class="text-xs font-mono text-zinc-400">{{ config('database.connections.mysql.database', 'db_cmswebbuilder') }}</p>
+                <p class="text-xs font-mono text-zinc-500">{{ config('database.connections.mysql.database', 'db_cmswebbuilder') }}</p>
             </div>
 
             <!-- Storage -->
-            <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-2">
-                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
-                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2">
+                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-700">
+                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
                     <span>Media Storage</span>
                 </div>
-                <p class="text-xs font-mono text-zinc-400">storage/app/public</p>
+                <p class="text-xs font-mono text-zinc-500">storage/app/public</p>
             </div>
 
             <!-- Mode Engine -->
-            <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-2">
-                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
-                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2">
+                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-700">
+                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     <span>Framework &amp; Engine</span>
                 </div>
-                <p class="text-xs font-mono text-zinc-400">Laravel 13 &bull; PHP {{ PHP_VERSION }}</p>
+                <p class="text-xs font-mono text-zinc-500">Laravel 13 &bull; PHP {{ PHP_VERSION }}</p>
             </div>
 
             <!-- Akses Publik -->
-            <div class="p-5 rounded-2xl bg-[#101116] border border-zinc-800 space-y-2">
-                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-300">
-                    <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2">
+                <div class="flex items-center gap-2.5 text-sm font-bold text-zinc-700">
+                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
                     <span>Dynamic Slug Routing</span>
                 </div>
-                <p class="text-xs font-mono text-zinc-400">Aktif via /{slug}</p>
+                <p class="text-xs font-mono text-zinc-500">Aktif via /{slug}</p>
             </div>
         </div>
     </div>
 
     <!-- ================= SECTION 4: BANTUAN DEVELOPER ================= -->
-    <div class="rounded-3xl bg-[#18191f] border border-zinc-800 p-6 sm:p-8 space-y-4 shadow-sm">
-        <h2 class="text-lg font-bold text-white">Bantuan &amp; Konsultasi Teknis</h2>
-        <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">
+    <div class="rounded-3xl bg-white border border-zinc-200 p-6 sm:p-8 space-y-4 shadow-sm">
+        <h2 class="text-lg font-bold text-zinc-900">Bantuan &amp; Konsultasi Teknis</h2>
+        <p class="text-xs sm:text-sm text-zinc-500 leading-relaxed font-normal">
             Mengalami kendala akun, lupa password, atau membutuhkan integrasi fitur baru pada platform CMS Web Builder?
         </p>
         <div class="pt-1">

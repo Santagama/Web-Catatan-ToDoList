@@ -11,12 +11,14 @@
             "id": "b697c5583df3340e",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Flowchart_3a_Login_Admin.svg"
+                "file": "ALUR CERITA+CODINGAN.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "Flowchart_3a_Login_Admin"
+              "icon": "lucide-file",
+              "title": "ALUR CERITA+CODINGAN"
             }
           }
         ]
@@ -188,8 +190,8 @@
   },
   "active": "b697c5583df3340e",
   "lastOpenFiles": [
-    "PANDUAN_BEDAH_KODINGAN_DAN_LIVE_CODING.md",
     "ALUR_CERITA_SISTEM.md",
+    "PANDUAN_BEDAH_KODINGAN_DAN_LIVE_CODING.md",
     "Flowchart_3a_Login_Admin.png",
     "Flowchart_3b_Input_Validasi_Publish.svg",
     "Flowchart_3b_Input_Validasi_Publish.png",

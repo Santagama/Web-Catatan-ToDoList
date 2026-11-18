@@ -4,7 +4,7 @@
 
 ## 1. Apa itu File `login.blade.php`? (Bahasa Santai)
 Ini adalah halaman **Pintu Gerbang Masuk Admin**! 🚪
-Tampilannya berdesain minimalis gelap modern dengan kartu di tengah layar (*centered card*).
+Tampilannya berdesain minimalis modern dengan kartu di tengah layar (*centered card*) berlatar video animasi.
 
 ---
 
