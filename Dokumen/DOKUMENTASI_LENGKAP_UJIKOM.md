@@ -165,7 +165,7 @@ Sesuai instruksi soal Poin 4, berikut adalah dokumentasi spesifikasi teknis **In
 #### A. Method `landing()`
 * **Fungsi:** Menampilkan landing page utama jasa pembuatan web bagi pengunjung publik.
 * **Input:** Request GET pada root URL (`/`).
-* **Proses:** Mengambil data portofolio UMKM unggulan yang berstatus `publish` untuk etalase showcase.
+* **Proses:** Merender halaman promosi jasa web builder yang memuat katalog 5 pilihan konsep template desain, daftar paket langganan, dan tombol order via WhatsApp.
 * **Output:** Render Blade View `resources/views/public/landing.blade.php`.
 
 #### B. Method `show(string $slug)`

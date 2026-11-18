@@ -20,20 +20,13 @@ use Illuminate\View\View;
 class PublicController extends Controller
 {
     /**
-     * Menampilkan Landing Page promosi utama.
+     * Menampilkan Landing Page promosi utama jasa web builder.
      * Siapapun yang membuka alamat web utama (root '/') akan diarahkan ke sini.
      */
     public function landing(): View
     {
-        // 1. Ambil maksimal 6 data portofolio UMKM yang statusnya sudah 'publish'
-        // Diurutkan dari yang paling baru diupdate untuk dipamerkan di section showcase
-        $showcasePortfolios = Portfolio::where('status', 'publish')
-            ->latest('updated_at')
-            ->take(6)
-            ->get();
-
-        // 2. Kirim data portofolio tersebut ke file tampilan 'resources/views/public/landing.blade.php'
-        return view('public.landing', compact('showcasePortfolios'));
+        // Langsung tampilkan halaman landing page promosi
+        return view('public.landing');
     }
 
     /**

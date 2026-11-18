@@ -42,29 +42,25 @@ Saat penguji meminta kamu mendemonstrasikan sistem:
 
 ### 1. Aksi di Layar Browser:
 - Buka: `http://localhost:8000/`
-- Tunjukkan Hero Section, 5 Katalog Desain Template, Showcase UMKM terdaftar, dan 2 Paket Layanan (Starter Rp 75.000 / 3 Bulan & Pro Bisnis Rp 200.000 / 1 Tahun).
+- Tunjukkan Hero Section, 5 Katalog Desain Template (Minuman, Makanan, Jasa, Tokoh, Barang), 2 Paket Layanan (Starter Rp 75.000 / 3 Bulan & Pro Bisnis Rp 200.000 / 1 Tahun), dan Tombol CTA WhatsApp.
 
 ### 2. Kalimat yang Kamu Ucapkan ke Penguji:
-> *"Pak Penguji, saat pengunjung membuka halaman utama `/`, rute ditangkap oleh file `routes/web.php` baris 29 yang mengarahkan ke `PublicController` method `landing()`. Di dalam Controller, sistem mengambil maksimal 6 data UMKM terbaru yang statusnya sudah 'publish' dari database melalui Model `Portfolio`, lalu mengirimkan datanya ke view Blade `resources/views/public/landing.blade.php` untuk ditampilkan secara responsif menggunakan Tailwind CSS."*
+> *"Pak Penguji, saat pengunjung membuka halaman utama `/`, rute ditangkap oleh file `routes/web.php` baris 29 yang mengarahkan ke `PublicController` method `landing()`. Controller ini langsung merender file view Blade `resources/views/public/landing.blade.php` sebagai landing page promosi jasa web builder kami, yang menampilkan 5 konsep desain template, paket harga langganan, dan tombol pemesanan langsung via WhatsApp."*
 
 ### 3. File yang Dibuka di VS Code:
 1. 📍 **Route**: [routes/web.php](file:///c:/laragon/www/CMSWebBuilder_Hanan/routes/web.php#L28-L29) (Baris 28–29)
    ```php
    Route::get('/', [PublicController::class, 'landing'])->name('home');
    ```
-2. 📍 **Controller**: [app/Http/Controllers/PublicController.php](file:///c:/laragon/www/CMSWebBuilder_Hanan/app/Http/Controllers/PublicController.php#L26-L37) (Baris 26–37, method `landing()`)
+2. 📍 **Controller**: [app/Http/Controllers/PublicController.php](file:///c:/laragon/www/CMSWebBuilder_Hanan/app/Http/Controllers/PublicController.php#L22-L30) (Method `landing()`)
    ```php
    public function landing(): View
    {
-       $showcasePortfolios = Portfolio::where('status', 'publish')
-           ->latest('updated_at')
-           ->take(6)
-           ->get();
-
-       return view('public.landing', compact('showcasePortfolios'));
+       // Langsung tampilkan halaman landing page promosi
+       return view('public.landing');
    }
    ```
-3. 📍 **View Blade**: [resources/views/public/landing.blade.php](file:///c:/laragon/www/CMSWebBuilder_Hanan/resources/views/public/landing.blade.php) (Looping data kartu showcase dan tombol CTA WhatsApp)
+3. 📍 **View Blade**: [resources/views/public/landing.blade.php](file:///c:/laragon/www/CMSWebBuilder_Hanan/resources/views/public/landing.blade.php) (Tampilan landing page promosi dan tombol CTA WhatsApp)
 
 ---
 
