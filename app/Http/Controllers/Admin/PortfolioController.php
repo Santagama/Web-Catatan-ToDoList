@@ -105,8 +105,21 @@ class PortfolioController extends Controller
         // Memastikan semua data yang diisi admin valid dan aman
         $validated = $request->validate([
             'nama_umkm' => ['required', 'string', 'max:150'],
-            // Slug harus unik di tabel portfolios, hanya huruf kecil-angka-strip, dan tidak boleh pakai kata sistem
-            'slug' => ['required', 'string', 'max:150', 'unique:portfolios,slug', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up'],
+            // Slug harus unik di tabel portfolios, tidak boleh ada di riwayat slug_histories, hanya huruf kecil-angka-strip, dan tidak boleh pakai kata sistem
+            'slug' => [
+                'required',
+                'string',
+                'max:150',
+                'unique:portfolios,slug',
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    // Validasi Anti-Overwrite SEO: Slug tidak boleh pernah terdaftar sebagai riwayat slug lama (SEO 301)
+                    if (SlugHistory::where('slug_lama', $value)->exists()) {
+                        $fail('Slug URL ini masih terdaftar sebagai riwayat pengalihan (SEO Redirect) portofolio lain.');
+                    }
+                },
+            ],
             'template_id' => ['required', 'string', 'in:'.implode(',', array_keys(self::TEMPLATE_OPTIONS))],
             'bio' => ['nullable', 'string'],
             'alamat' => ['nullable', 'string'],
@@ -211,10 +224,24 @@ class PortfolioController extends Controller
     {
         // LANGKAH 1: VALIDASI INPUT FORM
         // Perhatikan bagian 'unique:portfolios,slug,'.$portfolio->id
-        // Artinya slug harus unik, KECUALI slug milik data ini sendiri (agar tidak bentrok saat diedit)
+        // Artinya slug harus unik di portfolios, KECUALI slug milik data ini sendiri (agar tidak bentrok saat diedit)
+        // Serta tidak boleh bentrok dengan riwayat slug_lama milik portofolio LAIN
         $validated = $request->validate([
             'nama_umkm' => ['required', 'string', 'max:150'],
-            'slug' => ['required', 'string', 'max:150', 'unique:portfolios,slug,'.$portfolio->id, 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up'],
+            'slug' => [
+                'required',
+                'string',
+                'max:150',
+                'unique:portfolios,slug,'.$portfolio->id,
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                'not_in:admin,login,logout,dashboard,api,build,images,css,js,storage,up',
+                function (string $attribute, mixed $value, \Closure $fail) use ($portfolio): void {
+                    // Validasi Anti-Conflict: Cek apakah slug ini terdaftar sebagai slug lama milik portofolio LAIN
+                    if (SlugHistory::where('slug_lama', $value)->where('portfolio_id', '!=', $portfolio->id)->exists()) {
+                        $fail('Slug URL ini masih terdaftar sebagai riwayat pengalihan (SEO Redirect) portofolio lain.');
+                    }
+                },
+            ],
             'template_id' => ['required', 'string', 'in:'.implode(',', array_keys(self::TEMPLATE_OPTIONS))],
             'bio' => ['nullable', 'string'],
             'alamat' => ['nullable', 'string'],
@@ -233,6 +260,7 @@ class PortfolioController extends Controller
             'nama_umkm.required' => 'Nama UMKM wajib diisi.',
             'slug.unique' => 'Slug URL ini sudah digunakan UMKM lain.',
             'slug.regex' => 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.',
+            'slug.not_in' => 'Slug ini merupakan kata kunci sistem dan tidak boleh digunakan.',
         ]);
 
         // LANGKAH 2: DETEKSI PERUBAHAN SLUG (FITUR UNGGULAN SEO 301 REDIRECT)
@@ -241,8 +269,20 @@ class PortfolioController extends Controller
 
         // Jika alamat URL diubah oleh admin:
         if ($slugLama !== $slugBaru) {
-            // Catat alamat slug lama ke tabel 'slug_histories'
-            // Sehingga pengunjung yang membuka link lama otomatis dialihkan ke link baru!
+            // A. Mencegah circular loop: Jika portofolio ini pernah pakai slugBaru di masa lalu, hapus catatan riwayatnya
+            // Contoh: dulu asus -> asus1, sekarang asus1 balik lagi jadi asus, riwayat lama asus dihapus
+            SlugHistory::where('portfolio_id', $portfolio->id)
+                ->where('slug_lama', $slugBaru)
+                ->delete();
+
+            // B. Mencegah chained redirect: Jika ada riwayat lama yang mengarah ke slugLama, update agar langsung mengarah ke slugBaru
+            // Contoh: a -> b, sekarang b -> c, maka ubah a -> c langsung
+            SlugHistory::where('portfolio_id', $portfolio->id)
+                ->where('slug_lama', '!=', $slugBaru)
+                ->update(['slug_baru' => $slugBaru]);
+
+            // C. Catat alamat slug lama ke tabel 'slug_histories'
+            // Sehingga pengunjung yang membuka link lama otomatis dialihkan 301 ke link baru!
             SlugHistory::create([
                 'portfolio_id' => $portfolio->id,
                 'slug_lama' => $slugLama,
@@ -391,11 +431,18 @@ class PortfolioController extends Controller
         // Otomatis ubah nama jadi slug URL (contoh: "Kopi Kita Enak" jadi "kopi-kita-enak")
         $slug = Str::slug($request->input('name', ''));
 
-        // Cek apakah slug sudah pernah dipakai oleh toko lain di database
+        // Cek 1: Cek apakah slug sudah terpakai di tabel portfolios utama
         $excludeId = $request->input('exclude_id');
-        $isAvailable = ! Portfolio::where('slug', $slug)
+        $inPortfolios = Portfolio::where('slug', $slug)
             ->when($excludeId, fn ($q) => $q->where('id', '!=', $excludeId))
             ->exists();
+
+        // Cek 2: Cek apakah slug masih terdaftar di tabel slug_histories (riwayat redirect portofolio lain)
+        $inHistories = SlugHistory::where('slug_lama', $slug)
+            ->when($excludeId, fn ($q) => $q->where('portfolio_id', '!=', $excludeId))
+            ->exists();
+
+        $isAvailable = ! $inPortfolios && ! $inHistories;
 
         // Kembalikan respon format JSON ke script JavaScript di browser
         return response()->json([

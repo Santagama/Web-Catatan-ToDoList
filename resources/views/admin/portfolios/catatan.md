@@ -29,7 +29,7 @@ Di sinilah admin mengelola seluruh website portofolio klien UMKM, mulai dari mel
 ### C. `edit.blade.php` (Form Edit Portofolio)
 *   **Fungsinya**: Mengubah data portofolio yang sudah ada.
 *   **Fitur Andalan**:
-    *   *Peringatan Ganti Slug (SEO 301)*: Jika admin mengganti nama slug URL, muncul kotak peringatan ramah bahwa link lama otomatis dialihkan agar tidak terjadi broken link.
+    *   *Peringatan Ganti Slug (SEO 301) & Proteksi Riwayat*: Jika admin mengganti nama slug URL, muncul kotak peringatan bahwa link lama otomatis dialihkan 301 agar tidak broken link. Sistem di backend juga memvalidasi agar slug baru tidak bertabrakan dengan riwayat pengalihan milik portofolio lain.
     *   Menampilkan gambar logo dan banner lama yang sedang aktif.
 
 ### D. `show.blade.php` (Halaman Tinjauan / Detail Lengkap)

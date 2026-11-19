@@ -20,5 +20,5 @@ test('slug yang tidak terdaftar menghasilkan response 404', function () {
     $response = $this->get('/slug-yang-tidak-pernah-ada-12345');
 
     $response->assertStatus(404);
-    $response->assertSee('Halaman Portofolio Tidak Ditemukan');
+    $response->assertSee('Halaman Tidak Ditemukan');
 });

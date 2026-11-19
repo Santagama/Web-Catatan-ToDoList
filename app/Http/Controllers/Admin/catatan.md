@@ -55,14 +55,14 @@ Satpam (Middleware 'auth') memeriksa:
 ### C. `PortfolioController.php` (Jantung Aplikasi - CRUD Portofolio)
 *   **Fungsinya**: Pusat segala urusan Create, Read, Update, Delete portofolio UMKM.
 *   **Fitur-Fitur Andalan**:
-    1.  *Validasi Ketat*: Cek slug unik, batasan ukuran logo maksimal 2MB, banner maksimal 5MB.
+    1.  *Validasi Ketat*: Cek slug unik di tabel `portfolios`, serta validasi proteksi riwayat slug di tabel `slug_histories` (mencegah penimpaan URL lama milik toko lain). Batasan ukuran logo maksimal 2MB, banner maksimal 5MB.
     2.  *Array Produk JSON*: Mengunggah banyak foto produk sekaligus dan menyimpannya rapi dalam satu kolom JSON `products`.
-    3.  *SEO 301 Permanent Redirect*: Kalau nama/slug UMKM diganti saat diedit, slug lama otomatis dicatat ke tabel `slug_histories` agar pelanggan lama tidak nyasar ke 404!
+    3.  *SEO 301 Permanent Redirect & Anti-Loop*: Kalau nama/slug UMKM diganti saat diedit, slug lama otomatis dicatat ke tabel `slug_histories` agar pelanggan lama tidak nyasar ke 404. Jika admin mengubah kembali ke slug lama miliknya sendiri, riwayat dibersihkan agar tidak terjadi redirect loop (circular).
     4.  *Pembersihan File Otomatis*: Saat portofolio atau foto diganti/dihapus, file lama di folder storage langsung dihapus permanen (`Storage::disk('public')->delete(...)`) agar harddisk server tidak penuh sampah.
     5.  *Perpanjang Paket*: Fitur `extend()` untuk menambah durasi aktif 3 bulan atau 1 tahun.
-    6.  *Cek Slug Realtime*: API `checkSlug()` berbasis AJAX, sehingga saat admin mengetik nama usaha, ketersediaan slug langsung dicek tanpa perlu reload halaman!
+    6.  *Cek Slug Realtime*: API `checkSlug()` berbasis AJAX, sehingga saat admin mengetik nama usaha, ketersediaan slug langsung dicek secara ganda (ke tabel `portfolios` dan `slug_histories`) tanpa perlu reload halaman!
 *   💡 **Jawaban Mantap untuk Penguji:**
-    > *"PortfolioController ini mengintegrasikan upload multimedia dengan fitur pembersihan storage otomatis, serta mendukung fitur SEO 301 Redirect yang merekam riwayat perubahan URL secara otomatis ke tabel slug_histories."*
+    > *"PortfolioController ini mengintegrasikan upload multimedia dengan pembersihan storage otomatis, serta sistem SEO 301 Redirect tangguh yang memvalidasi ketersediaan slug ganda (tabel portfolios dan slug_histories) guna mencegah URL lama tertimpa atau terjadi redirect loop."*
 
 ---
 
@@ -79,7 +79,8 @@ Satpam (Middleware 'auth') memeriksa:
 ### E. `ActivityLogController.php` (Jejak Audit Aktivitas)
 *   **Fungsinya**: Menampilkan catatan sejarah seluruh aktivitas sistem dalam bentuk linimasa (*timeline*).
 *   **Fitur**:
-    *   Bisa difilter berdasarkan bulan dan tahun.
-    *   Tersedia kartu ringkasan total aksi tambah, edit, dan hapus di bulan berjalan.
+    *   Bisa difilter secara fleksibel berdasarkan bulan dan tahun.
+    *   4 Kartu Statistik Dinamis (Total, Tambah, Edit, Hapus) yang **otomatis ikut berubah nilainya** menyesuaikan periode filter yang dipilih admin.
+    *   Eager loading `with('admin', 'portfolio')` untuk performa query cepat tanpa masalah N+1.
 *   💡 **Jawaban Mantap untuk Penguji:**
-    > *"Modul Activity Log ini kami sediakan untuk menjamin akuntabilitas dan transparansi, sehingga setiap perubahan data dapat dilacak sampai ke level admin pelakunya."*
+    > *"Modul Activity Log ini kami sediakan untuk menjamin akuntabilitas dan transparansi. Controller ini mendukung filter periode yang secara dinamis menyinkronkan data linimasa dengan 4 kartu ringkasan aktivitas di bagian atas."*

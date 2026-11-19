@@ -96,8 +96,9 @@ DELIMITER ;
 
 
 -- ==============================================================================
--- 2. STORED FUNCTION (CEK SLUG)
--- Fungsi: Cek apakah slug sudah dipakai (0 = tersedia, > 0 = terpakai)
+-- 2. STORED FUNCTION (CEK SLUG & SLUG HISTORY)
+-- Fungsi: Cek apakah slug sudah dipakai di portfolios ATAU terdaftar di slug_histories
+--         (0 = tersedia, > 0 = terpakai / terdaftar sebagai riwayat SEO 301)
 -- ==============================================================================
 DELIMITER $$
 
@@ -108,7 +109,11 @@ DETERMINISTIC
 READS SQL DATA
 BEGIN
     DECLARE total INT;
-    SELECT COUNT(*) INTO total FROM portfolios WHERE slug = p_slug COLLATE utf8mb4_unicode_ci;
+    SELECT (
+        (SELECT COUNT(*) FROM portfolios WHERE slug = p_slug COLLATE utf8mb4_unicode_ci)
+        +
+        (SELECT COUNT(*) FROM slug_histories WHERE slug_lama = p_slug COLLATE utf8mb4_unicode_ci)
+    ) INTO total;
     RETURN total;
 END$$
 

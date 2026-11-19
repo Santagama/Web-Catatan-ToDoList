@@ -17,8 +17,20 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">Activity Log</h1>
+            {{--
+              // SUBTITLE DINAMIS MENGIKUTI FILTER:
+              // Menjelaskan periode log yang sedang ditampilkan (Bulan, Tahun, atau Seluruh Waktu)
+            --}}
             <p class="text-xs sm:text-sm text-zinc-500 mt-1 font-medium">
-                Riwayat aktivitas admin bulan {{ request('bulan') ? Carbon\Carbon::create(2026, request('bulan'), 1)->locale('id')->translatedFormat('F') : now()->locale('id')->translatedFormat('F') }} {{ request('tahun', now()->year) }}
+                @if (request()->filled('bulan') && request()->filled('tahun'))
+                    Riwayat aktivitas admin bulan {{ Carbon\Carbon::create(2026, request('bulan'), 1)->locale('id')->translatedFormat('F') }} {{ request('tahun') }}
+                @elseif (request()->filled('bulan'))
+                    Riwayat aktivitas admin bulan {{ Carbon\Carbon::create(2026, request('bulan'), 1)->locale('id')->translatedFormat('F') }}
+                @elseif (request()->filled('tahun'))
+                    Riwayat aktivitas admin tahun {{ request('tahun') }}
+                @else
+                    Riwayat seluruh aktivitas admin sistem
+                @endif
             </p>
         </div>
 

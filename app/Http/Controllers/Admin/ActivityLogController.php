@@ -40,27 +40,41 @@ class ActivityLogController extends Controller
         // 2. Ambil data dengan urutan waktu terbaru dan batasi 15 per halaman (Pagination)
         $logs = $query->orderByDesc('created_at')->paginate(15)->withQueryString();
 
-        // 3. HITUNG RINGKASAN AKSI BULAN INI (Untuk kartu statistik di bagian atas halaman):
+        // 3. HITUNG RINGKASAN AKSI DINAMIS SESUAI FILTER (Untuk 4 kartu metrik di atas):
+        // Query dasar kartu ringkasan otomatis mengikuti filter bulan dan tahun yang sedang dipilih admin
+        $summaryQuery = ActivityLog::query();
+
+        // Jika admin memilih filter bulan tertentu (1 - 12)
+        if ($request->filled('bulan')) {
+            $summaryQuery->whereMonth('created_at', $request->input('bulan'));
+        }
+
+        // Jika admin memilih filter tahun tertentu (misal: 2026)
+        if ($request->filled('tahun')) {
+            $summaryQuery->whereYear('created_at', $request->input('tahun'));
+        }
+
         $summaryBulanIni = [
-            // Total seluruh aksi apapun di bulan ini
-            'total' => ActivityLog::whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count(),
-            // Total berapa portofolio baru yang dibuat bulan ini
-            'tambah' => ActivityLog::where('action', 'TAMBAH_PORTFOLIO')
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count(),
-            // Total berapa kali portofolio diedit bulan ini
-            'edit' => ActivityLog::where('action', 'EDIT_PORTFOLIO')
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count(),
-            // Total berapa portofolio yang dihapus bulan ini
-            'hapus' => ActivityLog::where('action', 'HAPUS_PORTFOLIO')
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count(),
+            // Total seluruh aksi apapun pada periode filter yang dipilih
+            'total' => (clone $summaryQuery)->count(),
+
+            // Total aksi tambah portofolio pada periode filter yang dipilih
+            'tambah' => (clone $summaryQuery)->where(function ($q) {
+                $q->where('action', 'TAMBAH_PORTFOLIO')
+                    ->orWhere('action', 'like', '%TAMBAH%');
+            })->count(),
+
+            // Total aksi edit portofolio pada periode filter yang dipilih
+            'edit' => (clone $summaryQuery)->where(function ($q) {
+                $q->where('action', 'EDIT_PORTFOLIO')
+                    ->orWhere('action', 'like', '%EDIT%');
+            })->count(),
+
+            // Total aksi hapus portofolio pada periode filter yang dipilih
+            'hapus' => (clone $summaryQuery)->where(function ($q) {
+                $q->where('action', 'HAPUS_PORTFOLIO')
+                    ->orWhere('action', 'like', '%HAPUS%');
+            })->count(),
         ];
 
         // 4. Kirim data ke view Blade 'resources/views/admin/logs/index.blade.php'

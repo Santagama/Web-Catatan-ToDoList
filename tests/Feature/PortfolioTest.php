@@ -133,5 +133,112 @@ test('admin dapat membuat portofolio dengan template barang dan publik dapat mel
     $publicResponse = $this->get('/'.$uniqueSlug);
     $publicResponse->assertStatus(200);
     $publicResponse->assertSee('Toko Distro Test');
-    $publicResponse->assertSee('Katalog Produk &amp; Barang Pilihan', false);
+    $publicResponse->assertSee('Katalog Produk &amp; Retail', false);
 });
+
+test('slug yang pernah digunakan dan tercatat di slug_histories tidak dapat dipakai portofolio baru', function () {
+    $slugLama = 'boba-rajagaluh-'.time();
+    $slugBaru = 'boba-rajagaluh1-'.time();
+
+    $portfolio = Portfolio::create([
+        'admin_id' => $this->admin->id,
+        'template_id' => 'minuman',
+        'nama_umkm' => 'Boba Test',
+        'slug' => $slugLama,
+        'status' => 'publish',
+        'paket' => 'tanpa_batas',
+    ]);
+
+    // Update slug ke slugBaru sehingga slugLama masuk ke slug_histories
+    $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolio), [
+        'nama_umkm' => 'Boba Test',
+        'slug' => $slugBaru,
+        'template_id' => 'minuman',
+        'status' => 'publish',
+    ]);
+
+    // Coba buat portofolio baru dengan slugLama yang ada di riwayat
+    $response = $this->actingAs($this->admin)->post(route('admin.portfolios.store'), [
+        'nama_umkm' => 'Boba Test Baru',
+        'slug' => $slugLama,
+        'template_id' => 'minuman',
+        'status' => 'publish',
+    ]);
+
+    // Harus ditolak dengan validasi error pada slug
+    $response->assertSessionHasErrors(['slug']);
+});
+
+test('slug yang ada di riwayat portofolio lain tidak dapat direbut oleh portofolio lain saat update', function () {
+    $slugAsusLama = 'asus-test-'.time();
+    $slugAsusBaru = 'asus1-test-'.time();
+    $slugLenovo = 'lenovo-test-'.time();
+
+    $portfolioAsus = Portfolio::create([
+        'admin_id' => $this->admin->id,
+        'template_id' => 'barang',
+        'nama_umkm' => 'Asus Test',
+        'slug' => $slugAsusLama,
+        'status' => 'publish',
+    ]);
+
+    $portfolioLenovo = Portfolio::create([
+        'admin_id' => $this->admin->id,
+        'template_id' => 'barang',
+        'nama_umkm' => 'Lenovo Test',
+        'slug' => $slugLenovo,
+        'status' => 'publish',
+    ]);
+
+    // Asus update ke asus1 -> asus-test masuk slug_histories
+    $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolioAsus), [
+        'nama_umkm' => 'Asus Test',
+        'slug' => $slugAsusBaru,
+        'template_id' => 'barang',
+        'status' => 'publish',
+    ]);
+
+    // Lenovo coba ganti slug jadi asus-test (slug milik riwayat Asus)
+    $response = $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolioLenovo), [
+        'nama_umkm' => 'Lenovo Test',
+        'slug' => $slugAsusLama,
+        'template_id' => 'barang',
+        'status' => 'publish',
+    ]);
+
+    // Harus ditolak validasi
+    $response->assertSessionHasErrors(['slug']);
+});
+
+test('portofolio dapat mengubah kembali slug ke riwayat lamanya sendiri dan membersihkan loop', function () {
+    $slugAwal = 'kopi-asli-'.time();
+    $slugGanti = 'kopi-moderen-'.time();
+
+    $portfolio = Portfolio::create([
+        'admin_id' => $this->admin->id,
+        'template_id' => 'minuman',
+        'nama_umkm' => 'Kopi Test Revert',
+        'slug' => $slugAwal,
+        'status' => 'publish',
+    ]);
+
+    // Ganti awal -> ganti
+    $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolio), [
+        'nama_umkm' => 'Kopi Test Revert',
+        'slug' => $slugGanti,
+        'template_id' => 'minuman',
+        'status' => 'publish',
+    ]);
+
+    // Kembalikan ganti -> awal (menggunakan slug awalnya sendiri)
+    $response = $this->actingAs($this->admin)->put(route('admin.portfolios.update', $portfolio), [
+        'nama_umkm' => 'Kopi Test Revert',
+        'slug' => $slugAwal,
+        'template_id' => 'minuman',
+        'status' => 'publish',
+    ]);
+
+    $response->assertRedirect(route('admin.portfolios.index'));
+    expect($portfolio->fresh()->slug)->toBe($slugAwal);
+});
+

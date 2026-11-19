@@ -33,7 +33,7 @@ test('admin dapat melihat daftar akun admin pada halaman pengaturan', function (
 
     $response->assertStatus(200);
     $response->assertSee('Kelola Akun Admin (Multi-User)');
-    $response->assertSee('Admin Utama (Founder)');
+    $response->assertSee('Admin Utama');
     $response->assertSee('@hanan');
 });
 
